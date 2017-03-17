@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+	
+	<!-- 读取db.properties中的变量 值，db.properties要放在classpath根目录下 -->
+	
+	<context:property-placeholder location="classpath:/resource/*.properties" />
+	
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	<!--数据源配置  -->
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		
+		<!--配置初始化大小、最大、最小  -->
+		<property name="initialSize" value="3"></property>
+		<property name="minIdle" value="3"></property>
+		<property name="maxActive" value="10"></property>	
+		<!-- 超时设置  -->
+		<property name="maxWait" value="60000" /> 	
+		<property name="timeBetweenEvictionRunsMillis" value="3000" />  
+        <property name="minEvictableIdleTimeMillis" value="300000" /> 
+	
+		<property name="validationQuery" value="SELECT 'x' FROM DUAL" />  
+        <property name="testWhileIdle" value="true" />  
+        <property name="testOnBorrow" value="false" />  
+        <property name="testOnReturn" value="false" />  
+        
+        <!-- 开启Druid的监控统计功能 -->  
+        <property name="filters" value="stat" />  
+	</bean>
+	
+	<!--mybatis  sessionFactory配置-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+       	<!--  自动扫描到net/togogo/springmybatisproject/dao的xml文件-->
+		<property name="mapperLocations" value="classpath:lcsw/mapper/*.xml"/>
+		<!-- 声明别名，这样的话，在mapper xml文件描述类名时就可以不用完整路径了(即不用加包名了)-->
+		<property name="typeAliasesPackage" value="lcsw.domain"/>
+	</bean>
+	
+	<!-- 自动扫描mybatis定义的dao(mapper)类  ，spring扫描到这些dao类之后，就会向spring容器注册这些dao类对象-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage"  value="lcsw.mapper"/>
+	</bean>
+	
+</beans>
