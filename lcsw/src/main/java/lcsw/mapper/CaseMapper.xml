@@ -9,11 +9,18 @@
     <result column="create_time" property="createTime" jdbcType="DATE" />
     <result column="creater" property="creater" jdbcType="VARCHAR" />
     <result column="case_type" property="caseType" jdbcType="VARCHAR" />
+    <association property=""></association>
+    <collection property="inquirys" ofType="lcsw.domain.Inquiry">
+    	<id column="inquiry_id" property="inquiryId"/>
+    	<result column="inquiry_title" property="inquiryTitle"/>
+    	<result column="patient_answer" property="patientAnswer"/>
+    	<result column="inquiry_type" property="inquiryType"/>
+    	<result column="inquiry_order" property="inquiryOrder"/>
+    	<result column="score" property="score"/>
+    </collection>
+    <collection property=""></collection>
   </resultMap>
   
-  	<sql id="case">
-  		
-  	</sql>
   
   	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="CaseMap">
   		select case_id,case_title,patient_Info,chief_complain,create_time,creater,case_type from tbl_case where case_id = #{id}
