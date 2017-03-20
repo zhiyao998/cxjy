@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lcsw.mapper.AccessoryExamMapper">
+
+	<resultMap id="AccessoryExamMap" type="lcsw.domain.AccessoryExam" >
+    	<id column="accessory_exam_id" property="accessoryExamId" jdbcType="INTEGER" />
+    	<result column="case_id" property="caseId" jdbcType="INTEGER" />
+    	<result column="accessory_exam_name" property="accessoryExamName" jdbcType="VARCHAR" />
+    	<result column="accessory_exam_result" property="accessoryExamResult" jdbcType="VARCHAR" />
+    	<result column="accessory_exam_type" property="accessoryExamType" jdbcType="VARCHAR" />
+    	<result column="accessory_exam_order" property="accessoryExamOrder" jdbcType="INTEGER" />
+    	<result column="score" property="score" jdbcType="DOUBLE" />
+  	</resultMap>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
+  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score from tbl_accessory_exam where accessory_exam_id = #{id}
+  	</select>
+  	
+  	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
+  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score from tbl_accessory_exam where case_id = #{id}
+  	</select>
+  	
+  	<insert id="insert" parameterType="AccessoryExam" >
+    	insert into tbl_accessory_exam (case_id, accessory_exam_name, accessory_exam_result, accessory_exam_type, accessory_exam_order, score)
+    	values (#{caseId,jdbcType=INTEGER}, #{accessoryExamName,jdbcType=VARCHAR}, 
+      	#{accessoryExamResult,jdbcType=VARCHAR}, #{accessoryExamType,jdbcType=VARCHAR}, #{accessoryExamOrder,jdbcType=INTEGER}, 
+    	 #{score,jdbcType=DOUBLE})
+  	</insert>
+	
+	 <update id="updateByPrimaryKey" parameterType="AccessoryExam" >
+    	update tbl_accessory_exam
+    	set case_id = #{caseId,jdbcType=INTEGER},
+      		accessory_exam_name = #{accessoryExamName,jdbcType=VARCHAR},
+      		accessory_exam_result = #{accessoryExamResult,jdbcType=VARCHAR},
+      		accessory_exam_type = #{accessoryExamType,jdbcType=VARCHAR},
+      		accessory_exam_order = #{accessoryExamOrder,jdbcType=INTEGER},
+      		score = #{score,jdbcType=DOUBLE}
+    	where accessory_exam_id = #{accessoryExamId,jdbcType=INTEGER}
+  </update>
+  
+    <delete id="deleteByPrimaryKey">
+  		delete from tbl_accessory_exam
+    	where accessory_exam_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+  
+  	<delete id="deleteByCaseId">
+  		delete from tbl_accessory_exam
+    	where case_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+	
+</mapper>

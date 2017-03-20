@@ -3,6 +3,7 @@ package lcsw.domain;
 public class FirstVisit {
 	
 	private Integer firstVisitId;
+	private Integer caseId;
 	private String fvResultA;
 	private String fvResultB;
 	private String fvResultC;
@@ -10,6 +11,15 @@ public class FirstVisit {
 	private String fvResultE;
 	private Double score;
 	private String analysis;
+	
+	
+	
+	public Integer getCaseId() {
+		return caseId;
+	}
+	public void setCaseId(Integer caseId) {
+		this.caseId = caseId;
+	}
 	public Integer getFirstVisitId() {
 		return firstVisitId;
 	}

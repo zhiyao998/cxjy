@@ -1,5 +1,7 @@
 package lcsw.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -27,6 +29,11 @@ public class CaseServiceImpl implements CaseService {
 	@Override
 	public int insert(Case record) {
 		return caseMapper.insert(record);
+	}
+
+	@Override
+	public List<Case> selectAll() {
+		return caseMapper.selectAll();
 	}
 
 }

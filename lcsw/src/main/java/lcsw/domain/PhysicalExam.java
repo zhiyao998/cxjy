@@ -3,6 +3,7 @@ package lcsw.domain;
 public class PhysicalExam {
 	
 	private Integer physicalExamId;
+	private Integer caseId;
 	private String physicalExamName;
 	private String physicalExamPart;
 	private String physicalExamResult;
@@ -10,6 +11,13 @@ public class PhysicalExam {
 	private String physicalExamOrder;
 	private Double score;
 	
+	
+	public Integer getCaseId() {
+		return caseId;
+	}
+	public void setCaseId(Integer caseId) {
+		this.caseId = caseId;
+	}
 	public Integer getPhysicalExamId() {
 		return physicalExamId;
 	}

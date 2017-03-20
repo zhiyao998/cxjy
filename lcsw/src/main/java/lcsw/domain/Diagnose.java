@@ -3,6 +3,7 @@ package lcsw.domain;
 public class Diagnose {
 	
 	private Integer diagnoseId;
+	private Integer caseId;
 	private String diagnoseResultA;
 	private String diagnoseResultB;
 	private String diagnoseResultC;
@@ -11,6 +12,14 @@ public class Diagnose {
 	private String diagnoseAnswer;
 	private Double score;
 	
+	
+	
+	public Integer getCaseId() {
+		return caseId;
+	}
+	public void setCaseId(Integer caseId) {
+		this.caseId = caseId;
+	}
 	public Integer getDiagnoseId() {
 		return diagnoseId;
 	}
@@ -61,11 +70,13 @@ public class Diagnose {
 	}
 	@Override
 	public String toString() {
-		return "Diagnose [diagnoseId=" + diagnoseId + ", diagnoseResultA=" + diagnoseResultA + ", diagnoseResultB="
-				+ diagnoseResultB + ", diagnoseResultC=" + diagnoseResultC + ", diagnoseResultD=" + diagnoseResultD
-				+ ", diagnoseResultE=" + diagnoseResultE + ", diagnoseAnswer=" + diagnoseAnswer + ", score=" + score
-				+ "]";
-	} 
+		return "Diagnose [diagnoseId=" + diagnoseId + ", caseId=" + caseId + ", diagnoseResultA=" + diagnoseResultA
+				+ ", diagnoseResultB=" + diagnoseResultB + ", diagnoseResultC=" + diagnoseResultC + ", diagnoseResultD="
+				+ diagnoseResultD + ", diagnoseResultE=" + diagnoseResultE + ", diagnoseAnswer=" + diagnoseAnswer
+				+ ", score=" + score + "]";
+	}
+	
+	
 	
 	
 }

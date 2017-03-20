@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="lcsw.mapper.InquiryMapper">
+	
+	<resultMap id="InquiryMap" type="lcsw.domain.Inquiry" >
+    	<id column="inquiry_id" property="inquiryId" jdbcType="INTEGER" />
+    	<result column="case_id" property="caseId" jdbcType="INTEGER" />
+    	<result column="inquiry_title" property="inquiryTitle" jdbcType="VARCHAR" />
+    	<result column="patient_answer" property="patientAnswer" jdbcType="VARCHAR" />
+    	<result column="inquiry_type" property="inquiryType" jdbcType="INTEGER" />
+    	<result column="inquiry_order" property="inquiryOrder" jdbcType="INTEGER" />
+    	<result column="score" property="score" jdbcType="DOUBLE" />
+  	</resultMap>
+  	
+  	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="InquiryMap">
+  		select inquiry_id,case_id,inquiry_title,patient_answer,inquiry_type,inquiry_order,score from tbl_inquiry where inquiry_id = #{id}
+  	</select>
+  	
+  	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="InquiryMap">
+  		select inquiry_id,case_id,inquiry_title,patient_answer,inquiry_type,inquiry_order,score from tbl_inquiry where case_id = #{id}
+  	</select>
+  	
+  	<insert id="insert" parameterType="Inquiry" >
+    	insert into tbl_inquiry (case_id, inquiry_title, patient_answer, inquiry_type, inquiry_order, score)
+    	values (#{caseId,jdbcType=INTEGER}, #{inquiryTitle,jdbcType=VARCHAR}, 
+      	#{patientAnswer,jdbcType=VARCHAR}, #{inquiryType,jdbcType=INTEGER}, #{inquiryOrder,jdbcType=INTEGER}, 
+    	 #{score,jdbcType=DOUBLE})
+  	</insert>
+	
+	 <update id="updateByPrimaryKey" parameterType="Inquiry" >
+    	update tbl_inquiry
+    	set case_id = #{caseId,jdbcType=INTEGER},
+      		inquiry_title = #{inquiryTitle,jdbcType=VARCHAR},
+      		patient_answer = #{patientAnswer,jdbcType=VARCHAR},
+      		inquiry_type = #{inquiryType,jdbcType=INTEGER},
+      		inquiry_order = #{inquiryOrder,jdbcType=INTEGER},
+      		score = #{score,jdbcType=DOUBLE}
+    	where inquiry_id = #{inquiryId,jdbcType=INTEGER}
+  </update>
+  
+    <delete id="deleteByPrimaryKey">
+  		delete from tbl_inquiry
+    	where inquiry_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+  
+  	<delete id="deleteByCaseId">
+  		delete from tbl_inquiry
+    	where case_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+
+</mapper>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="lcsw.mapper.CaseMapper">
+
+	<!--延迟加载  -->
   <resultMap id="CaseMap" type="lcsw.domain.Case" >
     <id column="case_id" property="caseId" jdbcType="INTEGER" />
     <result column="case_title" property="caseTitle" jdbcType="VARCHAR" />
@@ -9,21 +11,15 @@
     <result column="create_time" property="createTime" jdbcType="DATE" />
     <result column="creater" property="creater" jdbcType="VARCHAR" />
     <result column="case_type" property="caseType" jdbcType="VARCHAR" />
-    <association property=""></association>
-    <collection property="inquirys" ofType="lcsw.domain.Inquiry">
-    	<id column="inquiry_id" property="inquiryId"/>
-    	<result column="inquiry_title" property="inquiryTitle"/>
-    	<result column="patient_answer" property="patientAnswer"/>
-    	<result column="inquiry_type" property="inquiryType"/>
-    	<result column="inquiry_order" property="inquiryOrder"/>
-    	<result column="score" property="score"/>
-    </collection>
-    <collection property=""></collection>
   </resultMap>
   
   
   	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="CaseMap">
   		select case_id,case_title,patient_Info,chief_complain,create_time,creater,case_type from tbl_case where case_id = #{id}
+  	</select>
+  	
+  	<select id="selectAll" parameterType="java.lang.Integer" resultMap="CaseMap">
+  		select case_id,case_title,patient_Info,chief_complain,create_time,creater,case_type from tbl_case
   	</select>
   	
   	<insert id="insert" parameterType="case" >
@@ -44,6 +40,9 @@
     	where case_id = #{caseId,jdbcType=INTEGER}
   </update>
   
-  
+  	<delete id="deleteByPrimaryKey">
+  		delete from tbl_case
+    	where case_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
 
 </mapper>

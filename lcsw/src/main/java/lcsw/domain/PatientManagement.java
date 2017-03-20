@@ -3,8 +3,18 @@ package lcsw.domain;
 public class PatientManagement {
 	
 	private Integer patientManagementId;
+	private Integer caseId;
 	private String managementPlan;
 	private String score;
+	
+	
+	
+	public Integer getCaseId() {
+		return caseId;
+	}
+	public void setCaseId(Integer caseId) {
+		this.caseId = caseId;
+	}
 	public Integer getPatientManagementId() {
 		return patientManagementId;
 	}

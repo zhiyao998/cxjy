@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="lcsw.mapper.PhysicalExamMapper">
+	
+	<resultMap id="PhysicalExamMap" type="lcsw.domain.PhysicalExam" >
+    	<id column="physical_exam_id" property="physicalExamId" jdbcType="INTEGER" />
+    	<result column="case_id" property="caseId" jdbcType="INTEGER" />
+    	<result column="physical_exam_name" property="physicalExamName" jdbcType="VARCHAR" />
+    	<result column="physical_exam_part" property="physicalExamPart" jdbcType="VARCHAR" />
+    	<result column="physical_exam_result" property="physicalExamResult" jdbcType="VARCHAR" />
+    	<result column="physical_exam_type" property="physicalExamType" jdbcType="VARCHAR" />
+    	<result column="physical_exam_order" property="physicalExamOrder" jdbcType="VARCHAR" />
+    	<result column="score" property="score" jdbcType="DOUBLE" />
+  	</resultMap>
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="PhysicalExamMap">
+  		select physical_exam_id,case_id,physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score from tbl_physical_exam where physical_exam_id = #{id}
+  	</select>
+  	
+  	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="PhysicalExamMap">
+  		select physical_exam_id,case_id,physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score from tbl_physical_exam where case_id = #{id}
+  	</select>
+  	
+  	<insert id="insert" parameterType="PhysicalExam" >
+    	insert into tbl_physical_exam (case_id, physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score)
+    	values (#{caseId,jdbcType=INTEGER}, #{physical_exam_name,jdbcType=VARCHAR}, 
+    	#{physical_exam_part,jdbcType=VARCHAR}, #{physical_exam_result,jdbcType=VARCHAR}, #{physical_exam_type,jdbcType=VARCHAR}, #{physical_exam_order,jdbcType=VARCHAR}, 
+    	 #{score,jdbcType=DOUBLE})
+  	</insert>
+	
+	 <update id="updateByPrimaryKey" parameterType="PhysicalExam" >
+    	update tbl_physical_exam
+    	set case_id = #{caseId,jdbcType=INTEGER},
+      		physical_exam_name = #{physicalExamName,jdbcType=VARCHAR},
+      		physical_exam_part = #{physicalExamPart,jdbcType=VARCHAR},
+      		physical_exam_result = #{physicalExamResult,jdbcType=VARCHAR},
+      		physical_exam_type = #{physicalExamType,jdbcType=VARCHAR},
+      		physical_exam_order = #{physicalExamOrder,jdbcType=VARCHAR},
+      		score = #{score,jdbcType=DOUBLE}
+    	where physical_exam_id = #{physicalExamId,jdbcType=INTEGER}
+  </update>
+  
+    <delete id="deleteByPrimaryKey">
+  		delete from tbl_physical_exam
+    	where physical_exam_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+  
+  	<delete id="deleteByCaseId">
+  		delete from tbl_physical_exam
+    	where case_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+	
+</mapper>

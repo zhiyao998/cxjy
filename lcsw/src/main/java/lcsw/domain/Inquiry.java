@@ -3,12 +3,21 @@ package lcsw.domain;
 public class Inquiry {
 	
 	private Integer inquiryId;
+	private Integer caseId;
 	private String inquiryTitle;
 	private String patientAnswer;
 	private Integer inquiryType;
 	private Integer inquiryOrder;
 	private Double score;
 	
+	
+	
+	public Integer getCaseId() {
+		return caseId;
+	}
+	public void setCaseId(Integer caseId) {
+		this.caseId = caseId;
+	}
 	public Integer getInquiryId() {
 		return inquiryId;
 	}

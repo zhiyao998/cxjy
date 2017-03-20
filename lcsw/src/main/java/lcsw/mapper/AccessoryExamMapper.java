@@ -1,0 +1,23 @@
+package lcsw.mapper;
+
+import java.util.List;
+
+import lcsw.domain.AccessoryExam;
+
+public interface AccessoryExamMapper {
+	
+    int deleteByPrimaryKey(Integer id);
+    
+    int deleteByCaseId(Integer id);
+
+    int insert(AccessoryExam record);
+
+//    int insertSelective(Case record);
+
+    AccessoryExam selectByPrimaryKey(Integer id);
+    
+    List<AccessoryExam> selectByCaseId(Integer id);
+
+    int updateByPrimaryKey(AccessoryExam record);
+	
+}

@@ -3,10 +3,19 @@ package lcsw.domain;
 public class Treatment {
 	
 	private Integer treatmentId;
+	private Integer caseId;
 	private String treatmentType;
 	private String treatmentPlan;
 	private Double score;
 	
+	
+	
+	public Integer getCaseId() {
+		return caseId;
+	}
+	public void setCaseId(Integer caseId) {
+		this.caseId = caseId;
+	}
 	public Integer getTreatmentId() {
 		return treatmentId;
 	}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="lcsw.mapper.DiagnoseMapper">
+	<resultMap id="DiagnoseMap" type="lcsw.domain.Diagnose" >
+    	<id column="diagnose_id" property="diagnoseId" jdbcType="INTEGER" />
+    	<result column="case_id" property="caseId" jdbcType="INTEGER" />
+    	<result column="diagnose_resultA" property="diagnoseResultA" jdbcType="VARCHAR" />
+    	<result column="diagnose_resultB" property="diagnoseResultB" jdbcType="VARCHAR" />
+    	<result column="diagnose_resultC" property="diagnoseResultC" jdbcType="VARCHAR" />
+    	<result column="diagnose_resultD" property="diagnoseResultD" jdbcType="VARCHAR" />
+    	<result column="diagnose_resultE" property="diagnoseResultE" jdbcType="VARCHAR" />
+    	<result column="score" property="score" jdbcType="DOUBLE" />
+  	</resultMap>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="DiagnoseMap">
+  		select diagnose_id,case_id,diagnose_resultA,diagnose_resultB,diagnose_resultC,diagnose_resultD,diagnose_resultE,score from tbl_diagnose where diagnose_id = #{id}
+  	</select>
+  	
+  	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="DiagnoseMap">
+  		select diagnose_id,case_id,diagnose_resultA,diagnose_resultB,diagnose_resultC,diagnose_resultD,diagnose_resultE,score from tbl_diagnose where case_id = #{id}
+  	</select>
+  	
+  	<insert id="insert" parameterType="Diagnose" >
+    	insert into tbl_diagnose (case_id,diagnose_resultA,diagnose_resultB,diagnose_resultC,diagnose_resultD,diagnose_resultE,score)
+    	values (#{caseId,jdbcType=INTEGER}, #{diagnoseResultA,jdbcType=VARCHAR}, 
+      	#{diagnoseResultB,jdbcType=VARCHAR}, #{diagnoseResultC,jdbcType=VARCHAR}, #{diagnoseResultD,jdbcType=VARCHAR}, #{diagnoseResultE,jdbcType=VARCHAR},
+    	 #{score,jdbcType=DOUBLE})
+  	</insert>
+	
+	 <update id="updateByPrimaryKey" parameterType="Diagnose" >
+    	update tbl_diagnose
+    	set case_id = #{caseId,jdbcType=INTEGER},
+      		diagnose_resultA = #{diagnoseResultA,jdbcType=VARCHAR},
+      		diagnose_resultB = #{diagnoseResultB,jdbcType=VARCHAR},
+      		diagnose_resultC = #{diagnoseResultC,jdbcType=VARCHAR},
+      		diagnose_resultD = #{diagnoseResultD,jdbcType=VARCHAR},
+      		diagnose_resultE = #{diagnoseResultE,jdbcType=VARCHAR},
+      		score = #{score,jdbcType=DOUBLE}
+    	where diagnose_id = #{diagnoseId,jdbcType=INTEGER}
+  </update>
+  
+    <delete id="deleteByPrimaryKey">
+  		delete from tbl_diagnose
+    	where diagnose_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+  
+  	<delete id="deleteByCaseId">
+  		delete from tbl_diagnose
+    	where case_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+
+</mapper>

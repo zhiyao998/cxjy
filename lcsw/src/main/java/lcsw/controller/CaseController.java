@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,12 +26,13 @@ public class CaseController {
 	private CaseService caseService;
 	
 	@RequestMapping("/list")
-	public ModelAndView listCase(HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public List<Case> listCase(HttpServletRequest request,HttpServletResponse response){
 		String id = request.getParameter("caseid");
 		
-		Case c = caseService.selectByPrimaryKey(Integer.parseInt(id));
-		System.out.println(c.toString());
-		return new ModelAndView("casetest", "cases", c);
+		List<Case> cases = caseService.selectAll();
+		
+		return cases;
 	}
 	
 	@RequestMapping("/queryOne")

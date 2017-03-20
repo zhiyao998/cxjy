@@ -3,11 +3,20 @@ package lcsw.domain;
 public class AccessoryExam {
 	
 	private Integer accessoryExamId;
+	private Integer caseId;
 	private String accessoryExamName;
 	private String accessoryExamResult;
 	private String accessoryExamType;
 	private Integer accessoryExamOrder;
 	private Double score;
+	
+	
+	public Integer getCaseId() {
+		return caseId;
+	}
+	public void setCaseId(Integer caseId) {
+		this.caseId = caseId;
+	}
 	public Integer getAccessoryExamId() {
 		return accessoryExamId;
 	}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="lcsw.mapper.TreatmentMapper">
+	
+	<resultMap id="TreatmentMap" type="lcsw.domain.Treatment" >
+    	<id column="treatment_id" property="treatmentId" jdbcType="INTEGER" />
+    	<result column="case_id" property="caseId" jdbcType="INTEGER" />
+    	<result column="treatment_type" property="treatmentType" jdbcType="VARCHAR" />
+    	<result column="treatment_plan" property="treatmentPlan" jdbcType="VARCHAR" />
+    	<result column="score" property="score" jdbcType="DOUBLE" />
+  	</resultMap>
+	
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="TreatmentMap">
+  		select treatment_id,case_id,treatment_type,treatment_plan,score from tbl_treatment where treatment_id = #{id}
+  	</select>
+  	
+  	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="TreatmentMap">
+  		select treatment_id,case_id,treatment_type,treatment_plan,score from tbl_treatment where case_id = #{id}
+  	</select>
+  	
+  	<insert id="insert" parameterType="Treatment" >
+    	insert into tbl_treatment (case_id, treatment_type,treatment_plan,score)
+    	values (#{caseId,jdbcType=INTEGER}, #{treatmentType,jdbcType=VARCHAR}, #{treatmentPlan,jdbcType=VARCHAR},
+    	 #{score,jdbcType=DOUBLE})
+  	</insert>
+	
+	 <update id="updateByPrimaryKey" parameterType="Treatment" >
+    	update tbl_treatment
+    	set case_id = #{caseId,jdbcType=INTEGER},
+      		treatment_type = #{treatmentType,jdbcType=VARCHAR},
+      		treatment_plan = #{treatmentPlan,jdbcType=VARCHAR},
+      		score = #{score,jdbcType=DOUBLE}
+    	where treatment_id = #{treatmentId,jdbcType=INTEGER}
+  </update>
+  
+    <delete id="deleteByPrimaryKey">
+  		delete from tbl_treatment
+    	where treatment_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+  
+  	<delete id="deleteByCaseId">
+  		delete from tbl_treatment
+    	where case_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+</mapper>

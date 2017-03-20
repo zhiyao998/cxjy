@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lcsw.mapper.FirstVisitMapper">
+	<resultMap id="FirstVisitMap" type="lcsw.domain.FirstVisit" >
+    	<id column="first_visit_id" property="firstVisitId" jdbcType="INTEGER" />
+    	<result column="case_id" property="caseId" jdbcType="INTEGER" />
+    	<result column="fv_resultA" property="fvResultA" jdbcType="VARCHAR" />
+    	<result column="fv_resultB" property="fvResultB" jdbcType="VARCHAR" />
+    	<result column="fv_resultC" property="fvResultC" jdbcType="VARCHAR" />
+    	<result column="fv_resultD" property="fvResultD" jdbcType="VARCHAR" />
+    	<result column="fv_resultE" property="fvResultE" jdbcType="VARCHAR" />
+    	<result column="score" property="score" jdbcType="DOUBLE" />
+    	<result column="analysis" property="analysis" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="FirstVisitMap">
+  		select first_visit_id,case_id,fv_resultA,fv_resultB,fv_resultC,fv_resultD,fv_resultE,score,analysis from tbl_first_visit where first_visit_id = #{id}
+  	</select>
+  	
+  	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="FirstVisitMap">
+  		select first_visit_id,case_id,fv_resultA,fv_resultB,fv_resultC,fv_resultD,fv_resultE,score,analysis from tbl_first_visit where case_id = #{id}
+  	</select>
+  	
+  	<insert id="insert" parameterType="FirstVisit" >
+    	insert into tbl_first_visit (case_id,fv_resultA,fv_resultB,fv_resultC,fv_resultD,fv_resultE,score,analysis)
+    	values (#{caseId,jdbcType=INTEGER}, #{fv_resultA,jdbcType=VARCHAR}, 
+      	#{fv_resultB,jdbcType=VARCHAR}, #{fv_resultC,jdbcType=VARCHAR}, #{fv_resultD,jdbcType=VARCHAR}, #{fv_resultE,jdbcType=VARCHAR},
+    	 #{score,jdbcType=DOUBLE}),#{analysis,jdbcType=VARCHAR}
+  	</insert>
+	
+	 <update id="updateByPrimaryKey" parameterType="FirstVisit" >
+    	update tbl_first_visit
+    	set case_id = #{caseId,jdbcType=INTEGER},
+      		fv_resultA = #{fvResultA,jdbcType=VARCHAR},
+      		fv_resultB = #{fvResultB,jdbcType=VARCHAR},
+      		fv_resultC = #{fvResultC,jdbcType=VARCHAR},
+      		fv_resultD = #{fvResultD,jdbcType=VARCHAR},
+      		fv_resultE = #{fvResultE,jdbcType=VARCHAR},
+      		score = #{score,jdbcType=DOUBLE}
+      		analysis = #{analysis,jdbcType=VARCHAR},
+    	where first_visit_id = #{firstVisitId,jdbcType=INTEGER}
+  </update>
+  
+    <delete id="deleteByPrimaryKey">
+  		delete from tbl_first_visit
+    	where first_visit_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+  
+  	<delete id="deleteByCaseId">
+  		delete from first_visit_id
+    	where case_id = #{id,jdbcType=INTEGER}	
+ 	 </delete>
+	
+	
+</mapper>
