@@ -36,4 +36,9 @@ public class CaseServiceImpl implements CaseService {
 		return caseMapper.selectAll();
 	}
 
+	@Override
+	public int deleteByPrimaryKey(List<Integer> ids) {
+		return caseMapper.deleteByPrimaryKey(ids);
+	}
+
 }

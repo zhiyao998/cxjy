@@ -2,6 +2,7 @@ package lcsw.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +30,35 @@ public class CaseController {
 	@ResponseBody
 	public List<Case> listCase(HttpServletRequest request,HttpServletResponse response){
 		String id = request.getParameter("caseid");
-		
 		List<Case> cases = caseService.selectAll();
-		
 		return cases;
+	}
+	
+	@RequestMapping("/management")
+	public String caseManagement(){
+		return "/case/management";
+	}
+	
+	@RequestMapping(value="/toAdd")
+	public String toAdd(){
+		return "/case/toAdd";
+	}
+	
+	@RequestMapping("/delete")
+	@ResponseBody
+	public HashMap deleteCase(HttpServletRequest request,HttpServletResponse response){
+		String str = request.getParameter("ids");
+		str = str.substring(1, str.length()-1);
+		String ids[] = str.split(",");
+		List<Integer> istr = new ArrayList<Integer>();
+		for(int i = 0; i < ids.length; i++){
+			istr.add(Integer.valueOf(ids[i]));
+		}
+		int flag = caseService.deleteByPrimaryKey(istr);
+		HashMap map = new HashMap<String,Object>();
+		map.put("status", flag);
+		map.put("msg", "success");
+		return map;
 	}
 	
 	@RequestMapping("/queryOne")
@@ -41,16 +67,6 @@ public class CaseController {
 		String id = request.getParameter("caseid");
 		Case c = caseService.selectByPrimaryKey(Integer.parseInt(id));
 		return c;
-	}
-	
-	@RequestMapping("/test")
-	public String testCase(){
-		return "/inputTest";
-	}
-	
-	@RequestMapping("/update")
-	public String update(){
-		return "/update";
 	}
 	
 	@RequestMapping("/updateCase")
@@ -84,7 +100,8 @@ public class CaseController {
 	}
 	
 	@RequestMapping("/insert")
-	public String insertCase(HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public HashMap insertCase(HttpServletRequest request,HttpServletResponse response){
 		Case c = new Case();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
 		Date d =null;
@@ -99,9 +116,10 @@ public class CaseController {
 		c.setCreater(request.getParameter("creater"));
 		c.setCreateTime(new java.sql.Date(d.getTime()));
 		c.setPatientInfo(request.getParameter("patientInfo"));
-		System.out.println(c);
-		caseService.insert(c);
-		
-		return "/inputTest";	
+		System.out.println(caseService.insert(c));
+		HashMap map = new HashMap<String,Object>();
+		map.put("msg", c.getCaseId());
+		map.put("status", true);
+		return map;	
 	}
 }

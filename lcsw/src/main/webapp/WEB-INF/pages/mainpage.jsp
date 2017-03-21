@@ -3,36 +3,139 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<%@ include file="../common.jsp"%>
 <style type="text/css">
-	
-	a{
-		margin: 10px;
+        .easyui-accordion ul
+        {
+            list-style-type: none;
+            margin: 0px;
+            padding: 10px;
+        }
+        .easyui-accordion ul li
+        {
+            padding: 0px;
+        }
+        .easyui-accordion ul li a
+        {
+            line-height: 24px;
+        }
+        .easyui-accordion ul li div
+        {
+            margin: 2px 0px;
+            padding-left: 10px;
+            padding-top: 2px;
+        }
+        .easyui-accordion ul li div.hover
+        {
+            border: 1px dashed #99BBE8;
+            background: #E0ECFF;
+            cursor: pointer;
+        }
+        .easyui-accordion ul li div.hover a
+        {
+            color: #416AA3;
+        }
+        .easyui-accordion ul li div.selected
+        {
+            border: 1px solid #99BBE8;
+            background: #E0ECFF;
+            cursor: default;
+        }
+        .easyui-accordion ul li div.selected a
+        {
+            color: #416AA3;
+            font-weight: bold;
+        }
+</style>
+<script type="text/javascript">
+
+$(function () {
+    InitMenu();
+    $('body').layout();
+})
+
+	function InitMenu() {
+		$(".easyui-accordion li a").click(function() {
+			var tabtitle = $(this).text();
+			var href = $(this).attr("href");
+			addtab(tabtitle,href);
+		      $('.easyui-accordion li div').removeClass("selected");
+		        $(this).parent().addClass("selected");
+		    }).hover(function () {
+		        $(this).parent().addClass("hover");
+		    }, function () {
+		        $(this).parent().removeClass("hover");
+		});
 	}
 	
-</style>
-<%@ include file="../common.jsp"%>
+	function addtab(title,url) {
+		var flag = $('#tabs').tabs("exists",title);
+		if(flag){
+			$('#tabs').tabs("select",title);
+		}else{
+			// 在用户点击的时候提示
+		       $('#tabs').tabs('add', {
+		            title: title,
+		            content: createFrame(url),
+		            closable: true,
+		            width: $('#mainPanle').width() - 10,
+		            height: $('#mainPanle').height() - 26
+		        });
+		}
+	}
+	
+	function createFrame(url) {
+	    var s = '<iframe name="mainFrame" scrolling="no" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+	    return s;
+	}
+</script>
 <title>首页</title>
 </head>
 <body>
 <div id="cc" class="easyui-layout" data-options="fit:true">   
-    <div data-options="region:'north',title:'后台管理',split:true" style="height:100px;"></div>   
-	<div data-options="region:'west',split:true,title:'菜单导航'" style="width:200px;">		
-		<a>病例管理</a>
-		<a>试卷管理</a>
-		<a>考试管理</a>
-		<a>学生管理</a>			
+    <div data-options="region:'north',title:'后台管理',split:true" style="overflow: hidden; height: 30px; background: #D2E0F2 repeat-x center 50%;
+        line-height: 20px; color: #fff;"></div>   
+	<div data-options="region:'west',split:true,title:'菜单导航'" style="width:200px;">
+		<div class="easyui-accordion" fit="true">
+             <div title="基本业务" style="padding: 10px;">
+                    <ul>
+                        <li>
+                            <div>
+                                <a target="mainFrame" href="/lcsw/case/management.action">病例管理</a>
+                            </div>
+                            <div>
+                                <a target="mainFrame" href="Product/Default.htm">试题管理</a>
+                            </div>
+                            <div>
+                                <a target="mainFrame" href="Product/Default.htm">学生管理</a>
+                            </div>
+                        </li>
+                    </ul>
+               </div>	
+               <div title="权限控制" style="padding: 10px;">
+               		<ul>
+                        <li>
+                            <div>
+                                <a target="mainFrame" href="Product/Default.htm">用户管理</a>
+                            </div>
+                            <div>
+                                <a target="mainFrame" href="Product/Default.htm">权限管理</a>
+                            </div>
+                            <div>
+                                <a target="mainFrame" href="Product/Default.htm">系统设置</a>
+                            </div>
+                        </li>
+                    </ul>
+               </div>
+		</div>				
 	</div>
-    <div data-options="region:'center',title:'center title'" style="padding:5px;background:#eee;">
-    	<table class="easyui-datagrid" data-options="fitColumns:true,fit:true,rownumbers:true,url:'/lcsw/case/list.action'">
-    		<thead>
-    			<th data-options="field:'caseId'">病例id</th>   
-    			<th data-options="field:'caseTitle'">病例名称</th>   
-            	<th data-options="field:'createTime'">创建时间</th>   
-            	<th data-options="field:'creater'">创建人</th> 
-            	<th data-options="field:'caseType'">病例类型</th>
-    		</thead>
-    	</table>
-    
+    <div data-options="region:'center'" id="mainPanle" style="padding:5px;background:#eee;">
+    	<div id="tabs" class="easyui-tabs" fit="true" border="false">
+            <div title="主页" style="padding: 20px;" id="home">
+                <h1>
+                    	临床思维系统</h1>
+            </div>
+        </div>
     </div>   
 </div>  
 	

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="lcsw.mapper.AccessoryExamMapper">
 
-	<resultMap id="AccessoryExamMap" type="lcsw.domain.AccessoryExam" >
+	<resultMap id="AccessoryExamMap" type="AccessoryExam" >
     	<id column="accessory_exam_id" property="accessoryExamId" jdbcType="INTEGER" />
     	<result column="case_id" property="caseId" jdbcType="INTEGER" />
     	<result column="accessory_exam_name" property="accessoryExamName" jdbcType="VARCHAR" />

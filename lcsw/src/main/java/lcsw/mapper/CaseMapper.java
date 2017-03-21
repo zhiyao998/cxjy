@@ -6,7 +6,7 @@ import lcsw.domain.Case;
 
 public interface CaseMapper {
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(List<Integer> ids);
 
     int insert(Case record);
 
