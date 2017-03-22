@@ -17,6 +17,8 @@ public interface InquiryService {
     Inquiry selectByPrimaryKey(Integer id);
     
     List<Inquiry> selectByCaseId(Integer id);
+    
+    List<Inquiry> selectByType(Integer tpye);
 
     int updateByPrimaryKey(Inquiry record);
 	

@@ -22,7 +22,7 @@
 			iconCls:'icon-add',
 			handler:function(){
 				var url = "/lcsw/case/toAdd.action";
-				open("新增病例",url,600,400);
+				open("新增病例",url,800,600);
 			}
 		},{
 			text:'删除病例',

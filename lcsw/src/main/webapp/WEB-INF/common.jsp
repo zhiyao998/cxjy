@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false"%>
 <!-- easyui install pack -->
 <%
 	//清除页面缓存
@@ -44,27 +44,27 @@ function open(title, url, width, hight) {
 		}
 	});
 }
-$(function() {	
-$('#inputForm').form('submit', {
-	onSubmit : function() {
-		var flag = $(this).form('enableValidation').form('validate');
-		if(flag){
-			var json = $("#inputForm").serializeArray();
-		  	var url = $(this).attr("action");
-			$.post(url, json, function(data) {
-				if (data.status) {
-					$.messager.alert('系统消息', data.msg, 'info', function() {
-						//ok后的回调方法，去关闭父页面的窗口元素
-						parent.$('#grid').datagrid('reload');
-						parent.$('#${windowid}').window('close');
-						
-					});
-				}
-			}, "json");
+function submit(title, url, width, hight) {
+	$('#inputForm').form('submit', {
+		onSubmit : function() {
+			var flag = $(this).form('enableValidation').form('validate');
+			if(flag){
+				var json = $("#inputForm").serializeArray();
+			  	var url = $(this).attr("action");
+				$.post(url, json, function(data) {
+					if (data.status) {
+						$.messager.alert('系统消息', data.msg, 'info', function() {
+							//ok后的回调方法，去关闭父页面的窗口元素
+							parent.$('#grid').datagrid('reload');
+							parent.open($("#nextTitle").val(),$("#nextUrl").val(),$("#nextWidth").val(),$("#nextHight").val());
+							parent.$('#${windowid}').window('close');
+						});
+					}
+				}, "json");
+			}
+			//返回flase ，否则会提交表单
+			return false;
 		}
-		//返回flase ，否则会提交表单
-		return false;
-	}
-});
-});
+	});
+}
 </script>

@@ -21,6 +21,10 @@
   		select inquiry_id,case_id,inquiry_title,patient_answer,inquiry_type,inquiry_order,score from tbl_inquiry where case_id = #{id}
   	</select>
   	
+  	<select id="selectByType" parameterType="java.lang.Integer" resultMap="InquiryMap">
+  		select inquiry_id,case_id,inquiry_title,patient_answer,inquiry_type,inquiry_order,score from tbl_inquiry where inquiry_type = #{tpye}
+  	</select>
+  	
   	<insert id="insert" parameterType="Inquiry" >
     	insert into tbl_inquiry (case_id, inquiry_title, patient_answer, inquiry_type, inquiry_order, score)
     	values (#{caseId,jdbcType=INTEGER}, #{inquiryTitle,jdbcType=VARCHAR}, 

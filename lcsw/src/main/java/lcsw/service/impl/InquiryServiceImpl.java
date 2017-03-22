@@ -46,4 +46,9 @@ public class InquiryServiceImpl implements InquiryService {
 		return InquiryMapper.updateByPrimaryKey(record);
 	}
 
+	@Override
+	public List<Inquiry> selectByType(Integer type) {
+		return InquiryMapper.selectByType(type);
+	}
+
 }

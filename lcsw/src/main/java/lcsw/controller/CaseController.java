@@ -40,8 +40,9 @@ public class CaseController {
 	}
 	
 	@RequestMapping(value="/toAdd")
-	public String toAdd(){
-		return "/case/toAdd";
+	public String toAdd(HttpServletRequest request){
+		request.setAttribute("windowid", request.getParameter("windowid"));
+		return "/case/toAddCase";
 	}
 	
 	@RequestMapping("/delete")
@@ -73,13 +74,8 @@ public class CaseController {
 	@ResponseBody
 	public HashMap updateCase(HttpServletRequest request,HttpServletResponse response){
 		Case c = new Case();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-		Date d =null;
-		try {
-			 d = format.parse(request.getParameter("createTime"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		Date d =new Date();
+
 		c.setCaseId(Integer.valueOf(request.getParameter("caseId")));
 		c.setCaseTitle(request.getParameter("caseTitle"));
 		c.setCaseType(request.getParameter("caseType"));
@@ -103,23 +99,19 @@ public class CaseController {
 	@ResponseBody
 	public HashMap insertCase(HttpServletRequest request,HttpServletResponse response){
 		Case c = new Case();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-		Date d =null;
-		try {
-			 d = format.parse(request.getParameter("createTime"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		Date d =new Date();
+
 		c.setCaseTitle(request.getParameter("caseTitle"));
 		c.setCaseType(request.getParameter("caseType"));
 		c.setChiefComplain(request.getParameter("chiefComplain"));
 		c.setCreater(request.getParameter("creater"));
 		c.setCreateTime(new java.sql.Date(d.getTime()));
 		c.setPatientInfo(request.getParameter("patientInfo"));
-		System.out.println(caseService.insert(c));
+		System.out.println(c);
+		int flag = caseService.insert(c);
 		HashMap map = new HashMap<String,Object>();
 		map.put("msg", c.getCaseId());
-		map.put("status", true);
+		map.put("status", flag);
 		return map;	
 	}
 }

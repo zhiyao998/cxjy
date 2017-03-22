@@ -18,6 +18,8 @@ public interface InquiryMapper {
     
     List<Inquiry> selectByCaseId(Integer id);
 
+    List<Inquiry> selectByType(Integer type);
+    
     int updateByPrimaryKey(Inquiry record);
 	
 }
