@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import lcsw.domain.Case;
+import lcsw.domain.CaseQuery;
 import lcsw.service.CaseService;
 
 @Controller
@@ -25,6 +26,8 @@ public class CaseController {
 	
 	@Autowired
 	private CaseService caseService;
+	
+	private CaseQuery caseQuery = new CaseQuery();
 	
 	@RequestMapping("/list")
 	@ResponseBody
@@ -97,7 +100,7 @@ public class CaseController {
 	
 	@RequestMapping("/insert")
 	@ResponseBody
-	public HashMap insertCase(HttpServletRequest request,HttpServletResponse response){
+	public CaseQuery insertCase(HttpServletRequest request,HttpServletResponse response){
 		Case c = new Case();
 		Date d =new Date();
 
@@ -108,10 +111,10 @@ public class CaseController {
 		c.setCreateTime(new java.sql.Date(d.getTime()));
 		c.setPatientInfo(request.getParameter("patientInfo"));
 		System.out.println(c);
-		int flag = caseService.insert(c);
-		HashMap map = new HashMap<String,Object>();
-		map.put("msg", c.getCaseId());
-		map.put("status", flag);
-		return map;	
+//		int flag = caseService.insert(c);
+		caseQuery.setNewCase(c);
+		caseQuery.setStatus(true);
+		request.getSession().setAttribute("CaseQuery", caseQuery);
+		return caseQuery;	
 	}
 }

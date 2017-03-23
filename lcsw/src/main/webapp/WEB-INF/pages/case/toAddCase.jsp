@@ -13,6 +13,28 @@
 		border: 10px;
 	}
 </style>
+<script type="text/javascript">
+function submitNewCase() {
+	$('#inputForm').form('submit', {
+		onSubmit : function() {
+			var flag = $(this).form('enableValidation').form('validate');
+			if(flag){
+				var json = $("#inputForm").serializeArray();
+			  	var url = $(this).attr("action");
+				$.post(url, json, function(data) {
+					if (data.status) {
+							//ok后的回调方法，去关闭父页面的窗口元素
+							parent.open($("#nextTitle").val(),$("#nextUrl").val(),$("#nextWidth").val(),$("#nextHight").val());
+							parent.$('#${windowid}').window('close');
+					}
+				}, "json");
+			}
+			//返回flase ，否则会提交表单
+			return false;
+		}
+	});
+}
+</script>
 </head>
 <body>
 	<div class="easyui-layout" data-options="fit:true">
@@ -61,7 +83,7 @@
 			<input type="hidden" id="nextWidth" value="800">
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
-		<a id="submit" href="#" onclick="submit()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
+		<a id="submit" href="#" onclick="submitNewCase()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
 		<a id="close" href="#" onclick="parent.$('#${windowid}').window('close')" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
 	</div>
 	
