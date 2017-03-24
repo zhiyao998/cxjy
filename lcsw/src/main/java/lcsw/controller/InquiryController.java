@@ -34,17 +34,30 @@ public class InquiryController {
 	@RequestMapping(value="/selectByType")
 	@ResponseBody
 	public Map selectByType(HttpServletRequest request){
+		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		Integer tpye = Integer.valueOf(request.getParameter("inquiryType"));
 		List<Inquiry> list = new ArrayList<Inquiry>();
 		Map map = new HashMap<String,Object>();
 		list = inquiryService.selectByType(tpye);
-		map.put("list", list);
+		if(caseQuery.getInquirys().isEmpty()){
+			map.put("list", list);
+		}else{
+			List<Inquiry> inquiries = caseQuery.getInquirys();
+			for(int i = 0; i < list.size(); i++){
+				for(Inquiry i1:inquiries){
+					if(list.get(i).getInquiryOrder().equals(i1.getInquiryOrder()))
+						list.set(i, i1);
+				}
+			}
+			map.put("list", list);
+		}
+		
 		map.put("status", true);
 		map.put("msg", list.size());
 		return map;
 	}
 	
-	@RequestMapping(value="/insert")
+	@RequestMapping(value="/next")
 	@ResponseBody
 	public CaseQuery insertInquiry(HttpServletRequest request,@RequestBody List<Inquiry> inquirys){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");

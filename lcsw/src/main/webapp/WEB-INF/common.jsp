@@ -44,4 +44,29 @@ function open(title, url, width, hight) {
 		}
 	});
 }
+
+function last() {
+	parent.open($("#lastTitle").val(),$("#lastUrl").val(),$("#lastWidth").val(),$("#lastHight").val());
+	parent.$('#${windowid}').window('close');
+}
+
+/* 设置输入框的可编辑性  */
+function change(checkbox) {
+	var pre = $(checkbox).parent().prevAll();
+	var td1 = pre[0];
+	var td2 = pre[1];
+	var td3 = pre[2];
+	var input1 = $(td1).children()[0];
+	var input2 = $(td2).children()[0];
+	var input3 = $(td3).children()[0];
+	if(checkbox.checked){
+			$(input1).attr("disabled",false);
+			$(input2).attr("disabled",false);
+			$(input3).attr("disabled",false);
+	}else{
+			$(input1).attr("disabled",true);
+			$(input2).attr("disabled",true);
+			$(input3).attr("disabled",true);
+	}
+}
 </script>

@@ -17,6 +17,8 @@ public interface PhysicalExamService {
     PhysicalExam selectByPrimaryKey(Integer id);
     
     List<PhysicalExam> selectByCaseId(Integer id);
+    
+    List<PhysicalExam> selectByType(Integer type);
 
     int updateByPrimaryKey(PhysicalExam record);
 	

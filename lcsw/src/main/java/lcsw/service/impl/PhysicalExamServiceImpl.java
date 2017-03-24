@@ -45,4 +45,9 @@ public class PhysicalExamServiceImpl implements lcsw.service.PhysicalExamService
 		return physicalExamMapper.updateByPrimaryKey(record);
 	}
 
+	@Override
+	public List<PhysicalExam> selectByType(Integer type) {
+		return physicalExamMapper.selectByType(type);
+	}
+
 }

@@ -22,6 +22,10 @@
   		select physical_exam_id,case_id,physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score from tbl_physical_exam where case_id = #{id}
   	</select>
   	
+  	<select id="selectByType" parameterType="java.lang.Integer" resultMap="PhysicalExamMap">
+  		select physical_exam_id,case_id,physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score from tbl_physical_exam where physical_exam_type = #{type}
+  	</select>
+  	
   	<insert id="insert" parameterType="PhysicalExam" >
     	insert into tbl_physical_exam (case_id, physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score)
     	values (#{caseId,jdbcType=INTEGER}, #{physical_exam_name,jdbcType=VARCHAR}, 

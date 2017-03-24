@@ -8,7 +8,7 @@
 <style type="text/css">
 table, th, td
   {
-  border: 1px solid pink;
+  border: 1px solid green;
   }
 td
   {
@@ -28,11 +28,18 @@ $(function() {
 						var panel =$("#aa").accordion('getSelected');
 						if(panel[0].children.length==0){
 							panel.append("<table>");
-							$.each(list, function(index, content){ 
-									panel.append("<tr><td><input style='height: 100px;width: 200px' disabled='true' class='easyui-textbox' value='"+content.inquiryTitle+"'></input></td>"+ 
-										"<td><input style='height: 100px;width: 200px' disabled='true' type='text' class='easyui-textbox' value='" +content.patientAnswer+"'></input></td>"+
+							$.each(list, function(index, content){
+								if(content.caseId == 0){
+									panel.append("<tr><td><input class='easyui-textbox' style='height: 100px;width: 200px' disabled='true' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
+										"<td><input class='easyui-textbox' style='height: 100px;width: 200px' disabled='true' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
 										"<td><select disabled='true' class='easyui-combobox'>    <option value='-3'>-3</option><option>-2</option><option>-1</option><option selected = 'selected'>0</option><option>1</option><option>2</option><option>3</option></select></td>"+
 										"<td><input type='checkbox' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
+								}else{
+									panel.append("<tr><td><input class='easyui-textbox' style='height: 100px;width: 200px' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
+											"<td><input class='easyui-textbox' style='height: 100px;width: 200px' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
+											"<td><select class='easyui-combobox'> <option value='-3'>-3</option><option value='-2'>-2</option><option value='-1'>-1</option><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option></select></td>"+
+											"<td><input type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
+								}
 							});
 							$("#aa").accordion('getSelected').append("</table>");
 						}
@@ -46,25 +53,6 @@ $(function() {
 	}); 
 });
 
-/* 设置输入框的可编辑性  */
-function change(checkbox) {
-	var pre = $(checkbox).parent().prevAll();
-	var td1 = pre[0];
-	var td2 = pre[1];
-	var td3 = pre[2];
-	var input1 = $(td1).children()[0];
-	var input2 = $(td2).children()[0];
-	var input3 = $(td3).children()[0];
-	if(checkbox.checked){
-			$(input1).attr("disabled",false);
-			$(input2).attr("disabled",false);
-			$(input3).attr("disabled",false);
-	}else{
-			$(input1).attr("disabled",true);
-			$(input2).attr("disabled",true);
-			$(input3).attr("disabled",true);
-	}
-}
 
 function submitInquery() {
 	var json = "[";
@@ -99,11 +87,12 @@ function submitInquery() {
 	        'Content-Type': 'application/json' 
 	    },
 	    'type': 'POST',
-	    'url': "/lcsw/inquiry/insert.action",
+	    'url': "/lcsw/inquiry/next.action",
 	    'data': json,
 	    'dataType': 'json',
 	    'success': function(data) {
 			if (data.status) {
+				parent.open($("#nextTitle").val(),$("#nextUrl").val(),$("#nextWidth").val(),$("#nextHight").val());
 				parent.$('#${windowid}').window('close');
 			}
 		}
@@ -124,13 +113,18 @@ function submitInquery() {
     			<div title="个人史" style="padding:10px;">     
     			</div>   
 			</div>
-			<input type="hidden" id="nextUrl" value="/lcsw/physicalexam/toAdd.action">
+			<input type="hidden" id="nextUrl" value="/lcsw/physicalExam/toAddPhysicalExam.action">
 			<input type="hidden" id="nextTitle" value="添加体检信息">
 			<input type="hidden" id="nextHight" value="600">
-			<input type="hidden" id="nextWidth" value="800">  
+			<input type="hidden" id="nextWidth" value="800">
+			<input type="hidden" id="lastUrl" value="/lcsw/case/toAdd.action">
+			<input type="hidden" id="lastTitle" value="新增病例">
+			<input type="hidden" id="lastHight" value="600">
+			<input type="hidden" id="lastWidth" value="800">   
 		</div>
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
-			<a id="submit" href="#" onclick="submitInquery()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
+			<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
+			<a id="next" href="#" onclick="submitInquery()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
 			<a id="close" href="#" onclick="parent.$('#${windowid}').window('close')" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
 		</div>
 	</div>

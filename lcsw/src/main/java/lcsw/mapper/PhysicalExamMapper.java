@@ -17,6 +17,8 @@ public interface PhysicalExamMapper {
     
     List<PhysicalExam> selectByCaseId(Integer id);
 
+    List<PhysicalExam> selectByType(Integer type);
+    
     int updateByPrimaryKey(PhysicalExam record);
 	
 }

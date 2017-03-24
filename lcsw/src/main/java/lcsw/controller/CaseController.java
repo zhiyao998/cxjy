@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +51,7 @@ public class CaseController {
 	
 	@RequestMapping("/delete")
 	@ResponseBody
-	public HashMap deleteCase(HttpServletRequest request,HttpServletResponse response){
+	public Map deleteCase(HttpServletRequest request,HttpServletResponse response){
 		String str = request.getParameter("ids");
 		str = str.substring(1, str.length()-1);
 		String ids[] = str.split(",");
@@ -71,6 +72,24 @@ public class CaseController {
 		String id = request.getParameter("caseid");
 		Case c = caseService.selectByPrimaryKey(Integer.parseInt(id));
 		return c;
+	}
+	
+	@RequestMapping("/getlastCase")
+	@ResponseBody
+	public Map getlastCase(HttpServletRequest request,HttpServletResponse response){
+		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		HashMap map = new HashMap<String,Object>();
+		if(caseQuery != null){
+			if(caseQuery.getNewCase() == null){
+				map.put("status", false);
+			}else{
+				map.put("status", true);
+				map.put("Newcase", caseQuery.getNewCase());
+			}
+		}else{
+			map.put("status", false);
+		}
+		return map;
 	}
 	
 	@RequestMapping("/updateCase")
@@ -98,7 +117,7 @@ public class CaseController {
 		return map;
 	}
 	
-	@RequestMapping("/insert")
+	@RequestMapping("/next")
 	@ResponseBody
 	public CaseQuery insertCase(HttpServletRequest request,HttpServletResponse response){
 		Case c = new Case();

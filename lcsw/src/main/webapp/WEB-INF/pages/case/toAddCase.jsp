@@ -14,6 +14,22 @@
 	}
 </style>
 <script type="text/javascript">
+$(function() {	
+	$.ajax({
+	    'type': 'POST',
+	    'url': "/lcsw/case/getlastCase.action",
+	    'dataType': 'json',
+	    'success': function(data) {
+			if (data.status) {
+				var Newcase = data.Newcase;
+				$("#caseTitle").textbox("setValue",Newcase.caseTitle);
+				$("#patientInfo").textbox("setValue",Newcase.patientInfo);
+				$("#chiefComplain").textbox("setValue",Newcase.chiefComplain);
+				$("#caseType").textbox("setValue",Newcase.caseType);
+			}
+		}
+	})
+});
 function submitNewCase() {
 	$('#inputForm').form('submit', {
 		onSubmit : function() {
@@ -40,14 +56,14 @@ function submitNewCase() {
 	<div class="easyui-layout" data-options="fit:true">
 		
 	<div data-options="region:'center',border:false" style="padding: 10px;">
-		<form action="/lcsw/case/insert.action" method="post" id="inputForm">
+		<form action="/lcsw/case/next.action" method="post" id="inputForm">
 			<table>
 				<tr>
 					<td>
 						<label for="caseTitle">题目：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" name="caseTitle" data-options="required:true">
+						<input class="easyui-textbox" type="text" id="caseTitle" name="caseTitle" data-options="required:true">
 					</td>
 				</tr>
 				<tr>
@@ -55,7 +71,7 @@ function submitNewCase() {
 						<label for="patientInfo">病人信息：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" name="patientInfo" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></input>
+						<input class="easyui-textbox" id="patientInfo" name="patientInfo" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></input>
 					</td>
 				</tr>
 				<tr style="height: 30%;width: 50%">
@@ -63,7 +79,7 @@ function submitNewCase() {
 						<label for="chiefComplain">主诉：</label>
 					</td>
 					<td>
-						<textarea rows="5" cols="30" class="easyui-textbox" name="chiefComplain" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></textarea>
+						<textarea rows="5" cols="30" class="easyui-textbox" id="chiefComplain" name="chiefComplain" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -71,7 +87,7 @@ function submitNewCase() {
 						<label for="caseType">病例类型：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" name="caseType" data-options="required:true">
+						<input class="easyui-textbox" type="text" id="caseType" name="caseType" data-options="required:true">
 					</td>
 				</tr>
 			</table>
