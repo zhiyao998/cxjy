@@ -9,7 +9,7 @@ public class Case {
 	private String chiefComplain;
 	private Date createTime;
 	private String creater;
-	private String caseType;
+	private Integer caseType;
 
 	public Integer getCaseId() {
 		return caseId;
@@ -83,13 +83,13 @@ public class Case {
 
 
 
-	public String getCaseType() {
+	public Integer getCaseType() {
 		return caseType;
 	}
 
 
 
-	public void setCaseType(String caseType) {
+	public void setCaseType(Integer caseType) {
 		this.caseType = caseType;
 	}
 

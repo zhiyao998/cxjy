@@ -100,7 +100,7 @@ public class CaseController {
 
 		c.setCaseId(Integer.valueOf(request.getParameter("caseId")));
 		c.setCaseTitle(request.getParameter("caseTitle"));
-		c.setCaseType(request.getParameter("caseType"));
+		c.setCaseType(Integer.valueOf(request.getParameter("caseType")));
 		c.setChiefComplain(request.getParameter("chiefComplain"));
 		c.setCreater(request.getParameter("creater"));
 		c.setCreateTime(new java.sql.Date(d.getTime()));
@@ -124,7 +124,7 @@ public class CaseController {
 		Date d =new Date();
 
 		c.setCaseTitle(request.getParameter("caseTitle"));
-		c.setCaseType(request.getParameter("caseType"));
+		c.setCaseType(Integer.valueOf(request.getParameter("caseType")));
 		c.setChiefComplain(request.getParameter("chiefComplain"));
 		c.setCreater(request.getParameter("creater"));
 		c.setCreateTime(new java.sql.Date(d.getTime()));

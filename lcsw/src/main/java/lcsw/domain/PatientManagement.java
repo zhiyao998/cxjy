@@ -4,11 +4,16 @@ public class PatientManagement {
 	
 	private Integer patientManagementId;
 	private Integer caseId;
+	private String patientManagementType;
 	private String managementPlan;
 	private String score;
 	
-	
-	
+	public String getPatientManagementType() {
+		return patientManagementType;
+	}
+	public void setPatientManagementType(String patientManagementType) {
+		this.patientManagementType = patientManagementType;
+	}
 	public Integer getCaseId() {
 		return caseId;
 	}
@@ -35,7 +40,10 @@ public class PatientManagement {
 	}
 	@Override
 	public String toString() {
-		return "PatientManagement [patientManagementId=" + patientManagementId + ", managementPlan=" + managementPlan
-				+ ", score=" + score + "]";
+		return "PatientManagement [patientManagementId=" + patientManagementId + ", caseId=" + caseId
+				+ ", patientManagementType=" + patientManagementType + ", managementPlan=" + managementPlan + ", score="
+				+ score + "]";
 	}
+	
+	
 }

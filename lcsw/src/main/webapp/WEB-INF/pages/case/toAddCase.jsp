@@ -25,7 +25,7 @@ $(function() {
 				$("#caseTitle").textbox("setValue",Newcase.caseTitle);
 				$("#patientInfo").textbox("setValue",Newcase.patientInfo);
 				$("#chiefComplain").textbox("setValue",Newcase.chiefComplain);
-				$("#caseType").textbox("setValue",Newcase.caseType);
+				$("#caseType").combobox("select",Newcase.caseType)
 			}
 		}
 	})
@@ -87,7 +87,14 @@ function submitNewCase() {
 						<label for="caseType">病例类型：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" id="caseType" name="caseType" data-options="required:true">
+						<select id="caseType" name="caseType" class="easyui-combobox" data-options="required:true" style="width:200px;">
+							<option value="1">标准型</option>   
+    						<option value="2">口腔科</option>   
+    						<option value="3">内科</option>   
+    						<option value="4">外科</option>   
+    						<option value="5">胸外科</option>   
+    						<option value="6">皮肤科</option>   
+						</select>  
 					</td>
 				</tr>
 			</table>

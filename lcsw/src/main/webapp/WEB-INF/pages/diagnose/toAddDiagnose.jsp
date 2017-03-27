@@ -3,31 +3,31 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>初诊信息</title>
 <%@ include file="../../common.jsp"%>
+<title>Insert title here</title>
 <script type="text/javascript">
 
 $(function() {	
 	$.ajax({
 	    'type': 'POST',
-	    'url': "/lcsw/firstVisit/getlastFirstVisit.action",
+	    'url': "/lcsw/diagnose/getlastDiagnose.action",
 	    'dataType': 'json',
 	    'success': function(data) {
 			if (data.status) {
-				var firstVisit = data.firstVisit;
-				$("#score").textbox("setValue",firstVisit.score);
-				$("#fvResultA").textbox("setValue",firstVisit.fvResultA);
-				$("#fvResultB").textbox("setValue",firstVisit.fvResultB);
-				$("#fvResultC").textbox("setValue",firstVisit.fvResultC);
-				$("#fvResultD").textbox("setValue",firstVisit.fvResultD);
-				$("#fvResultE").textbox("setValue",firstVisit.fvResultE);
-				$("#analysis").textbox("setValue",firstVisit.analysis);
+				var diagnose = data.diagnose;
+				$("#score").textbox("setValue",diagnose.score);
+				$("#diagnoseResultA").textbox("setValue",diagnose.diagnoseResultA);
+				$("#diagnoseResultB").textbox("setValue",diagnose.diagnoseResultB);
+				$("#diagnoseResultC").textbox("setValue",diagnose.diagnoseResultC);
+				$("#diagnoseResultD").textbox("setValue",diagnose.diagnoseResultD);
+				$("#diagnoseResultE").textbox("setValue",diagnose.diagnoseResultE);
+				$("#diagnoseAnswer").textbox("setValue",diagnose.diagnoseAnswer);
 			}
 		}
 	})
 });
 
-function submitFirstVisit() {
+function submitDiagnose() {
 	$('#inputForm').form('submit', {
 		onSubmit : function() {
 			var flag = $(this).form('enableValidation').form('validate');
@@ -50,14 +50,14 @@ function submitFirstVisit() {
 </script>
 </head>
 <body>
-	<div class="easyui-layout" data-options="fit:true">
+		<div class="easyui-layout" data-options="fit:true">
 		
 	<div data-options="region:'center',border:false" style="padding: 10px;">
-		<form action="/lcsw/firstVisit/next.action" method="post" id="inputForm">
+		<form action="/lcsw/diagnose/next.action" method="post" id="inputForm">
 			<table>
 				<tr>
 					<td>
-						<label>请添加初诊信息：</label>
+						<label>请添加确诊信息：</label>
 					</td>
 					<td>
 						<select class='easyui-combobox' id="score" name="score" style="width: 60px;">    
@@ -73,42 +73,42 @@ function submitFirstVisit() {
 				</tr>
 				<tr>
 					<td>
-						<label for="fvResultA">确诊选项A：</label>
+						<label for="diagnoseResultA">确诊选项A：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" id="fvResultA" name="fvResultA" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></input>
+						<input class="easyui-textbox" type="text" id="diagnoseResultA" name="diagnoseResultA" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></input>
 					</td>
 				</tr>
 				<tr style="height: 30%;width: 50%">
 					<td>
-						<label for="fvResultB">确诊选项B：</label>
+						<label for="diagnoseResultB">确诊选项B：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" id="fvResultB" name="fvResultB" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></input>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="fvResultC">确诊选项C：</label>
-					</td>
-					<td>
-						<input class="easyui-textbox" type="text" id="fvResultC" name="fvResultC" data-options="required:true,multiline:true" style="height: 80px;width: 240px">
+						<input class="easyui-textbox" type="text" id="diagnoseResultB" name="diagnoseResultB" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></input>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<label for="fvResultD">确诊选项D：</label>
+						<label for="diagnoseResultC">确诊选项C：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" id="fvResultD" name="fvResultD" data-options="required:true,multiline:true" style="height: 80px;width: 240px">
+						<input class="easyui-textbox" type="text" id="diagnoseResultC" name="diagnoseResultC" data-options="required:true,multiline:true" style="height: 80px;width: 240px">
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<label for="fvResultE">确诊选项E：</label>
+						<label for="diagnoseResultD">确诊选项D：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" id="fvResultE" name="fvResultE" data-options="required:true,multiline:true" style="height: 80px;width: 240px">
+						<input class="easyui-textbox" type="text" id="diagnoseResultD" name="diagnoseResultD" data-options="required:true,multiline:true" style="height: 80px;width: 240px">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="diagnoseResultE">确诊选项E：</label>
+					</td>
+					<td>
+						<input class="easyui-textbox" type="text" id="diagnoseResultE" name="diagnoseResultE" data-options="required:true,multiline:true" style="height: 80px;width: 240px">
 					</td>
 				</tr>
 				<tr>
@@ -116,23 +116,23 @@ function submitFirstVisit() {
 						<label>请添加初诊信息分析：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" id="analysis" name="analysis" data-options="required:true,multiline:true" style="height: 80px;width: 240px">
+						<input class="easyui-textbox" type="text" id="diagnoseAnswer" name="diagnoseAnswer" data-options="required:true,multiline:true" style="height: 80px;width: 240px">
 					</td>
 				</tr>
 			</table>
 		</form>
-			<input type="hidden" id="nextUrl" value="/lcsw/diagnose/toAddDiagnose.action">
-			<input type="hidden" id="nextTitle" value="添加问诊信息">
+			<input type="hidden" id="nextUrl" value="/lcsw/treatment/toAddTreatment.action">
+			<input type="hidden" id="nextTitle" value="添加治疗信息">
 			<input type="hidden" id="nextHight" value="600">
 			<input type="hidden" id="nextWidth" value="800">
-			<input type="hidden" id="lastUrl" value="/lcsw/physicalExam/toAddPhysicalExam.action">
+			<input type="hidden" id="lastUrl" value="/lcsw/firstVisit/toAddFirstVisit.action">
 			<input type="hidden" id="lastTitle" value="添加体检信息">
 			<input type="hidden" id="lastHight" value="600">
 			<input type="hidden" id="lastWidth" value="800">
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 		<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
-		<a id="submit" href="#" onclick="submitFirstVisit()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
+		<a id="submit" href="#" onclick="submitDiagnose()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
 		<a id="close" href="#" onclick="parent.$('#${windowid}').window('close')" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
 	</div>
 	

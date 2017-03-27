@@ -6,20 +6,21 @@
     	<id column="patient_management_id" property="patientManagementId" jdbcType="INTEGER" />
     	<result column="case_id" property="caseId" jdbcType="INTEGER" />
     	<result column="management_plan" property="managementPlan" jdbcType="VARCHAR" />
+    	<result column="patient_management_type" property="patientManagementType" jdbcType="VARCHAR" />
     	<result column="score" property="score" jdbcType="DOUBLE" />
   	</resultMap>
   	
   	  	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="PatientManagementMap">
-  		select patient_management_id,case_id,management_plan,score from tbl_patient_management where patient_management_id = #{id}
+  		select patient_management_id,case_id,management_plan,patient_management_type,score from tbl_patient_management where patient_management_id = #{id}
   	</select>
   	
   	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="PatientManagementMap">
-  		select patient_management_id,case_id,management_plan,score from tbl_patient_management where case_id = #{id}
+  		select patient_management_id,case_id,management_plan,patient_management_type,score from tbl_patient_management where case_id = #{id}
   	</select>
   	
   	<insert id="insert" parameterType="PatientManagement" >
-    	insert into tbl_patient_management (case_id, management_plan, score)
-    	values (#{caseId,jdbcType=INTEGER}, #{managementPlan,jdbcType=VARCHAR}, 
+    	insert into tbl_patient_management (case_id, management_plan, patient_management_type, score)
+    	values (#{caseId,jdbcType=INTEGER}, #{managementPlan,jdbcType=VARCHAR}, #{patientManagementType,jdbcType=VARCHAR}, 
     	 #{score,jdbcType=DOUBLE})
   	</insert>
 	
@@ -27,6 +28,7 @@
     	update tbl_patient_management
     	set case_id = #{caseId,jdbcType=INTEGER},
       		management_plan = #{managementPlan,jdbcType=VARCHAR},
+      		patient_management_type = #{patientManagementType,jdbcType=VARCHAR},
       		score = #{score,jdbcType=DOUBLE}
     	where patient_management_id = #{patientManagementId,jdbcType=INTEGER}
   </update>

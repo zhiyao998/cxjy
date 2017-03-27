@@ -10,7 +10,7 @@
     <result column="chief_complain" property="chiefComplain" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="DATE" />
     <result column="creater" property="creater" jdbcType="VARCHAR" />
-    <result column="case_type" property="caseType" jdbcType="VARCHAR" />
+    <result column="case_type" property="caseType" jdbcType="INTEGER" />
   </resultMap>
   
   
@@ -26,7 +26,7 @@
     	insert into tbl_case (case_title, patient_Info, chief_complain, create_time, creater, case_type)
     	values (#{caseTitle,jdbcType=VARCHAR}, #{patientInfo,jdbcType=VARCHAR}, 
       	#{chiefComplain,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, #{creater,jdbcType=VARCHAR}, 
-    	 #{caseType,jdbcType=VARCHAR})
+    	 #{caseType,jdbcType=INTEGER})
   	</insert>
 	
 	 <update id="updateByPrimaryKey" parameterType="case" >
@@ -36,7 +36,7 @@
       		chief_complain = #{chiefComplain,jdbcType=VARCHAR},
       		create_time = #{createTime,jdbcType=DATE},
       		creater = #{creater,jdbcType=VARCHAR},
-      		case_type = #{caseType,jdbcType=VARCHAR}
+      		case_type = #{caseType,jdbcType=INTEGER}
     	where case_id = #{caseId,jdbcType=INTEGER}
   </update>
   

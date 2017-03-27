@@ -101,7 +101,7 @@ function submitPhysicalExam() {
 </script>
 </head>
 <body>
-		<div class="easyui-layout" data-options="fit:true">
+	<div class="easyui-layout" data-options="fit:true">
 		
 		<div data-options="region:'center',border:false" style="padding: 10px;width: 100%">
 			<div id="aa" class="easyui-accordion" style="width: 100%;height:500px;">   
