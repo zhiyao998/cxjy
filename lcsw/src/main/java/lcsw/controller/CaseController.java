@@ -1,7 +1,5 @@
 package lcsw.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import lcsw.domain.Case;
 import lcsw.domain.CaseQuery;
@@ -33,7 +30,6 @@ public class CaseController {
 	@RequestMapping("/list")
 	@ResponseBody
 	public List<Case> listCase(HttpServletRequest request,HttpServletResponse response){
-		String id = request.getParameter("caseid");
 		List<Case> cases = caseService.selectAll();
 		return cases;
 	}
@@ -51,7 +47,7 @@ public class CaseController {
 	
 	@RequestMapping("/delete")
 	@ResponseBody
-	public Map deleteCase(HttpServletRequest request,HttpServletResponse response){
+	public Map<String,Object> deleteCase(HttpServletRequest request,HttpServletResponse response){
 		String str = request.getParameter("ids");
 		str = str.substring(1, str.length()-1);
 		String ids[] = str.split(",");
@@ -60,7 +56,7 @@ public class CaseController {
 			istr.add(Integer.valueOf(ids[i]));
 		}
 		int flag = caseService.deleteByPrimaryKey(istr);
-		HashMap map = new HashMap<String,Object>();
+		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("status", flag);
 		map.put("msg", "success");
 		return map;
@@ -76,9 +72,9 @@ public class CaseController {
 	
 	@RequestMapping("/getlastCase")
 	@ResponseBody
-	public Map getlastCase(HttpServletRequest request,HttpServletResponse response){
+	public Map<String,Object> getlastCase(HttpServletRequest request,HttpServletResponse response){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
-		HashMap map = new HashMap<String,Object>();
+		HashMap<String,Object> map = new HashMap<String,Object>();
 		if(caseQuery != null){
 			if(caseQuery.getNewCase() == null){
 				map.put("status", false);
@@ -94,7 +90,7 @@ public class CaseController {
 	
 	@RequestMapping("/updateCase")
 	@ResponseBody
-	public HashMap updateCase(HttpServletRequest request,HttpServletResponse response){
+	public HashMap<String,Object> updateCase(HttpServletRequest request,HttpServletResponse response){
 		Case c = new Case();
 		Date d =new Date();
 
@@ -112,7 +108,7 @@ public class CaseController {
 		}else{
 			message = new String("失败");
 		}
-		HashMap map = new HashMap<String,Object>();
+		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("status", message);
 		return map;
 	}

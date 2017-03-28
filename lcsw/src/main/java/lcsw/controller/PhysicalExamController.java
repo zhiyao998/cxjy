@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lcsw.domain.CaseQuery;
-import lcsw.domain.Inquiry;
 import lcsw.domain.PhysicalExam;
 import lcsw.service.PhysicalExamService;
 
@@ -33,11 +32,11 @@ public class PhysicalExamController {
 	
 	@RequestMapping("/selectByType")
 	@ResponseBody
-	public Map selectByType(HttpServletRequest request){
+	public Map<String,Object> selectByType(HttpServletRequest request){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		Integer tpye = Integer.valueOf(request.getParameter("physicalExamType"));
 		List<PhysicalExam> list = new ArrayList<PhysicalExam>();
-		Map map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>();
 		list = physicalExamService.selectByType(tpye);
 		System.out.println(caseQuery.getPhysicalExams());
 		if(caseQuery.getPhysicalExams().isEmpty()){

@@ -46,4 +46,14 @@ public class AccessoryExamServiceImpl implements AccessoryExamService {
 		return accessoryExamMapper.updateByPrimaryKey(record);
 	}
 
+	@Override
+	public List<AccessoryExam> selectByResultType(Integer id) {
+		return accessoryExamMapper.selectByResultType(id);
+	}
+
+	@Override
+	public List<AccessoryExam> selectByAccessoryExamType(Integer id) {
+		return accessoryExamMapper.selectByAccessoryExamType(id);
+	}
+
 }

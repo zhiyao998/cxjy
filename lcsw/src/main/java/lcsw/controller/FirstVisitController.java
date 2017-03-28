@@ -51,9 +51,9 @@ public class FirstVisitController {
 	
 	@RequestMapping("/getlastFirstVisit")
 	@ResponseBody
-	public Map getlastFirstVisit(HttpServletRequest request,HttpServletResponse response){
+	public Map<String,Object> getlastFirstVisit(HttpServletRequest request,HttpServletResponse response){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
-		HashMap map = new HashMap<String,Object>();
+		HashMap<String,Object> map = new HashMap<String,Object>();
 		if(caseQuery != null){
 			if(caseQuery.getFirstVisit() == null){
 				map.put("status", false);

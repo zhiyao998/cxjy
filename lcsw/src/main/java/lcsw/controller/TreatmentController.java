@@ -42,9 +42,9 @@ public class TreatmentController {
 	
 	@RequestMapping("/getlastTreatment")
 	@ResponseBody
-	public Map getlastTreatment(HttpServletRequest request,HttpServletResponse response){
+	public Map<String,Object> getlastTreatment(HttpServletRequest request,HttpServletResponse response){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
-		HashMap map = new HashMap<String,Object>();
+		HashMap<String,Object> map = new HashMap<String,Object>();
 		if(caseQuery != null){
 			if(caseQuery.getDiagnose() == null){
 				map.put("status", false);

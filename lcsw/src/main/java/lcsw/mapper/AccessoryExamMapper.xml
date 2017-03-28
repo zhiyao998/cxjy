@@ -10,21 +10,30 @@
     	<result column="accessory_exam_type" property="accessoryExamType" jdbcType="VARCHAR" />
     	<result column="accessory_exam_order" property="accessoryExamOrder" jdbcType="INTEGER" />
     	<result column="score" property="score" jdbcType="DOUBLE" />
+    	<result column="result_type" property="resultType" jdbcType="INTEGER" />
   	</resultMap>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
-  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score from tbl_accessory_exam where accessory_exam_id = #{id}
+  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where accessory_exam_id = #{id}
   	</select>
   	
   	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
-  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score from tbl_accessory_exam where case_id = #{id}
+  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where case_id = #{id}
+  	</select>
+  	
+  	<select id="selectByResultType" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
+  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where result_type = #{id}
+  	</select>
+  	
+  	<select id="selectByAccessoryExamType" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
+  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where accessory_exam_type = #{id}
   	</select>
   	
   	<insert id="insert" parameterType="AccessoryExam" >
-    	insert into tbl_accessory_exam (case_id, accessory_exam_name, accessory_exam_result, accessory_exam_type, accessory_exam_order, score)
+    	insert into tbl_accessory_exam (case_id, accessory_exam_name, accessory_exam_result, accessory_exam_type, accessory_exam_order, score, result_type)
     	values (#{caseId,jdbcType=INTEGER}, #{accessoryExamName,jdbcType=VARCHAR}, 
       	#{accessoryExamResult,jdbcType=VARCHAR}, #{accessoryExamType,jdbcType=VARCHAR}, #{accessoryExamOrder,jdbcType=INTEGER}, 
-    	 #{score,jdbcType=DOUBLE})
+    	 #{score,jdbcType=DOUBLE} , #{resultType,jdbcType=INTEGER})
   	</insert>
 	
 	 <update id="updateByPrimaryKey" parameterType="AccessoryExam" >
@@ -34,7 +43,8 @@
       		accessory_exam_result = #{accessoryExamResult,jdbcType=VARCHAR},
       		accessory_exam_type = #{accessoryExamType,jdbcType=VARCHAR},
       		accessory_exam_order = #{accessoryExamOrder,jdbcType=INTEGER},
-      		score = #{score,jdbcType=DOUBLE}
+      		score = #{score,jdbcType=DOUBLE},
+      		result_type = #{resultType,jdbcType=INTEGER}
     	where accessory_exam_id = #{accessoryExamId,jdbcType=INTEGER}
   </update>
   

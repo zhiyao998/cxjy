@@ -18,4 +18,8 @@ public interface AccessoryExamService {
     List<AccessoryExam> selectByCaseId(Integer id);
 
     int updateByPrimaryKey(AccessoryExam record);
+    
+    List<AccessoryExam> selectByResultType(Integer id);
+    
+    List<AccessoryExam> selectByAccessoryExamType(Integer id);
 }

@@ -9,8 +9,16 @@ public class AccessoryExam {
 	private String accessoryExamType;
 	private Integer accessoryExamOrder;
 	private Double score;
+	private Integer resultType;
 	
 	
+	
+	public Integer getResultType() {
+		return resultType;
+	}
+	public void setResultType(Integer resultType) {
+		this.resultType = resultType;
+	}
 	public Integer getCaseId() {
 		return caseId;
 	}

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,11 +32,11 @@ public class InquiryController {
 	
 	@RequestMapping(value="/selectByType")
 	@ResponseBody
-	public Map selectByType(HttpServletRequest request){
+	public Map<String,Object> selectByType(HttpServletRequest request){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		Integer tpye = Integer.valueOf(request.getParameter("inquiryType"));
 		List<Inquiry> list = new ArrayList<Inquiry>();
-		Map map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>();
 		list = inquiryService.selectByType(tpye);
 		if(caseQuery.getInquirys().isEmpty()){
 			map.put("list", list);

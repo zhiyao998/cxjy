@@ -125,7 +125,7 @@ function submitDiagnose() {
 			<input type="hidden" id="nextTitle" value="添加治疗信息">
 			<input type="hidden" id="nextHight" value="600">
 			<input type="hidden" id="nextWidth" value="800">
-			<input type="hidden" id="lastUrl" value="/lcsw/firstVisit/toAddFirstVisit.action">
+			<input type="hidden" id="lastUrl" value="/lcsw/AccessoryExam/toAddAccessoryExam.action">
 			<input type="hidden" id="lastTitle" value="添加体检信息">
 			<input type="hidden" id="lastHight" value="600">
 			<input type="hidden" id="lastWidth" value="800">

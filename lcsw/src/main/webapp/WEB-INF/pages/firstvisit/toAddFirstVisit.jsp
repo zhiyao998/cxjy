@@ -121,7 +121,7 @@ function submitFirstVisit() {
 				</tr>
 			</table>
 		</form>
-			<input type="hidden" id="nextUrl" value="/lcsw/diagnose/toAddDiagnose.action">
+			<input type="hidden" id="nextUrl" value="/lcsw/AccessoryExam/toAddAccessoryExam.action">
 			<input type="hidden" id="nextTitle" value="添加问诊信息">
 			<input type="hidden" id="nextHight" value="600">
 			<input type="hidden" id="nextWidth" value="800">
