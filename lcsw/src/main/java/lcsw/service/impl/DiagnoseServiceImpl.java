@@ -22,7 +22,7 @@ public class DiagnoseServiceImpl implements DiagnoseService {
 	}
 
 	@Override
-	public int deleteByCaseId(Integer id) {
+	public int deleteByCaseId(List<Integer> id) {
 		return diagnoseMapper.deleteByCaseId(id);
 	}
 
@@ -37,7 +37,7 @@ public class DiagnoseServiceImpl implements DiagnoseService {
 	}
 
 	@Override
-	public List<Diagnose> selectByCaseId(Integer id) {
+	public Diagnose selectByCaseId(Integer id) {
 		return diagnoseMapper.selectByCaseId(id);
 	}
 

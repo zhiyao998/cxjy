@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lcsw.domain.CaseQuery;
+import lcsw.domain.Inquiry;
 import lcsw.domain.PhysicalExam;
 import lcsw.service.PhysicalExamService;
 
@@ -35,21 +36,29 @@ public class PhysicalExamController {
 	public Map<String,Object> selectByType(HttpServletRequest request){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		Integer tpye = Integer.valueOf(request.getParameter("physicalExamType"));
-		List<PhysicalExam> list = new ArrayList<PhysicalExam>();
+		List<PhysicalExam> newList = new ArrayList<PhysicalExam>();
 		Map<String,Object> map = new HashMap<String,Object>();
-		list = physicalExamService.selectByType(tpye);
+		List<PhysicalExam> list = physicalExamService.selectByType(tpye);
 		System.out.println(caseQuery.getPhysicalExams());
 		if(caseQuery.getPhysicalExams().isEmpty()){
 			map.put("list", list);
 		}else{
-			List<PhysicalExam> exams = caseQuery.getPhysicalExams();
+			List<PhysicalExam> physicalExams = caseQuery.getPhysicalExams();
+			for(PhysicalExam p:physicalExams){
+				if(p.getPhysicalExamType().equals(tpye))
+					newList.add(p);
+			}
 			for(int i = 0; i < list.size(); i++){
-				for(PhysicalExam i1:exams){
-					if(list.get(i).getPhysicalExamOrder().equals(i1.getPhysicalExamOrder()))
-						list.set(i, i1);
+				boolean flag = true;
+				for(PhysicalExam p1:physicalExams){
+					if(list.get(i).getPhysicalExamOrder().equals(p1.getPhysicalExamOrder()) && list.get(i).getPhysicalExamOrder().equals(p1.getPhysicalExamOrder()))
+						flag = false;
+				}
+				if(flag){
+					newList.add(list.get(i));
 				}
 			}
-			map.put("list", list);
+			map.put("list", newList);
 		}
 		
 		

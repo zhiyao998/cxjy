@@ -7,7 +7,7 @@ import lcsw.domain.FirstVisit;
 public interface FirstVisitService {
     int deleteByPrimaryKey(Integer id);
     
-    int deleteByCaseId(Integer id);
+    int deleteByCaseId(List<Integer> id);
 
     int insert(FirstVisit record);
 
@@ -15,7 +15,7 @@ public interface FirstVisitService {
 
     FirstVisit selectByPrimaryKey(Integer id);
     
-    List<FirstVisit> selectByCaseId(Integer id);
+    FirstVisit selectByCaseId(Integer id);
 
     int updateByPrimaryKey(FirstVisit record);
 }

@@ -8,9 +8,11 @@ public interface TreatmentMapper {
 	
     int deleteByPrimaryKey(Integer id);
     
-    int deleteByCaseId(Integer id);
+    int deleteByCaseId(List<Integer> id);
 
     int insert(Treatment record);
+    
+    int insertByBatch(List<Treatment> record);
 
 //    int insertSelective(Case record);
 

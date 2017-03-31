@@ -23,9 +23,9 @@
   	
   	<insert id="insert" parameterType="FirstVisit" >
     	insert into tbl_first_visit (case_id,fv_resultA,fv_resultB,fv_resultC,fv_resultD,fv_resultE,score,analysis)
-    	values (#{caseId,jdbcType=INTEGER}, #{fv_resultA,jdbcType=VARCHAR}, 
-      	#{fv_resultB,jdbcType=VARCHAR}, #{fv_resultC,jdbcType=VARCHAR}, #{fv_resultD,jdbcType=VARCHAR}, #{fv_resultE,jdbcType=VARCHAR},
-    	 #{score,jdbcType=DOUBLE}),#{analysis,jdbcType=VARCHAR}
+    	values (#{caseId,jdbcType=INTEGER}, #{fvResultA,jdbcType=VARCHAR}, 
+      	#{fvResultB,jdbcType=VARCHAR}, #{fvResultC,jdbcType=VARCHAR}, #{fvResultD,jdbcType=VARCHAR}, #{fvResultE,jdbcType=VARCHAR},
+    	 #{score,jdbcType=DOUBLE},#{analysis,jdbcType=VARCHAR})
   	</insert>
 	
 	 <update id="updateByPrimaryKey" parameterType="FirstVisit" >
@@ -46,9 +46,12 @@
     	where first_visit_id = #{id,jdbcType=INTEGER}	
  	 </delete>
   
-  	<delete id="deleteByCaseId">
-  		delete from first_visit_id
-    	where case_id = #{id,jdbcType=INTEGER}	
+  	<delete id="deleteByCaseId" parameterType="java.util.List">
+  		delete from tbl_first_visit
+    	where case_id in 
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    		#{item}
+    	</foreach>
  	 </delete>
 	
 	

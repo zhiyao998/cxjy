@@ -65,7 +65,7 @@ function submitTreatment() {
 	});
 	json += "]";
 	if(json=="[]")
-		json=null;
+		alert("请添加治疗信息！");
 	$.ajax({
 	    headers: { 
 	        'Accept': 'application/json',

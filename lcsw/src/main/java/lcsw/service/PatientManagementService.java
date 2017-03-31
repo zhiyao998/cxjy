@@ -8,7 +8,7 @@ public interface PatientManagementService {
 
     int deleteByPrimaryKey(Integer id);
     
-    int deleteByCaseId(Integer id);
+    int deleteByCaseId(List<Integer> id);
 
     int insert(PatientManagement record);
 

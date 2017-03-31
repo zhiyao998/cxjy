@@ -25,6 +25,15 @@
     	values (#{caseId,jdbcType=INTEGER}, #{treatmentType,jdbcType=VARCHAR}, #{treatmentPlan,jdbcType=VARCHAR},
     	 #{score,jdbcType=DOUBLE})
   	</insert>
+  	
+  	<insert id="insertByBatch" parameterType="java.util.List">
+        insert into tbl_treatment (case_id, treatment_type,treatment_plan,score)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.caseId,jdbcType=INTEGER}, #{item.treatmentType,jdbcType=VARCHAR}, #{item.treatmentPlan,jdbcType=VARCHAR},
+    	 #{item.score,jdbcType=DOUBLE})
+        </foreach>
+    </insert>
 	
 	 <update id="updateByPrimaryKey" parameterType="Treatment" >
     	update tbl_treatment
@@ -40,8 +49,11 @@
     	where treatment_id = #{id,jdbcType=INTEGER}	
  	 </delete>
   
-  	<delete id="deleteByCaseId">
+  	<delete id="deleteByCaseId" parameterType="java.util.List">
   		delete from tbl_treatment
-    	where case_id = #{id,jdbcType=INTEGER}	
+    	where case_id in 
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    		#{item}
+    	</foreach>
  	 </delete>
 </mapper>

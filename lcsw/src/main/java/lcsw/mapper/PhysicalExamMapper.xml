@@ -28,10 +28,20 @@
   	
   	<insert id="insert" parameterType="PhysicalExam" >
     	insert into tbl_physical_exam (case_id, physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score)
-    	values (#{caseId,jdbcType=INTEGER}, #{physical_exam_name,jdbcType=VARCHAR}, 
-    	#{physical_exam_part,jdbcType=VARCHAR}, #{physical_exam_result,jdbcType=VARCHAR}, #{physical_exam_type,jdbcType=VARCHAR}, #{physical_exam_order,jdbcType=VARCHAR}, 
+    	values (#{caseId,jdbcType=INTEGER}, #{physicalExamName,jdbcType=VARCHAR}, 
+    	#{physicalExamPart,jdbcType=VARCHAR}, #{physicalExamResult,jdbcType=VARCHAR}, #{physicalExamType,jdbcType=VARCHAR}, #{physicalExamOrder,jdbcType=VARCHAR}, 
     	 #{score,jdbcType=DOUBLE})
   	</insert>
+  	
+  	 <insert id="insertByBatch" parameterType="java.util.List">
+        insert into tbl_physical_exam (case_id, physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.caseId,jdbcType=INTEGER}, #{item.physicalExamName,jdbcType=VARCHAR}, 
+    	#{item.physicalExamPart,jdbcType=VARCHAR}, #{item.physicalExamResult,jdbcType=VARCHAR}, #{item.physicalExamType,jdbcType=VARCHAR}, #{item.physicalExamOrder,jdbcType=VARCHAR}, 
+    	 #{item.score,jdbcType=DOUBLE})
+        </foreach>
+    </insert>
 	
 	 <update id="updateByPrimaryKey" parameterType="PhysicalExam" >
     	update tbl_physical_exam
@@ -50,9 +60,12 @@
     	where physical_exam_id = #{id,jdbcType=INTEGER}	
  	 </delete>
   
-  	<delete id="deleteByCaseId">
+  	<delete id="deleteByCaseId" parameterType="java.util.List">
   		delete from tbl_physical_exam
-    	where case_id = #{id,jdbcType=INTEGER}	
+    	where case_id in 
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    		#{item}
+    	</foreach>	
  	 </delete>
 	
 </mapper>

@@ -54,14 +54,19 @@
 			iconCls:'icon-edit',
 			handler:function(){
 				
-				
+				 
 			}
 		},{
 			text:'查看病例',
 			iconCls:'icon-edit',
 			handler:function(){
-				
-				
+				var row = $('#grid').datagrid('getSelections');
+				var ids = [];
+				for(var i=0;i<row.length;i++){
+					ids[i] = row[i].caseId;
+				}
+				var url = "/lcsw/case/checkCase.action?id="+ids[0];
+				open("查看病例",url,800,600);				
 			}
 		}];
 	</script>

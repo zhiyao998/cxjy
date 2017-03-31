@@ -21,7 +21,7 @@ public class PhysicalExamServiceImpl implements lcsw.service.PhysicalExamService
 	}
 
 	@Override
-	public int deleteByCaseId(Integer id) {
+	public int deleteByCaseId(List<Integer> id) {
 		return physicalExamMapper.deleteByCaseId(id);
 	}
 

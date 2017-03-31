@@ -35,24 +35,32 @@ public class InquiryController {
 	public Map<String,Object> selectByType(HttpServletRequest request){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		Integer tpye = Integer.valueOf(request.getParameter("inquiryType"));
-		List<Inquiry> list = new ArrayList<Inquiry>();
+		List<Inquiry> newList = new ArrayList<Inquiry>();
 		Map<String,Object> map = new HashMap<String,Object>();
-		list = inquiryService.selectByType(tpye);
+		List<Inquiry> list = inquiryService.selectByType(tpye);
 		if(caseQuery.getInquirys().isEmpty()){
 			map.put("list", list);
 		}else{
 			List<Inquiry> inquiries = caseQuery.getInquirys();
+			for(Inquiry i:inquiries){
+				if(i.getInquiryType().equals(tpye))
+					newList.add(i);
+			}
 			for(int i = 0; i < list.size(); i++){
+				boolean flag = true;
 				for(Inquiry i1:inquiries){
-					if(list.get(i).getInquiryOrder().equals(i1.getInquiryOrder()))
-						list.set(i, i1);
+					if(list.get(i).getInquiryOrder().equals(i1.getInquiryOrder()) && list.get(i).getInquiryType().equals(i1.getInquiryType()))
+						flag = false;
+				}
+				if(flag){
+					newList.add(list.get(i));
 				}
 			}
-			map.put("list", list);
+			map.put("list", newList);
 		}
 		
 		map.put("status", true);
-		map.put("msg", list.size());
+		map.put("msg", newList.size());
 		return map;
 	}
 	

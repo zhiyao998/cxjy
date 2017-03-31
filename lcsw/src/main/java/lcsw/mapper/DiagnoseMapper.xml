@@ -10,21 +10,22 @@
     	<result column="diagnose_resultC" property="diagnoseResultC" jdbcType="VARCHAR" />
     	<result column="diagnose_resultD" property="diagnoseResultD" jdbcType="VARCHAR" />
     	<result column="diagnose_resultE" property="diagnoseResultE" jdbcType="VARCHAR" />
+    	<result column="diagnose_answer" property="diagnoseAnswer" jdbcType="VARCHAR" />
     	<result column="score" property="score" jdbcType="DOUBLE" />
   	</resultMap>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="DiagnoseMap">
-  		select diagnose_id,case_id,diagnose_resultA,diagnose_resultB,diagnose_resultC,diagnose_resultD,diagnose_resultE,score from tbl_diagnose where diagnose_id = #{id}
+  		select diagnose_id,case_id,diagnose_resultA,diagnose_resultB,diagnose_resultC,diagnose_resultD,diagnose_resultE,diagnose_answer,score from tbl_diagnose where diagnose_id = #{id}
   	</select>
   	
   	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="DiagnoseMap">
-  		select diagnose_id,case_id,diagnose_resultA,diagnose_resultB,diagnose_resultC,diagnose_resultD,diagnose_resultE,score from tbl_diagnose where case_id = #{id}
+  		select diagnose_id,case_id,diagnose_resultA,diagnose_resultB,diagnose_resultC,diagnose_resultD,diagnose_resultE,diagnose_answer,score from tbl_diagnose where case_id = #{id}
   	</select>
   	
   	<insert id="insert" parameterType="Diagnose" >
-    	insert into tbl_diagnose (case_id,diagnose_resultA,diagnose_resultB,diagnose_resultC,diagnose_resultD,diagnose_resultE,score)
+    	insert into tbl_diagnose (case_id,diagnose_resultA,diagnose_resultB,diagnose_resultC,diagnose_resultD,diagnose_resultE,diagnose_answer,score)
     	values (#{caseId,jdbcType=INTEGER}, #{diagnoseResultA,jdbcType=VARCHAR}, 
-      	#{diagnoseResultB,jdbcType=VARCHAR}, #{diagnoseResultC,jdbcType=VARCHAR}, #{diagnoseResultD,jdbcType=VARCHAR}, #{diagnoseResultE,jdbcType=VARCHAR},
+      	#{diagnoseResultB,jdbcType=VARCHAR}, #{diagnoseResultC,jdbcType=VARCHAR}, #{diagnoseResultD,jdbcType=VARCHAR}, #{diagnoseResultE,jdbcType=VARCHAR},#{diagnoseAnswer,jdbcType=VARCHAR},
     	 #{score,jdbcType=DOUBLE})
   	</insert>
 	
@@ -36,6 +37,7 @@
       		diagnose_resultC = #{diagnoseResultC,jdbcType=VARCHAR},
       		diagnose_resultD = #{diagnoseResultD,jdbcType=VARCHAR},
       		diagnose_resultE = #{diagnoseResultE,jdbcType=VARCHAR},
+      		diagnose_answer = #{diagnoseAnswer,jdbcType=VARCHAR},
       		score = #{score,jdbcType=DOUBLE}
     	where diagnose_id = #{diagnoseId,jdbcType=INTEGER}
   </update>
@@ -45,9 +47,12 @@
     	where diagnose_id = #{id,jdbcType=INTEGER}	
  	 </delete>
   
-  	<delete id="deleteByCaseId">
+  	<delete id="deleteByCaseId" parameterType="java.util.List">
   		delete from tbl_diagnose
-    	where case_id = #{id,jdbcType=INTEGER}	
+    	    	where case_id in 
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    		#{item}
+    	</foreach>	
  	 </delete>
 
 </mapper>

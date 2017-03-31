@@ -31,6 +31,16 @@
       	#{patientAnswer,jdbcType=VARCHAR}, #{inquiryType,jdbcType=INTEGER}, #{inquiryOrder,jdbcType=INTEGER}, 
     	 #{score,jdbcType=DOUBLE})
   	</insert>
+  	
+  	 <insert id="insertByBatch" parameterType="java.util.List">
+        insert into tbl_inquiry (case_id, inquiry_title, patient_answer, inquiry_type, inquiry_order, score)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.caseId,jdbcType=INTEGER}, #{item.inquiryTitle,jdbcType=VARCHAR}, 
+      	#{item.patientAnswer,jdbcType=VARCHAR}, #{item.inquiryType,jdbcType=INTEGER} , #{item.inquiryOrder,jdbcType=INTEGER},
+    	 #{item.score,jdbcType=DOUBLE})
+        </foreach>
+    </insert>
 	
 	 <update id="updateByPrimaryKey" parameterType="Inquiry" >
     	update tbl_inquiry
@@ -48,9 +58,12 @@
     	where inquiry_id = #{id,jdbcType=INTEGER}	
  	 </delete>
   
-  	<delete id="deleteByCaseId">
+  	<delete id="deleteByCaseId" parameterType="java.util.List">
   		delete from tbl_inquiry
-    	where case_id = #{id,jdbcType=INTEGER}	
+    	where case_id in 
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    		#{item}
+    	</foreach>
  	 </delete>
 
 </mapper>

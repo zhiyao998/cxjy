@@ -8,9 +8,11 @@ public interface InquiryMapper {
 
     int deleteByPrimaryKey(Integer id);
     
-    int deleteByCaseId(Integer id);
+    int deleteByCaseId(List<Integer> id);
 
     int insert(Inquiry record);
+    
+    int insertByBatch(List<Inquiry> record);
 
 //    int insertSelective(Case record);
 

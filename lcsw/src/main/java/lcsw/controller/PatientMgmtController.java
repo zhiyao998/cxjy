@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lcsw.domain.CaseQuery;
 import lcsw.domain.PatientManagement;
+import lcsw.service.CaseQueryService;
 import lcsw.service.PatientManagementService;
 
 @Controller
@@ -23,6 +24,8 @@ public class PatientMgmtController {
 	
 	@Resource
 	private PatientManagementService patientMgmtService;
+	@Resource
+	private CaseQueryService caseQueryService;
 	
 	@RequestMapping(value="/toAddPatientMgmt")
 	public String toAddTreatment(HttpServletRequest request){
@@ -32,12 +35,17 @@ public class PatientMgmtController {
 	
 	@RequestMapping(value="/next")
 	@ResponseBody
-	public CaseQuery next(HttpServletRequest request,@RequestBody List<PatientManagement> managements){
+	public Map next(HttpServletRequest request,@RequestBody List<PatientManagement> managements){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		caseQuery.setPatientManagements(managements);
 		System.out.println(managements);
 		request.getSession().setAttribute("CaseQuery",caseQuery);
-		return caseQuery;
+		System.out.println(caseQuery);
+		int flag = caseQueryService.insert(caseQuery);
+		Map map = new HashMap<String,Object>();
+		map.put("status", flag);
+		request.getSession().setAttribute("CaseQuery",null);
+		return map;
 	}
 	
 	@RequestMapping("/getlastPatientMgmt")

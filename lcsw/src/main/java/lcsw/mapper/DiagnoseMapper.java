@@ -8,7 +8,7 @@ public interface DiagnoseMapper {
 	
     int deleteByPrimaryKey(Integer id);
     
-    int deleteByCaseId(Integer id);
+    int deleteByCaseId(List<Integer> id);
 
     int insert(Diagnose record);
 
@@ -16,7 +16,7 @@ public interface DiagnoseMapper {
 
     Diagnose selectByPrimaryKey(Integer id);
     
-    List<Diagnose> selectByCaseId(Integer id);
+    Diagnose selectByCaseId(Integer id);
 
     int updateByPrimaryKey(Diagnose record);
 	

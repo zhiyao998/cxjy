@@ -22,7 +22,7 @@ public class FirstVisitServiceImpl implements FirstVisitService {
 	}
 
 	@Override
-	public int deleteByCaseId(Integer id) {
+	public int deleteByCaseId(List<Integer> id) {
 		return firstVisitMapper.deleteByCaseId(id);
 	}
 
@@ -37,7 +37,7 @@ public class FirstVisitServiceImpl implements FirstVisitService {
 	}
 
 	@Override
-	public List<FirstVisit> selectByCaseId(Integer id) {
+	public FirstVisit selectByCaseId(Integer id) {
 		return firstVisitMapper.selectByCaseId(id);
 	}
 

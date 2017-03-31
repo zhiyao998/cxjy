@@ -7,7 +7,7 @@ import lcsw.domain.AccessoryExam;
 public interface AccessoryExamService {
     int deleteByPrimaryKey(Integer id);
     
-    int deleteByCaseId(Integer id);
+    int deleteByCaseId(List<Integer> ids);
 
     int insert(AccessoryExam record);
 
@@ -19,7 +19,7 @@ public interface AccessoryExamService {
 
     int updateByPrimaryKey(AccessoryExam record);
     
-    List<AccessoryExam> selectByResultType(Integer id);
+    List<Integer> selectAccessoryExamTypeByResultType(Integer id);
     
     List<AccessoryExam> selectByAccessoryExamType(Integer id);
 }

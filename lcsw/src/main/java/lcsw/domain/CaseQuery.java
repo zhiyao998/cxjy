@@ -16,7 +16,6 @@ public class CaseQuery {
 	private boolean status;
 	
 	
-	
 	public boolean isStatus() {
 		return status;
 	}
@@ -71,7 +70,14 @@ public class CaseQuery {
 	public void setPatientManagements(List<PatientManagement> patientManagements) {
 		this.patientManagements = patientManagements;
 	}
-	
+	@Override
+	public String toString() {
+		return "CaseQuery [newCase=" + newCase + ", inquirys=" + inquirys + ", physicalExams=" + physicalExams
+				+ ", firstVisit=" + firstVisit + ", accessoryExams=" + accessoryExams + ", diagnose=" + diagnose
+				+ ", treatments=" + treatments + ", patientManagements=" + patientManagements + ", status=" + status
+				+ "]";
+	}
+
 	
 	
 }

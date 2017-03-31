@@ -22,7 +22,7 @@ public class InquiryServiceImpl implements InquiryService {
 	}
 
 	@Override
-	public int deleteByCaseId(Integer id) {
+	public int deleteByCaseId(List<Integer> id) {
 		return InquiryMapper.deleteByCaseId(id);
 	}
 

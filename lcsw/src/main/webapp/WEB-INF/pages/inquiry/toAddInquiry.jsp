@@ -6,13 +6,14 @@
 <title>问诊信息</title>
 <%@ include file="../../common.jsp"%>
 <style type="text/css">
-table, th, td
+table, td
   {
-  border: 1px solid green;
+  border: 1px solid pink;
   }
-td
+td,th
   {
   padding:15px;
+  text-align: center;
   }
 </style>
 <script type="text/javascript">
@@ -27,21 +28,22 @@ $(function() {
 						var list = data.list;
 						var panel =$("#aa").accordion('getSelected');
 						if(panel[0].children.length==0){
-							panel.append("<table>");
+							panel.append("<table><thead><tr><th style='width: 200px'>问诊问题</th><th style='width: 200px'>病人回应</th><th>分值</th><th>是否修改</th><tr></thead><tbody>");
 							$.each(list, function(index, content){
 								if(content.caseId == 0){
-									panel.append("<tr><td><input class='easyui-textbox' style='height: 100px;width: 200px' disabled='true' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
-										"<td><input class='easyui-textbox' style='height: 100px;width: 200px' disabled='true' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
-										"<td><select disabled='true' class='easyui-combobox'>    <option value='-3'>-3</option><option>-2</option><option>-1</option><option selected = 'selected'>0</option><option>1</option><option>2</option><option>3</option></select></td>"+
-										"<td><input type='checkbox' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
+									panel.append("<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
+										"<td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
+										"<td><input style='width:50px' disabled='true' class='easyui-numberbox' value='0'></td>"+
+										"<td><input type='hidden' value='" + content.inquiryType + "'><input style='width: 60px' type='checkbox' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
 								}else{
-									panel.append("<tr><td><input class='easyui-textbox' style='height: 100px;width: 200px' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
-											"<td><input class='easyui-textbox' style='height: 100px;width: 200px' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
-											"<td><select class='easyui-combobox'> <option value='-3'>-3</option><option value='-2'>-2</option><option value='-1'>-1</option><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option></select></td>"+
-											"<td><input type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
+									panel.append("<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
+											"<td><input class='easyui-textbox' style='height: 80px;width: 200px' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
+											"<td><input style='width:50px' class='easyui-numberbox' value='" + content.score + "'></td>" +
+											"<td><input type='hidden' value='" + content.inquiryType + "'><input  type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
 								}
 							});
-							$("#aa").accordion('getSelected').append("</table>");
+							$("#aa").accordion('getSelected').append("</tbody></table>");
+							$.parser.parse("#aa");
 						}
 				}
 			}, "json");
@@ -65,22 +67,24 @@ function submitInquery() {
 		var input1 = $(td1).children()[0];
 		var input2 = $(td2).children()[0];
 		var input3 = $(td3).children()[0];
+		var input4 = $(this).prev();
 		if(this.checked){
 			var score = $(input1).val();
 			var answer = $(input2).val();
 			var title = $(input3).val();
+			var type = $(input4).val();
 			var order = $(this).val();
 			if(flag){
-				json += "{\"inquiryTitle\":\""+ title +"\",\"patientAnswer\":\""+ answer + "\",\"inquiryOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
+				json += "{\"inquiryTitle\":\""+ title +"\",\"patientAnswer\":\""+ answer +"\",\"inquiryType\":\""+ type + "\",\"inquiryOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
 				flag = false;
 			}else{
-				json += ",{\"inquiryTitle\":\""+ title +"\",\"patientAnswer\":\""+ answer + "\",\"inquiryOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
+				json += ",{\"inquiryTitle\":\""+ title +"\",\"patientAnswer\":\""+ answer +"\",\"inquiryType\":\""+ type + "\",\"inquiryOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
 			}
 		}
 	});
 	json += "]";
 	if(json=="[]")
-		json=null;
+		alert("请选择至少一条问诊信息！");
 	$.ajax({
 	    headers: { 
 	        'Accept': 'application/json',

@@ -8,7 +8,7 @@ public interface FirstVisitMapper {
 
     int deleteByPrimaryKey(Integer id);
     
-    int deleteByCaseId(Integer id);
+    int deleteByCaseId(List<Integer> id);
 
     int insert(FirstVisit record);
 
@@ -16,7 +16,7 @@ public interface FirstVisitMapper {
 
     FirstVisit selectByPrimaryKey(Integer id);
     
-    List<FirstVisit> selectByCaseId(Integer id);
+    FirstVisit selectByCaseId(Integer id);
 
     int updateByPrimaryKey(FirstVisit record);
 	

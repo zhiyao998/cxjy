@@ -18,5 +18,6 @@ public interface CaseMapper {
 
     int updateByPrimaryKey(Case record);
 	
+    
 	
 }

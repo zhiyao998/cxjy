@@ -22,7 +22,7 @@ public class AccessoryExamServiceImpl implements AccessoryExamService {
 	}
 
 	@Override
-	public int deleteByCaseId(Integer id) {
+	public int deleteByCaseId(List<Integer> id) {
 		return accessoryExamMapper.deleteByCaseId(id);
 	}
 
@@ -47,8 +47,8 @@ public class AccessoryExamServiceImpl implements AccessoryExamService {
 	}
 
 	@Override
-	public List<AccessoryExam> selectByResultType(Integer id) {
-		return accessoryExamMapper.selectByResultType(id);
+	public List<Integer> selectAccessoryExamTypeByResultType(Integer id) {
+		return accessoryExamMapper.selectAccessoryExamTypeByResultType(id);
 	}
 
 	@Override

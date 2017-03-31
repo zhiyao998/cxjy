@@ -12,6 +12,15 @@
 	
 	<context:property-placeholder location="classpath:/resource/*.properties" />
 	
+	   <!-- 注解事务mybatis -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <!-- 自动扫描事务注解 -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class = "true"/>
+	
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 	<!--数据源配置  -->
 		<property name="driverClassName" value="${jdbc.driverClassName}" />

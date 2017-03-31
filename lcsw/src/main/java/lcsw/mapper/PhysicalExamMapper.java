@@ -7,9 +7,11 @@ import lcsw.domain.PhysicalExam;
 public interface PhysicalExamMapper {
     int deleteByPrimaryKey(Integer id);
     
-    int deleteByCaseId(Integer id);
+    int deleteByCaseId(List<Integer> id);
 
     int insert(PhysicalExam record);
+    
+    int insertByBatch(List<PhysicalExam> record);
 
 //    int insertSelective(Case record);
 

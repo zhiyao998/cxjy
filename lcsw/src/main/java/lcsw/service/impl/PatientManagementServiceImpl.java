@@ -2,6 +2,8 @@ package lcsw.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
 import lcsw.domain.PatientManagement;
@@ -11,6 +13,7 @@ import lcsw.service.PatientManagementService;
 @Service
 public class PatientManagementServiceImpl implements PatientManagementService {
 	
+	@Resource
 	private PatientManagementMapper patientManagementMapper;
 
 	@Override
@@ -19,7 +22,7 @@ public class PatientManagementServiceImpl implements PatientManagementService {
 	}
 
 	@Override
-	public int deleteByCaseId(Integer id) {
+	public int deleteByCaseId(List<Integer> id) {
 		return patientManagementMapper.deleteByCaseId(id);
 	}
 

@@ -62,7 +62,7 @@ function submitNewCase() {
 					<td>
 						<label for="caseTitle">题目：</label>
 					</td>
-					<td>
+					<td >
 						<input class="easyui-textbox" type="text" id="caseTitle" name="caseTitle" data-options="required:true">
 					</td>
 				</tr>

@@ -21,12 +21,12 @@
   		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where case_id = #{id}
   	</select>
   	
-  	<select id="selectByResultType" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
-  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where result_type = #{id}
+  	<select id="selectAccessoryExamTypeByResultType" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  		select distinct accessory_exam_type from tbl_accessory_exam where result_type = #{id}
   	</select>
   	
   	<select id="selectByAccessoryExamType" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
-  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where accessory_exam_type = #{id}
+  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where accessory_exam_type = #{id} and case_id = 0
   	</select>
   	
   	<insert id="insert" parameterType="AccessoryExam" >
@@ -35,6 +35,16 @@
       	#{accessoryExamResult,jdbcType=VARCHAR}, #{accessoryExamType,jdbcType=VARCHAR}, #{accessoryExamOrder,jdbcType=INTEGER}, 
     	 #{score,jdbcType=DOUBLE} , #{resultType,jdbcType=INTEGER})
   	</insert>
+  	
+  	<insert id="insertByBatch" parameterType="java.util.List">
+        insert into tbl_accessory_exam (case_id, accessory_exam_name, accessory_exam_result, accessory_exam_type, accessory_exam_order, score, result_type)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.caseId,jdbcType=INTEGER}, #{item.accessoryExamName,jdbcType=VARCHAR}, 
+      	#{item.accessoryExamResult,jdbcType=VARCHAR}, #{item.accessoryExamType,jdbcType=VARCHAR}, #{item.accessoryExamOrder,jdbcType=INTEGER}, 
+    	 #{item.score,jdbcType=DOUBLE} , #{item.resultType,jdbcType=INTEGER})
+        </foreach>
+    </insert>
 	
 	 <update id="updateByPrimaryKey" parameterType="AccessoryExam" >
     	update tbl_accessory_exam
@@ -53,9 +63,12 @@
     	where accessory_exam_id = #{id,jdbcType=INTEGER}	
  	 </delete>
   
-  	<delete id="deleteByCaseId">
+  	<delete id="deleteByCaseId" parameterType="java.util.List">
   		delete from tbl_accessory_exam
-    	where case_id = #{id,jdbcType=INTEGER}	
+    	where case_id in 
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    		#{item}
+    	</foreach>
  	 </delete>
 	
 </mapper>

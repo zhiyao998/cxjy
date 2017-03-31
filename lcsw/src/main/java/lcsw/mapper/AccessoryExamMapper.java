@@ -8,9 +8,11 @@ public interface AccessoryExamMapper {
 	
     int deleteByPrimaryKey(Integer id);
     
-    int deleteByCaseId(Integer id);
+    int deleteByCaseId(List<Integer> id);
 
     int insert(AccessoryExam record);
+    
+    int insertByBatch(List<AccessoryExam> record);
 
 //    int insertSelective(Case record);
 
@@ -20,7 +22,7 @@ public interface AccessoryExamMapper {
 
     int updateByPrimaryKey(AccessoryExam record);
     
-    List<AccessoryExam> selectByResultType(Integer id);
+    List<Integer> selectAccessoryExamTypeByResultType(Integer id);
     
     List<AccessoryExam> selectByAccessoryExamType(Integer id);
 	

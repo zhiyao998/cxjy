@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lcsw.domain.Case;
 import lcsw.domain.CaseQuery;
+import lcsw.service.CaseQueryService;
 import lcsw.service.CaseService;
 
 @Controller
@@ -24,6 +26,8 @@ public class CaseController {
 	
 	@Autowired
 	private CaseService caseService;
+	@Resource
+	private CaseQueryService caseQueryService;
 	
 	private CaseQuery caseQuery = new CaseQuery();
 	
@@ -39,9 +43,19 @@ public class CaseController {
 		return "/case/management";
 	}
 	
+	@RequestMapping("/checkCase")
+	public String checkCase(HttpServletRequest request){
+		Integer id = Integer.valueOf(request.getParameter("id"));
+		CaseQuery caseQuery = caseQueryService.selectByPrimaryKey(id);
+		request.setAttribute("caseQuery", caseQuery);
+		System.out.println(caseQuery);
+		return "/case/checkCase";
+	}
+	
 	@RequestMapping(value="/toAdd")
 	public String toAdd(HttpServletRequest request){
 		request.setAttribute("windowid", request.getParameter("windowid"));
+		request.getSession().setAttribute("CaseQuery", null);
 		return "/case/toAddCase";
 	}
 	
@@ -55,7 +69,7 @@ public class CaseController {
 		for(int i = 0; i < ids.length; i++){
 			istr.add(Integer.valueOf(ids[i]));
 		}
-		int flag = caseService.deleteByPrimaryKey(istr);
+		int flag = caseQueryService.deleteByPrimaryKey(istr);
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("status", flag);
 		map.put("msg", "success");
@@ -126,7 +140,6 @@ public class CaseController {
 		c.setCreateTime(new java.sql.Date(d.getTime()));
 		c.setPatientInfo(request.getParameter("patientInfo"));
 		System.out.println(c);
-//		int flag = caseService.insert(c);
 		caseQuery.setNewCase(c);
 		caseQuery.setStatus(true);
 		request.getSession().setAttribute("CaseQuery", caseQuery);

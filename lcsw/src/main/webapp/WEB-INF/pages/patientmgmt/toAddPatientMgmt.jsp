@@ -71,7 +71,7 @@ function submitPatientMgmt() {
 	});
 	json += "]";
 	if(json=="[]")
-		json=null;
+		alert("请添加病人管理！");
 	$.ajax({
 	    headers: { 
 	        'Accept': 'application/json',
@@ -83,7 +83,10 @@ function submitPatientMgmt() {
 	    'dataType': 'json',
 	    'success': function(data) {
 			if (data.status) {
+				parent.$('#grid').datagrid('reload');
 				parent.$('#${windowid}').window('close');
+			}else{
+				alert("提交失败");
 			}
 		}
 	});
