@@ -18,7 +18,7 @@
   	</select>
   	
   	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
-  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where case_id = #{id}
+  		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where case_id = #{id} order by accessory_exam_type,accessory_exam_order
   	</select>
   	
   	<select id="selectAccessoryExamTypeByResultType" parameterType="java.lang.Integer" resultType="java.lang.Integer">

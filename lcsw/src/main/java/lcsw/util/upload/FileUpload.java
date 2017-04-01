@@ -17,6 +17,7 @@ public class FileUpload {
 	public static String uploadFile(MultipartFile file,HttpServletRequest request){
 		DateFormat df = new SimpleDateFormat("/yyyy/MM/dd");
 		String filePath = "";
+		String showPath= "";
         // 判断文件是否为空  
         if (!file.isEmpty()) {  
             try {  
@@ -27,19 +28,23 @@ public class FileUpload {
     			//构建出一个新的文件名
     			imageName = imageName + lastfix;
                 // 文件保存路径  
-                filePath += request.getSession().getServletContext().getRealPath("/") + "temp" + imagePath + ("/")
+                filePath += "E://cxjy/images" + imagePath + ("/")
                         + imageName;
                 // 转存文件 
                 File f = new File(filePath);
                 if(!f.getParentFile().exists()){
                 	f.getParentFile().mkdirs();
                 	f.createNewFile();
+                    file.transferTo(f);                     
+                }else{
+                	f.createNewFile();
                     file.transferTo(f); 
-                } 
+                }
+                showPath += "http://localhost:8080/upload"  + imagePath + ("/")+ imageName;
             } catch (Exception e) {  
                 e.printStackTrace();  
             }  
         }
-        return filePath;
+        return showPath;
 	}
 }

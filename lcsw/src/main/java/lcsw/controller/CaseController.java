@@ -59,6 +59,14 @@ public class CaseController {
 		return "/case/toAddCase";
 	}
 	
+	@RequestMapping("/toEdit")
+	public String toEdit(HttpServletRequest request){
+		Integer id = Integer.valueOf(request.getParameter("id"));
+		CaseQuery caseQuery = caseQueryService.selectByPrimaryKey(id);
+		request.setAttribute("caseQuery", caseQuery);
+		return "/case/toEditCase";
+	}
+	
 	@RequestMapping("/delete")
 	@ResponseBody
 	public Map<String,Object> deleteCase(HttpServletRequest request,HttpServletResponse response){

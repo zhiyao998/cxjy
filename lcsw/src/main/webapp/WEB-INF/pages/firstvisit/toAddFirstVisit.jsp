@@ -57,18 +57,10 @@ function submitFirstVisit() {
 			<table>
 				<tr>
 					<td>
-						<label>请添加初诊信息：</label>
+						<label for="score">请添加初诊信息：</label>
 					</td>
 					<td>
-						<select class='easyui-combobox' id="score" name="score" style="width: 60px;">    
-							<option value='-3'>-3</option>
-							<option>-2</option>
-							<option>-1</option>
-							<option selected = 'selected'>0</option>
-							<option>1</option>
-							<option>2</option>
-							<option>3</option>
-						</select>
+						<input id="score" name="score" style='width:50px' class='easyui-numberbox' value='0'>
 					</td>
 				</tr>
 				<tr>

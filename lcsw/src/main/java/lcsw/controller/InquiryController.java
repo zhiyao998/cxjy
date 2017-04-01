@@ -30,6 +30,12 @@ public class InquiryController {
 		return "/inquiry/toAddInquiry";
 	}
 	
+	@RequestMapping(value="/toEdit")
+	public String toEditInquiry(HttpServletRequest request){
+		request.setAttribute("windowid", request.getParameter("windowid"));
+		return "/inquiry/toEditInquiry";
+	}
+	
 	@RequestMapping(value="/selectByType")
 	@ResponseBody
 	public Map<String,Object> selectByType(HttpServletRequest request){

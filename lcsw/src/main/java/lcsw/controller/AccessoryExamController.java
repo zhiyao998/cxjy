@@ -89,7 +89,6 @@ public class AccessoryExamController {
 		a.setAccessoryExamType(request.getParameter("accessoryExamType"));
 		a.setResultType(Integer.valueOf(request.getParameter("resultType")));
 		a.setScore(Double.valueOf(request.getParameter("score")));
-		System.out.println(a);
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		List<AccessoryExam> list = caseQuery.getAccessoryExams();
 		int index = list.size();

@@ -53,8 +53,13 @@
 			text:'修改病例',
 			iconCls:'icon-edit',
 			handler:function(){
-				
-				 
+				var row = $('#grid').datagrid('getSelections');
+				var ids = [];
+				for(var i=0;i<row.length;i++){
+					ids[i] = row[i].caseId;
+				}
+				var url = "/lcsw/case/toEdit.action?id="+ids[0];
+				open("编辑病例",url,800,600);				 
 			}
 		},{
 			text:'查看病例',
