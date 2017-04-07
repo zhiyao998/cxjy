@@ -27,13 +27,14 @@ $(function() {
 				var patientMgmt = data.patientMgmt;
 				$(patientMgmt).each(function() {
 					if(this.patientManagementType == 1){
-						$("#Rtable").append("<tr><td style='width:100px;'><input type='text' value='" + this.managementPlan + "'></input></td><td><select class='easyui-combobox'><option value='-3'>-3</option><option>-2</option><option>-1</option><option selected = 'selected'>0</option><option>1</option><option>2</option><option>3</option></select></td><td><input type='hidden' value='" + this.patientManagementType + "'></input></td></tr>");					
+						$("#Rtable").append("<tr><td style='width:100px;'><input type='text' value='" + this.managementPlan + "'></input></td><td><input style='width:50px' class='easyui-numberbox' value='" + this.score + "'></td><td><input type='hidden' value='" + this.patientManagementType + "'></input><input type='hidden' value='" + this.patientManagementId + "'></input></td></tr>");					
 					}else if(this.patientManagementType == 2){
-						$("#Ftable").append("<tr><td style='width:100px;'><input type='text' value='" + this.managementPlan + "'></input></td><td><select class='easyui-combobox'><option value='-3'>-3</option><option>-2</option><option>-1</option><option selected = 'selected'>0</option><option>1</option><option>2</option><option>3</option></select></td><td><input type='hidden' value='" + this.patientManagementType + "'></input></td></tr>");					
+						$("#Ftable").append("<tr><td style='width:100px;'><input type='text' value='" + this.managementPlan + "'></input></td><td><input style='width:50px' class='easyui-numberbox' value='" + this.score + "'></td><td><input type='hidden' value='" + this.patientManagementType + "'></input><input type='hidden' value='" + this.patientManagementId + "'></input></td></tr>");					
 					}else{
-						$("#Ctable").append("<tr><td style='width:100px;'><input type='text' value='" + this.managementPlan + "'></input></td><td><select class='easyui-combobox'><option value='-3'>-3</option><option>-2</option><option>-1</option><option selected = 'selected'>0</option><option>1</option><option>2</option><option>3</option></select></td><td><input type='hidden' value='" + this.patientManagementType + "'></input></td></tr>");					
+						$("#Ctable").append("<tr><td style='width:100px;'><input type='text' value='" + this.managementPlan + "'></input></td><td><input style='width:50px' class='easyui-numberbox' value='" + this.score + "'></td><td><input type='hidden' value='" + this.patientManagementType + "'></input><input type='hidden' value='" + this.patientManagementId + "'></input></td></tr>");					
 					}					
 				});
+				$.parser.parse("#main");
 			}
 		}
 	})
@@ -41,7 +42,8 @@ $(function() {
 
 function add(button,type) {
 	var parent = $(button).parent();
-	parent.append("<tr><td><input type='text' style='width:100px;'></input></td><td><select class='easyui-combobox'><option value='-3'>-3</option><option>-2</option><option>-1</option><option selected = 'selected'>0</option><option>1</option><option>2</option><option>3</option></select></td><td><input type='hidden' value='" + type + "'></input></td></tr>");
+	parent.append("<tr><td><input type='text' style='width:100px;'></td><td><input style='width:50px' class='easyui-numberbox' value='0'></td><td><input type='hidden'" + type + "'><input type='hidden'></td></tr>");
+	$.parser.parse("#main");
 }
 
 function lastPage() {
@@ -59,14 +61,16 @@ function submitPatientMgmt() {
 		var input1 = $(children[0]).children()[0];
 		var input2 = $(children[1]).children()[0];
 		var input3 = $(children[2]).children()[0];
+		var input4 = $(children[2]).children()[1];
  		var score = $(input2).val();
 		var plan = $(input1).val();
 		var type = $(input3).val();
+		var id = $(input4).val();
 		if(flag){
-			json += "{\"managementPlan\":\""+ plan + "\",\"patientManagementType\":\""+ type +   "\",\"score\":\"" + score +"\"}"
+			json += "{\"managementPlan\":\""+ plan + "\",\"patientManagementType\":\""+ type + "\",\"patientManagementId\":\""+ id +   "\",\"score\":\"" + score +"\"}"
 			flag = false;
 		}else{
-			json += ",{\"managementPlan\":\""+ plan + "\",\"patientManagementType\":\""+ type +  "\",\"score\":\"" + score +"\"}";
+			json += ",{\"managementPlan\":\""+ plan + "\",\"patientManagementType\":\""+ type + "\",\"patientManagementId\":\""+ id +  "\",\"score\":\"" + score +"\"}";
 		} 
 	});
 	json += "]";
@@ -82,12 +86,8 @@ function submitPatientMgmt() {
 	    'data': json,
 	    'dataType': 'json',
 	    'success': function(data) {
-			if (data.status) {
 				parent.$('#grid').datagrid('reload');
 				parent.$('#${windowid}').window('close');
-			}else{
-				alert("提交失败");
-			}
 		}
 	});
 }
@@ -97,7 +97,7 @@ function submitPatientMgmt() {
 <body>
 		<div class="easyui-layout" data-options="fit:true">
 		
-		<div data-options="region:'center',border:false" style="padding: 10px;width: 100%"> 
+		<div id="main" data-options="region:'center',border:false" style="padding: 10px;width: 100%"> 
     		<div style="padding:10px;" id="nRoutine">
     			<label>护理常规：</label>
     			<br>
@@ -130,7 +130,7 @@ function submitPatientMgmt() {
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 			<a id="last" href="#" onclick="lastPage()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
 			<a id="next" href="#" onclick="submitPatientMgmt()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">提交</a>  
-			<a id="close" href="#" onclick="parent.$('#${windowid}').window('close')" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
 		</div>
 	</div>
 </body>

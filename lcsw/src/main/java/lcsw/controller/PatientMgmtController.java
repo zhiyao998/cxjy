@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lcsw.domain.CaseQuery;
 import lcsw.domain.PatientManagement;
+import lcsw.domain.Treatment;
 import lcsw.service.CaseQueryService;
 import lcsw.service.PatientManagementService;
 
@@ -41,7 +42,11 @@ public class PatientMgmtController {
 		System.out.println(managements);
 		request.getSession().setAttribute("CaseQuery",caseQuery);
 		System.out.println(caseQuery);
-		int flag = caseQueryService.insert(caseQuery);
+		int flag = 0;
+		if(caseQuery.getNewCase().getCaseId() == null)
+			flag = caseQueryService.insert(caseQuery);
+		else
+			flag = caseQueryService.updateByPrimaryKey(caseQuery);
 		Map map = new HashMap<String,Object>();
 		map.put("status", flag);
 		request.getSession().setAttribute("CaseQuery",null);
@@ -52,10 +57,15 @@ public class PatientMgmtController {
 	@ResponseBody
 	public Map<String,Object> getlastTreatment(HttpServletRequest request,HttpServletResponse response){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		Integer caseId = null;
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		if(caseQuery != null){
-			if(caseQuery.getPatientManagements() == null){
-				map.put("status", false);
+			if(caseQuery.getPatientManagements().isEmpty() && caseQuery.getNewCase().getCaseId() != null){
+				caseId = Integer.valueOf(caseQuery.getNewCase().getCaseId());
+				map.put("status", true);
+				List<PatientManagement> p = patientMgmtService.selectByCaseId(caseId);
+				caseQuery.setPatientManagements(p);
+				map.put("patientMgmt", caseQuery.getPatientManagements());
 			}else{
 				map.put("status", true);
 				map.put("patientMgmt", caseQuery.getPatientManagements());

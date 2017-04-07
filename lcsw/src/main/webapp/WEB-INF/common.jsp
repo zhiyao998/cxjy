@@ -9,13 +9,14 @@
 	request.setAttribute("ctx", ctx);
 %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link rel="stylesheet" type="text/css" href="/lcsw/js/easyui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="/lcsw/js/easyui/themes/icon.css">
-<script type="text/javascript" src="/lcsw/js/easyui/jquery.min.js"></script>
-<script type="text/javascript" src="/lcsw/js/easyui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="/lcsw/js/easyui/easyui-lang-zh_CN.js?id=2"></script>
-<script type="text/javascript" src="/lcsw/js/form/jquery.form.3.5.js"></script>
-<script type="text/javascript" src="/lcsw/js/upload/ajaxfileupload.js"></script>
+<link rel="stylesheet" type="text/css" href="/lcsw/public/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/lcsw/public/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/lcsw/public/bootstrap/css/bootstrap.min.css">
+<script type="text/javascript" src="/lcsw/public/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/lcsw/public/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/lcsw/public/easyui/easyui-lang-zh_CN.js?id=2"></script>
+<script type="text/javascript" src="/lcsw/public/form/jquery.form.3.5.js"></script>
+<script type="text/javascript" src="/lcsw/public/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 function closeWindow(){
 	parent.closeWindow('${windowid}');
@@ -44,6 +45,23 @@ function open(title, url, width, hight) {
 			$('#'+windowid).window('destroy');
 		}
 	});
+}
+
+function closeWin() {
+	$.post("/lcsw/case/clear.action",null,function(data){
+		if(data.status){
+			resertForm();
+			parent.$('#${windowid}').window('close');
+		}
+	});
+}
+
+function  resertForm(){
+     $(':input','#inputForm') 
+     .not(':button, :submit, :reset, :hidden') 
+     .val('') 
+     .removeAttr('checked') 
+     .removeAttr('selected');
 }
 
 function last() {
@@ -86,7 +104,6 @@ function changeResult(checkbox) {
 			$(input2).numberbox("disable");
 	}
 }
-
 
 //网上找的缩略图代码
 function PreviewImage(fileObj,imgPreviewId,divPreviewId){  

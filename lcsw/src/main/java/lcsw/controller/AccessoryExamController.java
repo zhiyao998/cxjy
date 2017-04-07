@@ -47,9 +47,35 @@ public class AccessoryExamController {
 	@RequestMapping(value="/selectByAccessoryExamType")
 	@ResponseBody
 	public List<AccessoryExam> selectByAccessoryExamType(HttpServletRequest request){
-		Integer accessoryExamType = Integer.valueOf(request.getParameter("accessoryExamType")) ;
+		String accessoryExamType = request.getParameter("accessoryExamType") ;
+		Integer caseId = null;
+		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		List<AccessoryExam> list = accessoryExamService.selectByAccessoryExamType(accessoryExamType);
-		return list;
+		if(caseQuery.getAccessoryExams().isEmpty() && caseQuery.getNewCase().getCaseId() == null){
+			return list;
+		}else{
+			if(caseQuery.getAccessoryExams().isEmpty() && caseQuery.getNewCase().getCaseId() != null){
+				caseId = Integer.valueOf(caseQuery.getNewCase().getCaseId());
+				caseQuery.setAccessoryExams(accessoryExamService.selectByCaseId(caseId));
+			}
+			List<AccessoryExam> newList = new ArrayList<AccessoryExam>();
+			for(AccessoryExam a:caseQuery.getAccessoryExams()){
+				if(a.getAccessoryExamType().equals(accessoryExamType))
+					newList.add(a);
+			}
+			for(AccessoryExam a:list){
+				boolean flag = true;
+				for(AccessoryExam i:caseQuery.getAccessoryExams()){
+					if(a.getAccessoryExamType().equals(i.getAccessoryExamType()) && a.getAccessoryExamOrder().equals(i.getAccessoryExamOrder())){
+						flag = false;
+						break;
+					}
+				}
+				if(flag)
+					newList.add(a);
+			}
+			return newList;
+		}
 	}
 	
 	@RequestMapping(value="/next")
@@ -61,12 +87,13 @@ public class AccessoryExamController {
 		if(list.isEmpty()){
 			newList.addAll(accessoryExams);
 		}else{
+			newList.addAll(accessoryExams);
 			for(AccessoryExam a:list){
 				boolean flag = true;
 				for(AccessoryExam i:accessoryExams){
-					newList.add(i);
 					if(a.getAccessoryExamType().equals(i.getAccessoryExamType()) && a.getAccessoryExamOrder().equals(i.getAccessoryExamOrder())){
 						flag = false;
+						break;
 					}
 				}
 				if(flag)
@@ -74,6 +101,7 @@ public class AccessoryExamController {
 			}
 		}
 		caseQuery.setAccessoryExams(newList);
+		System.out.println(newList.size());
 		request.getSession().setAttribute("CaseQuery",caseQuery);
 		return caseQuery;
 	}
@@ -84,6 +112,9 @@ public class AccessoryExamController {
 		AccessoryExam a =new AccessoryExam(); 
 		String filePath = FileUpload.uploadFile(file, request);
 		a.setAccessoryExamResult(filePath);
+		if(request.getParameter("accessoryExamId") != null){
+			a.setAccessoryExamId(Integer.valueOf(request.getParameter("accessoryExamId")));
+		}
 		a.setAccessoryExamName(request.getParameter("accessoryExamName"));
 		a.setAccessoryExamOrder(Integer.valueOf(request.getParameter("accessoryExamOrder")));
 		a.setAccessoryExamType(request.getParameter("accessoryExamType"));
@@ -92,12 +123,13 @@ public class AccessoryExamController {
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		List<AccessoryExam> list = caseQuery.getAccessoryExams();
 		int index = list.size();
-		for(AccessoryExam i:list){
-			if(i.getAccessoryExamType().equals(a.getAccessoryExamType()) && i.getAccessoryExamOrder().equals(a.getAccessoryExamOrder())){
-				index = list.indexOf(i);
+		for(int i = 0;i < list.size();i++){
+			if(list.get(i).getAccessoryExamType().equals(a.getAccessoryExamType()) && list.get(i).getAccessoryExamOrder().equals(a.getAccessoryExamOrder())){
+				index = i;
 			}
 		}
-		list.add(index, a);
+		list.remove(index);
+		list.add(a);
 
 		
 		caseQuery.setAccessoryExams(list);

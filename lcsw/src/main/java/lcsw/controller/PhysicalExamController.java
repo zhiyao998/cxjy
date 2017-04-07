@@ -35,14 +35,19 @@ public class PhysicalExamController {
 	@ResponseBody
 	public Map<String,Object> selectByType(HttpServletRequest request){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
-		Integer tpye = Integer.valueOf(request.getParameter("physicalExamType"));
+		Integer caseId = null;
+		String tpye = request.getParameter("physicalExamType");
 		List<PhysicalExam> newList = new ArrayList<PhysicalExam>();
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<PhysicalExam> list = physicalExamService.selectByType(tpye);
 		System.out.println(caseQuery.getPhysicalExams());
-		if(caseQuery.getPhysicalExams().isEmpty()){
+		if(caseQuery.getPhysicalExams().isEmpty() && caseQuery.getNewCase().getCaseId() == null){
 			map.put("list", list);
 		}else{
+			if(caseQuery.getPhysicalExams().isEmpty() && caseQuery.getNewCase().getCaseId() != null){
+				caseId = Integer.valueOf(caseQuery.getNewCase().getCaseId());
+				caseQuery.setPhysicalExams(physicalExamService.selectByCaseId(caseId));
+			}
 			List<PhysicalExam> physicalExams = caseQuery.getPhysicalExams();
 			for(PhysicalExam p:physicalExams){
 				if(p.getPhysicalExamType().equals(tpye))
@@ -51,8 +56,10 @@ public class PhysicalExamController {
 			for(int i = 0; i < list.size(); i++){
 				boolean flag = true;
 				for(PhysicalExam p1:physicalExams){
-					if(list.get(i).getPhysicalExamOrder().equals(p1.getPhysicalExamOrder()) && list.get(i).getPhysicalExamOrder().equals(p1.getPhysicalExamOrder()))
+					if(list.get(i).getPhysicalExamType().equals(p1.getPhysicalExamType()) && list.get(i).getPhysicalExamOrder().equals(p1.getPhysicalExamOrder())){
 						flag = false;
+						break;
+					}
 				}
 				if(flag){
 					newList.add(list.get(i));

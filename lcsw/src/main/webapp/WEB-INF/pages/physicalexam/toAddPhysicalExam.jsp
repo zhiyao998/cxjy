@@ -33,12 +33,12 @@ $(function() {
 								if(content.caseId == 0){
 									panel.append("<tr><td><input disabled='true' class='easyui-textbox' value='"+content.physicalExamName+"'></input></td>"+ 
 										"<td><input disabled='true' type='text' class='easyui-textbox' value='" +content.physicalExamResult+"'></input></td>"+
-										"<td><input style='width:50px' disabled='true' class='easyui-numberbox' value='0'></td>"+
+										"<td><input style='width:50px' disabled='true' class='easyui-numberbox' value='0'><input type='hidden' value='" + content.physicalExamId + "''></td>"+
 										"<td><input type='hidden' value='" + content.physicalExamType + "'><input style='width: 60px' type='checkbox' onclick='change(this)' value='"+ (content.physicalExamOrder) +"'/></td>"+"</tr>");
 								}else{
 									panel.append("<tr><td><input class='easyui-textbox' value='"+content.physicalExamName+"'></input></td>"+ 
 											"<td><input type='text' class='easyui-textbox' value='" +content.physicalExamResult+"'></input></td>"+
-											"<td><input style='width:50px' class='easyui-numberbox' value='" + content.score + "'></td>" +
+											"<td><input style='width:50px' class='easyui-numberbox' value='" + content.score + "'><input type='hidden' value='" + content.physicalExamId + "''></td>" +
 											"<td><input type='hidden' value='" + content.physicalExamType + "'><input style='width: 60px' type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.physicalExamOrder) +"'/></td>"+"</tr>");
 								}
 							});
@@ -68,23 +68,26 @@ function submitPhysicalExam() {
 		var input2 = $(td2).children()[0];
 		var input3 = $(td3).children()[0];
 		var input4 = $(this).prev();
+		var input5 = $(td1).children()[2];
 		if(this.checked){
 			var score = $(input1).val();
 			var result = $(input2).val();
 			var name = $(input3).val();
 			var type = $(input4).val();
 			var order = $(this).val();
+			var id = $(input5).val();
 			if(flag){
-				json += "{\"physicalExamName\":\""+ name +"\",\"physicalExamResult\":\""+ result + "\",\"physicalExamType\":\""+ type + "\",\"physicalExamOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
+				json += "{\"physicalExamName\":\""+ name +"\",\"physicalExamId\":\""+ id +"\",\"physicalExamResult\":\""+ result + "\",\"physicalExamType\":\""+ type + "\",\"physicalExamOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
 				flag = false;
 			}else{
-				json += ",{\"physicalExamName\":\""+ name +"\",\"physicalExamResult\":\""+ result + "\",\"physicalExamType\":\""+ type + "\",\"physicalExamOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
+				json += ",{\"physicalExamName\":\""+ name +"\",\"physicalExamId\":\""+ id +"\",\"physicalExamResult\":\""+ result + "\",\"physicalExamType\":\""+ type + "\",\"physicalExamOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
 			}
 		}
 	});
 	json += "]";
 	if(json=="[]")
 		alert("请选择至少一条体检信息！");
+	else{
 	$.ajax({
 	    headers: { 
 	        'Accept': 'application/json',
@@ -101,6 +104,7 @@ function submitPhysicalExam() {
 			}
 		}
 	});
+	}
 }
 </script>
 </head>
@@ -136,7 +140,7 @@ function submitPhysicalExam() {
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 			<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
 			<a id="next" href="#" onclick="submitPhysicalExam()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
-			<a id="close" href="#" onclick="parent.$('#${windowid}').window('close')" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
 		</div>
 	</div>
 </body>

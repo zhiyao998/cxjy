@@ -21,5 +21,5 @@ public interface AccessoryExamService {
     
     List<Integer> selectAccessoryExamTypeByResultType(Integer id);
     
-    List<AccessoryExam> selectByAccessoryExamType(Integer id);
+    List<AccessoryExam> selectByAccessoryExamType(String accessoryExamType);
 }

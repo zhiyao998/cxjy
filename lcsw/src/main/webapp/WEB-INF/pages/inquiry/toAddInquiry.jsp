@@ -33,12 +33,12 @@ $(function() {
 								if(content.caseId == 0){
 									panel.append("<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
 										"<td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
-										"<td><input style='width:50px' disabled='true' class='easyui-numberbox' value='0'></td>"+
+										"<td><input style='width:50px' disabled='true' class='easyui-numberbox' value='0'><input type='hidden' value='" + content.inquiryId + "'></td>"+
 										"<td><input type='hidden' value='" + content.inquiryType + "'><input style='width: 60px' type='checkbox' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
 								}else{
 									panel.append("<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
 											"<td><input class='easyui-textbox' style='height: 80px;width: 200px' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
-											"<td><input style='width:50px' class='easyui-numberbox' value='" + content.score + "'></td>" +
+											"<td><input style='width:50px' class='easyui-numberbox' value='" + content.score + "'><input type='hidden' value='" + content.inquiryId + "'></td>" +
 											"<td><input type='hidden' value='" + content.inquiryType + "'><input  type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
 								}
 							});
@@ -68,23 +68,26 @@ function submitInquery() {
 		var input2 = $(td2).children()[0];
 		var input3 = $(td3).children()[0];
 		var input4 = $(this).prev();
+		var input5 = $(td1).children()[2];
 		if(this.checked){
 			var score = $(input1).val();
 			var answer = $(input2).val();
 			var title = $(input3).val();
 			var type = $(input4).val();
 			var order = $(this).val();
+			var id = $(input5).val();
 			if(flag){
-				json += "{\"inquiryTitle\":\""+ title +"\",\"patientAnswer\":\""+ answer +"\",\"inquiryType\":\""+ type + "\",\"inquiryOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
+				json += "{\"inquiryTitle\":\""+ title +"\",\"inquiryId\":\""+ id +"\",\"patientAnswer\":\""+ answer +"\",\"inquiryType\":\""+ type + "\",\"inquiryOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
 				flag = false;
 			}else{
-				json += ",{\"inquiryTitle\":\""+ title +"\",\"patientAnswer\":\""+ answer +"\",\"inquiryType\":\""+ type + "\",\"inquiryOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
+				json += ",{\"inquiryTitle\":\""+ title +"\",\"inquiryId\":\""+ id  +"\",\"patientAnswer\":\""+ answer +"\",\"inquiryType\":\""+ type + "\",\"inquiryOrder\":\""+ order + "\",\"score\":\"" + score +"\"}"
 			}
 		}
 	});
 	json += "]";
 	if(json=="[]")
 		alert("请选择至少一条问诊信息！");
+	else{
 	$.ajax({
 	    headers: { 
 	        'Accept': 'application/json',
@@ -101,6 +104,7 @@ function submitInquery() {
 			}
 		}
 	});
+	}
 }
 
 </script>
@@ -129,7 +133,7 @@ function submitInquery() {
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 			<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
 			<a id="next" href="#" onclick="submitInquery()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
-			<a id="close" href="#" onclick="parent.$('#${windowid}').window('close')" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
 		</div>
 	</div>
 

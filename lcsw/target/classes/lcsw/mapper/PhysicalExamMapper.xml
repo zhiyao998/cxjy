@@ -22,8 +22,8 @@
   		select physical_exam_id,case_id,physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score from tbl_physical_exam where case_id = #{id}
   	</select>
   	
-  	<select id="selectByType" parameterType="java.lang.Integer" resultMap="PhysicalExamMap">
-  		select physical_exam_id,case_id,physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score from tbl_physical_exam where physical_exam_type = #{type}
+  	<select id="selectByType" parameterType="String" resultMap="PhysicalExamMap">
+  		select physical_exam_id,case_id,physical_exam_name,physical_exam_part,physical_exam_result,physical_exam_type,physical_exam_order,score from tbl_physical_exam where physical_exam_type = #{type} and case_id = 0
   	</select>
   	
   	<insert id="insert" parameterType="PhysicalExam" >
@@ -53,7 +53,23 @@
       		physical_exam_order = #{physicalExamOrder,jdbcType=VARCHAR},
       		score = #{score,jdbcType=DOUBLE}
     	where physical_exam_id = #{physicalExamId,jdbcType=INTEGER}
-  </update>
+  	</update>
+  
+  	 <update id="updateByBatch" parameterType="java.util.List" >
+    	<foreach collection="list" item="item" index="index" separator=";">
+    		update tbl_physical_exam	
+    		<set>
+    	    	case_id = #{item.caseId,jdbcType=INTEGER},
+      			physical_exam_name = #{item.physicalExamName,jdbcType=VARCHAR},
+      			physical_exam_part = #{item.physicalExamPart,jdbcType=VARCHAR},
+      			physical_exam_result = #{item.physicalExamResult,jdbcType=VARCHAR},
+      			physical_exam_type = #{item.physicalExamType,jdbcType=VARCHAR},
+      			physical_exam_order = #{item.physicalExamOrder,jdbcType=VARCHAR},
+      			score = #{item.score,jdbcType=DOUBLE}
+      		</set>
+    	where physical_exam_id = #{item.physicalExamId,jdbcType=INTEGER}
+    	</foreach>
+  	</update>
   
     <delete id="deleteByPrimaryKey">
   		delete from tbl_physical_exam

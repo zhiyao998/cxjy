@@ -31,20 +31,12 @@ public class FirstVisitController {
 	
 	@RequestMapping("/next")
 	@ResponseBody
-	public CaseQuery insertCase(HttpServletRequest request,HttpServletResponse response){
-		FirstVisit f = new FirstVisit();
+	public CaseQuery insertCase(HttpServletRequest request,FirstVisit firstVisit){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
-		f.setScore(Double.valueOf(request.getParameter("score")));
-		f.setFvResultA(request.getParameter("fvResultA"));
-		f.setFvResultB(request.getParameter("fvResultB"));
-		f.setFvResultC(request.getParameter("fvResultC"));
-		f.setFvResultD(request.getParameter("fvResultD"));
-		f.setFvResultE(request.getParameter("fvResultE"));
-		f.setAnalysis(request.getParameter("analysis"));
-		System.out.println(f);
+		System.out.println(firstVisit);
 //		int flag = caseService.insert(c);
 		caseQuery.setStatus(true);
-		caseQuery.setFirstVisit(f);
+		caseQuery.setFirstVisit(firstVisit);
 		request.getSession().setAttribute("CaseQuery", caseQuery);
 		return caseQuery;	
 	}
@@ -54,9 +46,13 @@ public class FirstVisitController {
 	public Map<String,Object> getlastFirstVisit(HttpServletRequest request,HttpServletResponse response){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		HashMap<String,Object> map = new HashMap<String,Object>();
+		Integer caseId = null;
 		if(caseQuery != null){
-			if(caseQuery.getFirstVisit() == null){
-				map.put("status", false);
+			if(caseQuery.getFirstVisit() == null && caseQuery.getNewCase().getCaseId() != null){
+				caseId = Integer.valueOf(caseQuery.getNewCase().getCaseId());
+				caseQuery.setFirstVisit(firstVisitService.selectByCaseId(caseId));
+				map.put("status", true);
+				map.put("firstVisit", caseQuery.getFirstVisit());
 			}else{
 				map.put("status", true);
 				map.put("firstVisit", caseQuery.getFirstVisit());

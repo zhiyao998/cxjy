@@ -46,7 +46,7 @@ public class PhysicalExamServiceImpl implements lcsw.service.PhysicalExamService
 	}
 
 	@Override
-	public List<PhysicalExam> selectByType(Integer type) {
+	public List<PhysicalExam> selectByType(String type) {
 		return physicalExamMapper.selectByType(type);
 	}
 

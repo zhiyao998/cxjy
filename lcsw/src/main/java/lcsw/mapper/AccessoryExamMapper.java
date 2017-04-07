@@ -22,8 +22,10 @@ public interface AccessoryExamMapper {
 
     int updateByPrimaryKey(AccessoryExam record);
     
+    int updateByBatch(List<AccessoryExam> record);
+    
     List<Integer> selectAccessoryExamTypeByResultType(Integer id);
     
-    List<AccessoryExam> selectByAccessoryExamType(Integer id);
+    List<AccessoryExam> selectByAccessoryExamType(String id);
 	
 }

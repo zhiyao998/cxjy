@@ -40,7 +40,7 @@
 							'ids':JSON.stringify(ids)
 						}, function(data) {
  							if (data.status) {
-								$.messager.alert('系统消息', data.msg, 'info',
+								$.messager.alert('系统消息', "删除成功", 'info',
 										function() {
 											$('#grid').datagrid('reload');
 										});

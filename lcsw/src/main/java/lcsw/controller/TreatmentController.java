@@ -44,10 +44,15 @@ public class TreatmentController {
 	@ResponseBody
 	public Map<String,Object> getlastTreatment(HttpServletRequest request,HttpServletResponse response){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		Integer caseId = null;
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		if(caseQuery != null){
-			if(caseQuery.getDiagnose() == null){
-				map.put("status", false);
+			if(caseQuery.getTreatments().isEmpty() && caseQuery.getNewCase().getCaseId() != null){
+				caseId = Integer.valueOf(caseQuery.getNewCase().getCaseId());
+				map.put("status", true);
+				List<Treatment> t = treatmentService.selectByCaseId(caseId);
+				caseQuery.setTreatments(t);
+				map.put("treatment", caseQuery.getTreatments());
 			}else{
 				map.put("status", true);
 				map.put("treatment", caseQuery.getTreatments());

@@ -15,6 +15,7 @@ $(function() {
 	    'success': function(data) {
 			if (data.status) {
 				var firstVisit = data.firstVisit;
+				$("#firstVisitId").val(firstVisit.firstVisitId)
 				$("#score").textbox("setValue",firstVisit.score);
 				$("#fvResultA").textbox("setValue",firstVisit.fvResultA);
 				$("#fvResultB").textbox("setValue",firstVisit.fvResultB);
@@ -54,6 +55,7 @@ function submitFirstVisit() {
 		
 	<div data-options="region:'center',border:false" style="padding: 10px;">
 		<form action="/lcsw/firstVisit/next.action" method="post" id="inputForm">
+			<input type="hidden" id="firstVisitId" name="firstVisitId">
 			<table>
 				<tr>
 					<td>
@@ -125,7 +127,7 @@ function submitFirstVisit() {
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 		<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
 		<a id="submit" href="#" onclick="submitFirstVisit()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
-		<a id="close" href="#" onclick="parent.$('#${windowid}').window('close')" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+		<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
 	</div>
 	
 	</div>

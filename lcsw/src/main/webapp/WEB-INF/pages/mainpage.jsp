@@ -104,6 +104,9 @@ $(function () {
                                 <a target="mainFrame" href="/lcsw/case/management.action">病例管理</a>
                             </div>
                             <div>
+                                <a target="mainFrame" href="/lcsw/standard/mgmt.action">标准管理</a>
+                            </div>
+                            <div>
                                 <a target="mainFrame" href="Product/Default.htm">试题管理</a>
                             </div>
                             <div>

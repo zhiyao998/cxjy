@@ -21,5 +21,7 @@ public interface TreatmentMapper {
     List<Treatment> selectByCaseId(Integer id);
 
     int updateByPrimaryKey(Treatment record);
+    
+    int updateByBatch(List<Treatment> record);
 	
 }

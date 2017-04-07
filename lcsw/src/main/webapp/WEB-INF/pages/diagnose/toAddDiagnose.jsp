@@ -15,6 +15,7 @@ $(function() {
 	    'success': function(data) {
 			if (data.status) {
 				var diagnose = data.diagnose;
+				$("#diagnoseId").val(diagnose.diagnoseId);
 				$("#score").textbox("setValue",diagnose.score);
 				$("#diagnoseResultA").textbox("setValue",diagnose.diagnoseResultA);
 				$("#diagnoseResultB").textbox("setValue",diagnose.diagnoseResultB);
@@ -54,21 +55,19 @@ function submitDiagnose() {
 		
 	<div data-options="region:'center',border:false" style="padding: 10px;">
 		<form action="/lcsw/diagnose/next.action" method="post" id="inputForm">
+			<input type="hidden" name="diagnoseId" id="diagnoseId">
 			<table>
 				<tr>
 					<td>
 						<label>请添加确诊信息：</label>
 					</td>
+				</tr>
+				<tr>
 					<td>
-						<select class='easyui-combobox' id="score" name="score" style="width: 60px;">    
-							<option value='-3'>-3</option>
-							<option>-2</option>
-							<option>-1</option>
-							<option selected = 'selected'>0</option>
-							<option>1</option>
-							<option>2</option>
-							<option>3</option>
-						</select>
+						<label>分值：</label>
+					</td>
+					<td>
+						<input id="score" name="score" style='width:50px' class='easyui-numberbox' value='0'>
 					</td>
 				</tr>
 				<tr>
@@ -133,7 +132,7 @@ function submitDiagnose() {
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 		<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
 		<a id="submit" href="#" onclick="submitDiagnose()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
-		<a id="close" href="#" onclick="parent.$('#${windowid}').window('close')" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+		<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
 	</div>
 	
 	</div>

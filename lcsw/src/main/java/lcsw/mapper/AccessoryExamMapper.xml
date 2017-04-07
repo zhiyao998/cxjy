@@ -25,7 +25,7 @@
   		select distinct accessory_exam_type from tbl_accessory_exam where result_type = #{id}
   	</select>
   	
-  	<select id="selectByAccessoryExamType" parameterType="java.lang.Integer" resultMap="AccessoryExamMap">
+  	<select id="selectByAccessoryExamType" parameterType="String" resultMap="AccessoryExamMap">
   		select accessory_exam_id,case_id,accessory_exam_name,accessory_exam_result,accessory_exam_type,accessory_exam_order,score,result_type from tbl_accessory_exam where accessory_exam_type = #{id} and case_id = 0
   	</select>
   	
@@ -48,15 +48,33 @@
 	
 	 <update id="updateByPrimaryKey" parameterType="AccessoryExam" >
     	update tbl_accessory_exam
-    	set case_id = #{caseId,jdbcType=INTEGER},
-      		accessory_exam_name = #{accessoryExamName,jdbcType=VARCHAR},
-      		accessory_exam_result = #{accessoryExamResult,jdbcType=VARCHAR},
-      		accessory_exam_type = #{accessoryExamType,jdbcType=VARCHAR},
-      		accessory_exam_order = #{accessoryExamOrder,jdbcType=INTEGER},
-      		score = #{score,jdbcType=DOUBLE},
-      		result_type = #{resultType,jdbcType=INTEGER}
+    		<set>
+    			case_id = #{caseId,jdbcType=INTEGER},
+      			accessory_exam_name = #{accessoryExamName,jdbcType=VARCHAR},
+      			accessory_exam_result = #{accessoryExamResult,jdbcType=VARCHAR},
+      			accessory_exam_type = #{accessoryExamType,jdbcType=VARCHAR},
+      			accessory_exam_order = #{accessoryExamOrder,jdbcType=INTEGER},
+      			score = #{score,jdbcType=DOUBLE},
+      			result_type = #{resultType,jdbcType=INTEGER}
+      		</set>	
     	where accessory_exam_id = #{accessoryExamId,jdbcType=INTEGER}
-  </update>
+  	</update>
+  	
+  	<update id="updateByBatch" parameterType="java.util.List" >
+    	<foreach collection="list" item="item" index="index" separator=";">
+    	   	update tbl_accessory_exam
+    		<set>
+    			case_id = #{item.caseId,jdbcType=INTEGER},
+       			accessory_exam_name = #{item.accessoryExamName,jdbcType=VARCHAR}, 
+      			accessory_exam_result = #{item.accessoryExamResult,jdbcType=VARCHAR},
+      			accessory_exam_type = #{item.accessoryExamType,jdbcType=VARCHAR},
+      			accessory_exam_order = #{item.accessoryExamOrder,jdbcType=INTEGER},
+      			score = #{item.score,jdbcType=DOUBLE},
+      			result_type = #{item.resultType,jdbcType=INTEGER}
+      		</set>
+    		where accessory_exam_id = #{item.accessoryExamId,jdbcType=INTEGER}
+    	</foreach>
+  	</update>
   
     <delete id="deleteByPrimaryKey">
   		delete from tbl_accessory_exam

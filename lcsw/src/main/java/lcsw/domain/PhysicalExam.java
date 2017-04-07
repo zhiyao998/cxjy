@@ -62,11 +62,13 @@ public class PhysicalExam {
 	}
 	@Override
 	public String toString() {
-		return "PhysicalExam [physicalExamId=" + physicalExamId + ", physicalExamName=" + physicalExamName
-				+ ", physicalExamPart=" + physicalExamPart + ", physicalExamResult=" + physicalExamResult
-				+ ", physicalExamType=" + physicalExamType + ", physicalExamOrder=" + physicalExamOrder + ", score="
-				+ score + "]";
+		return "PhysicalExam [physicalExamId=" + physicalExamId + ", caseId=" + caseId + ", physicalExamName="
+				+ physicalExamName + ", physicalExamPart=" + physicalExamPart + ", physicalExamResult="
+				+ physicalExamResult + ", physicalExamType=" + physicalExamType + ", physicalExamOrder="
+				+ physicalExamOrder + ", score=" + score + "]";
 	}
+	
+	
 	
 	
 	

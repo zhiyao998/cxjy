@@ -22,7 +22,7 @@
   	</select>
   	
   	<select id="selectByType" parameterType="java.lang.Integer" resultMap="InquiryMap">
-  		select inquiry_id,case_id,inquiry_title,patient_answer,inquiry_type,inquiry_order,score from tbl_inquiry where inquiry_type = #{tpye}
+  		select inquiry_id,case_id,inquiry_title,patient_answer,inquiry_type,inquiry_order,score from tbl_inquiry where inquiry_type = #{tpye} and case_id = 0
   	</select>
   	
   	<insert id="insert" parameterType="Inquiry" >
@@ -51,7 +51,22 @@
       		inquiry_order = #{inquiryOrder,jdbcType=INTEGER},
       		score = #{score,jdbcType=DOUBLE}
     	where inquiry_id = #{inquiryId,jdbcType=INTEGER}
-  </update>
+  	</update>
+  
+  	 <update id="updateByBatch" parameterType="java.util.List" >
+    	<foreach collection="list" item="item" index="index" separator=";">
+    	    update tbl_inquiry
+    		<set>
+    			case_id = #{item.caseId,jdbcType=INTEGER},
+      			inquiry_title = #{item.inquiryTitle,jdbcType=VARCHAR},
+      			patient_answer = #{item.patientAnswer,jdbcType=VARCHAR},
+      			inquiry_type = #{item.inquiryType,jdbcType=INTEGER},
+      			inquiry_order = #{item.inquiryOrder,jdbcType=INTEGER},
+      			score = #{item.score,jdbcType=DOUBLE}
+      		</set>
+    	where inquiry_id = #{item.inquiryId,jdbcType=INTEGER}
+    	</foreach>
+  	</update>
   
     <delete id="deleteByPrimaryKey">
   		delete from tbl_inquiry

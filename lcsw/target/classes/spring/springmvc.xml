@@ -18,10 +18,7 @@
 	</bean>
         
    	<!-- 资源映射 -->
-	<mvc:resources location="/WEB-INF/css/" mapping="/css/**"/>
-	<mvc:resources location="/WEB-INF/js/" mapping="/js/**"/>
-	<mvc:resources location="/WEB-INF/json/" mapping="/json/**"/>
-	<mvc:resources location="/WEB-INF/temp/" mapping="/temp/**"/>
+	<mvc:resources location="/WEB-INF/public/" mapping="/public/**"/>
 	
 		<!-- 配置json转换器-->
     <bean id="mappingJacksonHttpMessageConverter"

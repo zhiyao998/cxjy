@@ -36,8 +36,8 @@
       		fv_resultC = #{fvResultC,jdbcType=VARCHAR},
       		fv_resultD = #{fvResultD,jdbcType=VARCHAR},
       		fv_resultE = #{fvResultE,jdbcType=VARCHAR},
-      		score = #{score,jdbcType=DOUBLE}
-      		analysis = #{analysis,jdbcType=VARCHAR},
+      		score = #{score,jdbcType=DOUBLE},
+      		analysis = #{analysis,jdbcType=VARCHAR}
     	where first_visit_id = #{firstVisitId,jdbcType=INTEGER}
   </update>
   

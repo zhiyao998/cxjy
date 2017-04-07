@@ -52,7 +52,7 @@ public class AccessoryExamServiceImpl implements AccessoryExamService {
 	}
 
 	@Override
-	public List<AccessoryExam> selectByAccessoryExamType(Integer id) {
+	public List<AccessoryExam> selectByAccessoryExamType(String id) {
 		return accessoryExamMapper.selectByAccessoryExamType(id);
 	}
 

@@ -23,5 +23,7 @@ public interface InquiryMapper {
     List<Inquiry> selectByType(Integer type);
     
     int updateByPrimaryKey(Inquiry record);
+    
+    int updateByBatch(List<Inquiry> record);
 	
 }

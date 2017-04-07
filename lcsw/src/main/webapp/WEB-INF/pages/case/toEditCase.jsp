@@ -15,8 +15,8 @@
 </style>
 <script type="text/javascript">
 	$(function() {
-		$("#caseType").combobox("select",${caseQuery.newCase.caseType})
-	})
+		$("#caseType").combobox("select",${caseQuery.newCase.caseType});
+	});
 	function editNewCase() {
 	$('#inputForm').form('submit', {
 		onSubmit : function() {
@@ -44,6 +44,7 @@
 		
 	<div data-options="region:'center',border:false" style="padding: 10px;">
 		<form action="/lcsw/case/next.action" method="post" id="inputForm">
+			<input type="hidden" name="caseId" value="${caseQuery.newCase.caseId }">
 			<table>
 				<tr>
 					<td>

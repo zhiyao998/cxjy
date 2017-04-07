@@ -42,7 +42,20 @@
       		treatment_plan = #{treatmentPlan,jdbcType=VARCHAR},
       		score = #{score,jdbcType=DOUBLE}
     	where treatment_id = #{treatmentId,jdbcType=INTEGER}
-  </update>
+  	</update>
+  
+  	 <update id="updateByBatch" parameterType="java.util.List" >
+    	<foreach collection="list" item="item" index="index" separator=";">
+    		update tbl_treatment
+    		<set>
+    	    	case_id = #{item.caseId,jdbcType=INTEGER},
+      			treatment_type = #{item.treatmentType,jdbcType=VARCHAR},
+      			treatment_plan = #{item.treatmentPlan,jdbcType=VARCHAR},
+      			score = #{item.score,jdbcType=DOUBLE}
+      		</set>
+    	where treatment_id = #{item.treatmentId,jdbcType=INTEGER}
+    	</foreach>
+ 	 </update>
   
     <delete id="deleteByPrimaryKey">
   		delete from tbl_treatment

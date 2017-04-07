@@ -29,13 +29,21 @@ public class CaseController {
 	@Resource
 	private CaseQueryService caseQueryService;
 	
-	private CaseQuery caseQuery = new CaseQuery();
-	
 	@RequestMapping("/list")
 	@ResponseBody
 	public List<Case> listCase(HttpServletRequest request,HttpServletResponse response){
 		List<Case> cases = caseService.selectAll();
 		return cases;
+	}
+	
+	@RequestMapping("/clear")
+	@ResponseBody
+	public HashMap clear(HttpServletRequest request){
+		request.getSession().removeAttribute("CaseQuery");
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		System.out.println("-------------------clear  session-----------------------");
+		map.put("status", true);
+		return map;
 	}
 	
 	@RequestMapping("/management")
@@ -48,19 +56,18 @@ public class CaseController {
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		CaseQuery caseQuery = caseQueryService.selectByPrimaryKey(id);
 		request.setAttribute("caseQuery", caseQuery);
-		System.out.println(caseQuery);
 		return "/case/checkCase";
 	}
 	
 	@RequestMapping(value="/toAdd")
 	public String toAdd(HttpServletRequest request){
 		request.setAttribute("windowid", request.getParameter("windowid"));
-		request.getSession().setAttribute("CaseQuery", null);
 		return "/case/toAddCase";
 	}
 	
 	@RequestMapping("/toEdit")
 	public String toEdit(HttpServletRequest request){
+		request.setAttribute("windowid", request.getParameter("windowid"));
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		CaseQuery caseQuery = caseQueryService.selectByPrimaryKey(id);
 		request.setAttribute("caseQuery", caseQuery);
@@ -96,6 +103,8 @@ public class CaseController {
 	@ResponseBody
 	public Map<String,Object> getlastCase(HttpServletRequest request,HttpServletResponse response){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		System.out.println(request.getSession().getAttribute("CaseQuery"));
+		System.out.println("getlastCase" + caseQuery);
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		if(caseQuery != null){
 			if(caseQuery.getNewCase() == null){
@@ -110,45 +119,15 @@ public class CaseController {
 		return map;
 	}
 	
-	@RequestMapping("/updateCase")
-	@ResponseBody
-	public HashMap<String,Object> updateCase(HttpServletRequest request,HttpServletResponse response){
-		Case c = new Case();
-		Date d =new Date();
-
-		c.setCaseId(Integer.valueOf(request.getParameter("caseId")));
-		c.setCaseTitle(request.getParameter("caseTitle"));
-		c.setCaseType(Integer.valueOf(request.getParameter("caseType")));
-		c.setChiefComplain(request.getParameter("chiefComplain"));
-		c.setCreater(request.getParameter("creater"));
-		c.setCreateTime(new java.sql.Date(d.getTime()));
-		c.setPatientInfo(request.getParameter("patientInfo"));
-		int status = caseService.updateByPrimaryKey(c);
-		String message = null;
-		if(status > 0){
-			message = new String("成功");
-		}else{
-			message = new String("失败");
-		}
-		HashMap<String,Object> map = new HashMap<String,Object>();
-		map.put("status", message);
-		return map;
-	}
 	
 	@RequestMapping("/next")
 	@ResponseBody
-	public CaseQuery insertCase(HttpServletRequest request,HttpServletResponse response){
-		Case c = new Case();
+	public CaseQuery insertCase(HttpServletRequest request,Case newCase){
 		Date d =new Date();
-
-		c.setCaseTitle(request.getParameter("caseTitle"));
-		c.setCaseType(Integer.valueOf(request.getParameter("caseType")));
-		c.setChiefComplain(request.getParameter("chiefComplain"));
-		c.setCreater(request.getParameter("creater"));
-		c.setCreateTime(new java.sql.Date(d.getTime()));
-		c.setPatientInfo(request.getParameter("patientInfo"));
-		System.out.println(c);
-		caseQuery.setNewCase(c);
+		newCase.setCreateTime(new java.sql.Date(d.getTime()));
+		System.out.println(newCase);
+		CaseQuery caseQuery = new CaseQuery();
+		caseQuery.setNewCase(newCase);
 		caseQuery.setStatus(true);
 		request.getSession().setAttribute("CaseQuery", caseQuery);
 		return caseQuery;	

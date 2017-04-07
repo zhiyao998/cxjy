@@ -30,32 +30,29 @@ public class DiagnoseController {
 	
 	@RequestMapping("/next")
 	@ResponseBody
-	public CaseQuery insertCase(HttpServletRequest request,HttpServletResponse response){
-		Diagnose d = new Diagnose();
+	public CaseQuery insertCase(HttpServletRequest request,Diagnose diagnose){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
-		d.setScore(Double.valueOf(request.getParameter("score")));
-		d.setDiagnoseResultA(request.getParameter("diagnoseResultA"));
-		d.setDiagnoseResultB(request.getParameter("diagnoseResultB"));
-		d.setDiagnoseResultC(request.getParameter("diagnoseResultC"));
-		d.setDiagnoseResultD(request.getParameter("diagnoseResultD"));
-		d.setDiagnoseResultE(request.getParameter("diagnoseResultE"));
-		d.setDiagnoseAnswer(request.getParameter("diagnoseAnswer"));
-		System.out.println(d);
+		System.out.println(diagnose);
 //		int flag = caseService.insert(c);
 		caseQuery.setStatus(true);
-		caseQuery.setDiagnose(d);
+		caseQuery.setDiagnose(diagnose);
 		request.getSession().setAttribute("CaseQuery", caseQuery);
 		return caseQuery;	
 	}
 	
 	@RequestMapping("/getlastDiagnose")
 	@ResponseBody
-	public Map<String,Object> getlastDiagnose(HttpServletRequest request,HttpServletResponse response){
+	public Map<String,Object> getlastDiagnose(HttpServletRequest request){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		Integer caseId = null;
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		if(caseQuery != null){
-			if(caseQuery.getDiagnose() == null){
-				map.put("status", false);
+			if(caseQuery.getDiagnose() == null && caseQuery.getNewCase().getCaseId() != null){
+				caseId = Integer.valueOf(caseQuery.getNewCase().getCaseId());
+				map.put("status", true);
+				Diagnose d = diagnoseService.selectByCaseId(caseId);
+				caseQuery.setDiagnose(d);
+				map.put("diagnose", caseQuery.getDiagnose());
 			}else{
 				map.put("status", true);
 				map.put("diagnose", caseQuery.getDiagnose());

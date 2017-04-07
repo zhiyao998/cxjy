@@ -21,5 +21,7 @@ public interface PatientManagementMapper {
     List<PatientManagement> selectByCaseId(Integer id);
 
     int updateByPrimaryKey(PatientManagement record);
+    
+    int updateByBatch(List<PatientManagement> record);
 	
 }

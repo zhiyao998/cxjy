@@ -33,20 +33,27 @@ public class InquiryController {
 	@RequestMapping(value="/toEdit")
 	public String toEditInquiry(HttpServletRequest request){
 		request.setAttribute("windowid", request.getParameter("windowid"));
-		return "/inquiry/toEditInquiry";
+		
+		return "/inquiry/toAddInquiry";
 	}
 	
 	@RequestMapping(value="/selectByType")
 	@ResponseBody
 	public Map<String,Object> selectByType(HttpServletRequest request){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		Integer caseId = null;
 		Integer tpye = Integer.valueOf(request.getParameter("inquiryType"));
 		List<Inquiry> newList = new ArrayList<Inquiry>();
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<Inquiry> list = inquiryService.selectByType(tpye);
-		if(caseQuery.getInquirys().isEmpty()){
+		if(caseQuery.getInquirys().isEmpty() && caseQuery.getNewCase().getCaseId() == null){
 			map.put("list", list);
+			map.put("msg", list.size());
 		}else{
+			if(caseQuery.getInquirys().isEmpty() && caseQuery.getNewCase().getCaseId() != null){
+				caseId = Integer.valueOf(caseQuery.getNewCase().getCaseId());
+				caseQuery.setInquirys(inquiryService.selectByCaseId(caseId));
+			}
 			List<Inquiry> inquiries = caseQuery.getInquirys();
 			for(Inquiry i:inquiries){
 				if(i.getInquiryType().equals(tpye))
@@ -63,10 +70,10 @@ public class InquiryController {
 				}
 			}
 			map.put("list", newList);
+			map.put("msg", newList.size());
 		}
 		
 		map.put("status", true);
-		map.put("msg", newList.size());
 		return map;
 	}
 	
