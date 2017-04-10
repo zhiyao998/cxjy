@@ -3,18 +3,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%@ include file="../common.jsp"%>
+<%@ include file="../examcommom.jsp"%>
 <style type="text/css">
 	#menu{
-		background-color: #F0FFF0;
-		height: 100%;
+		background-color: #d9d9d9;
 	}
 	#menu li{
-		padding-bottom: 3%;
-		padding-top: 3%;
+		padding-bottom: 5%;
+		padding-top: 5%;
 	}
-	.navbar{
-		background-color: #F0FFFF;
+	#header{
+		background-color: #434343;
 		
 	}
 	
@@ -27,22 +26,33 @@
 		});	
 		$("#menu li").click(function() {
 	        var current = $(this),  
-	        target = current.attr('target'); // 找到链接a中的targer的值  
-	        $.get(target,function(data){  
+	        target = current.attr('target'); // 找到链接a中的targer的值
+  	        $("#menu li").each(function() {
+				$(this).removeClass("active");
+			});
+	        current.addClass("active");  
+	        $.get(target,function(data){ 
+	        	$("#iframe").empty();
 	            $("#iframe").html(data);   
 	         });  
 		});
 		$("#caseInfo").click(function() {
-			
+	        var current = $(this),  
+	        target = current.attr('target'); // 找到链接a中的targer的值  
+	        $.get(target,function(data){ 
+	        	$("#iframe").empty();
+	            $("#iframe").html(data);   
+	         }); 
+	        return false;
 		});
 	});
 </script>
 </head>
 <body>
 <div id="mian">
-	<nav class="navbar navbar-default navbar-fixed-top ">
+	<nav id="header" class="navbar navbar-default navbar-fixed-top ">
 		<div class="navbar-header">
-			<a class="navbar-brand" id="caseInfo" href="#">病例信息</a>
+			<a class="navbar-brand" id="caseInfo" target="/lcsw/exam/caseInfo.action" href="#">病例信息</a>
 		</div>
 		
 		<a href="#" class="navbar-link navbar-text navbar-right">退出练习</a>
@@ -50,19 +60,19 @@
 	</nav>
 	<div id="body" class="container-fluid" style="padding-top: 50px;">
 		<div class="row">
-			<div class="col-md-2" style="height: 750px;">
-				<ul id="menu" class="nav nav-pills nav-stacked text-center">
-  					<li target="/lcsw/exam/patientInfo.action"><a href="#">病人信息</a></li>
-  					<li target="/lcsw/exam/inquiryInfo.action"><a href="#">问诊</a></li>
- 					<li target="/lcsw/exam/physicalExamInfo.action"><a href="#">体格检查</a></li>
- 					<li target="/lcsw/exam/firstvisitInfo.action"><a href="#">初诊</a></li>
- 					<li target="/lcsw/exam/accessoryExamInfo.action"><a href="#">辅助检查</a></li>
- 					<li target="/lcsw/exam/diagnoseInfo.action"><a href="#">确诊</a></li>
- 					<li target="/lcsw/exam/treatmentInfo.action"><a href="#">治疗方案</a></li>
- 					<li target="/lcsw/exam/patientMgmtInfo.action"><a href="#">病人管理</a></li>
+			<div class="col-md-1">
+				<ul id="menu" class="nav nav-pills nav-stacked text-center" data-spy="affix" data-offset-top="125">
+  					<li target="/lcsw/exam/patientInfo.action"><a href="javascript:void(0)">病人信息</a></li>
+  					<li target="/lcsw/exam/inquiryInfo.action"><a href="javascript:void(0)">问诊</a></li>
+ 					<li target="/lcsw/exam/physicalExamInfo.action"><a href="javascript:void(0)">体格检查</a></li>
+ 					<li target="/lcsw/exam/firstvisitInfo.action"><a href="javascript:void(0)">初诊</a></li>
+ 					<li target="/lcsw/exam/accessoryExamInfo.action"><a href="javascript:void(0)">辅助检查</a></li>
+ 					<li target="/lcsw/exam/diagnoseInfo.action"><a href="javascript:void(0)">确诊</a></li>
+ 					<li target="/lcsw/exam/treatmentInfo.action"><a href="javascript:void(0)">治疗方案</a></li>
+ 					<li target="/lcsw/exam/patientMgmtInfo.action"><a href="javascript:void(0)">病人管理</a></li>
 				</ul>
 			</div>
-			<div class="col-md-10 center-block text-center" id="iframe">
+			<div class="col-md-11 center-block text-center" id="iframe">
 				
 			</div>
 		</div>

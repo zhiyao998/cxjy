@@ -12,11 +12,11 @@
 	<div style="height: 600px;width: 100%;">
 		<div style="padding: 10px;">
 			<h2>病例信息</h2>
-			<p class="text-left">分值：</p>
-			<p class="text-left">练习时间：</p>
-			<p class="text-left">适用人群：</p>
-			<p class="text-left">专科：</p>
-			<p class="text-left">作者</p>
+			<p>分值：100分</p>
+			<p>练习时间：60分钟</p>
+			<p>适用人群：本科生</p>
+			<p>专科：内科</p>
+			<p>作者：rongyu</p>
 		</div>
 		<hr>
 		<div>
