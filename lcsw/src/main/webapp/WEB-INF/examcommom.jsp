@@ -12,5 +12,7 @@
 <script type="text/javascript" src="/lcsw/public/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="/lcsw/public/form/jquery.form.3.5.js"></script>
 <link rel="stylesheet" type="text/css" href="/lcsw/public/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lcsw/public/bootstrap/css/bootstrap-submenu.min.css">
 <script type="text/javascript" src="/lcsw/public/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/lcsw/public/plugins/dynamicscrollspy.min.js"></script>
+<script src="/lcsw/public/bootstrap/js/bootstrap-submenu.min.js" defer></script>
+<script src="/lcsw/public/plugins/jquery.slidereveal.min.js" defer></script>

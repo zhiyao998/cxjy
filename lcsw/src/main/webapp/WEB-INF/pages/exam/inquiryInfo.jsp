@@ -13,13 +13,14 @@
 		padding: 50PX;
 	}
 	#inquiryInfo ul li{
-		padding-top: 50px;
-		padding-bottom: 50px;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		width: 100%;
 	}
-		#inquiryInfo ol li{
-		margin-top: 30px;
-		margin-bottom: 30px;
+	#inquiryInfo ul{
+		width: 150px;
 	}
+	
 	#inquiryType{
 		background-color: #434343;
 	}
@@ -39,7 +40,7 @@
 <body>
 	<div id="inquiryInfo" class="container">
 		<div class="row">
-			<div class="col-md-1 scrollnav" style="height: 750px;">
+			<div class="col-md-1">
 				<ul id="inquiryType" class="nav nav-tabs nav-stacked text-center affix" data-spy="affix" data-offset-top="200">
   					<li><a href="#now">一般情况及现病史</a></li>
   					<li><a href="#last">系统回顾与既往史</a></li>
@@ -50,7 +51,7 @@
 				<div id="now">
 					<h4>一般情况及现病史</h4>
 					<c:forEach begin="1" end="10" step="1">
-						<div>
+						<div class="inline-block">
 							<a class="question" class="text-primary" href="javascript:void(0)">你最近常常感到疲倦吗？</a> <p class="text-success hidden">我精神最近很不好</p>
 						</div>
 					</c:forEach>

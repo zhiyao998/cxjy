@@ -3,23 +3,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>体检信息</title>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <style type="text/css">
+	
 	#physicalExamInfo{
 		height: 600px;
 		width: 100%;
 		padding: 50PX;
 	}
 	#physicalExamInfo ul li{
-		padding-top: 50px;
-		padding-bottom: 50px;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		width: 100%;
 	}
-		#physicalExamInfo ol li{
-		margin-top: 30px;
-		margin-bottom: 30px;
+	#physicalExamInfo ul{
+		width: 150px;
 	}
+	
 	#physicalExamType{
 		background-color: #434343;
 	}
@@ -29,7 +31,7 @@
 </style>
 <script type="text/javascript">
 	$(function() {
-		$(".question").click(function() {
+		$(".check").click(function() {
 			var p = $(this).next("p");
 			$(p).removeClass("hidden");
 		});
@@ -39,37 +41,83 @@
 <body>
 	<div id="physicalExamInfo" class="container">
 		<div class="row">
-			<div class="col-md-1 scrollnav" style="height: 750px;">
+			<div class="col-md-1">
 				<ul id="physicalExamType" class="nav nav-tabs nav-stacked text-center affix" data-spy="affix" data-offset-top="200">
-  					<li><a href="#now">一般情况及现病史</a></li>
-  					<li><a href="#last">系统回顾与既往史</a></li>
- 					<li><a href="#person">个人史</a></li>
+  					<li><a href="#p1">生命体征</a></li>
+  					<li><a href="#p2">一般情况</a></li>
+ 					<li><a href="#p3">皮肤粘膜</a></li>
+ 					<li><a href="#p4">淋巴结</a></li>
+ 					<li><a href="#p5">头颈部</a></li>
 				</ul>
 			</div>
 			<div id="physicalExamBody" class="col-md-11 text-left">
-				<div id="now">
-					<h4>一般情况及现病史</h4>
-					<c:forEach begin="1" end="10" step="1">
-						<div>
-							<a class="question" class="text-primary" href="javascript:void(0)">你最近常常感到疲倦吗？</a> <p class="text-success hidden">我精神最近很不好</p>
-						</div>
+				<div>
+					<h4>生命体征</h4>
+					<div>
+						<a class="check" class="text-primary" href="javascript:void(0)">脉率（次/分）</a> <p class="text-success hidden">70</p>
+					</div>
+					<div>
+						<a class="check" class="text-primary" href="javascript:void(0)">血压（mmHg）</a> <p class="text-success hidden">110/70</p>
+					</div>
+					<div>
+						<a class="check" class="text-primary" href="javascript:void(0)">体温（℃）</a> <p class="text-success hidden">110/70</p>
+					</div>
+				</div>
+				<div>
+					<h4>一般情况</h4>
+					<c:forEach begin="1" end="2" step="1">
+					<div>
+						<a class="check" class="text-primary" href="javascript:void(0)">脉率（次/分）</a> <p class="text-success hidden">70</p>
+					</div>
+					<div>
+						<a class="check" class="text-primary" href="javascript:void(0)">血压（mmHg）</a> <p class="text-success hidden">110/70</p>
+					</div>
+					<div>
+						<a class="check" class="text-primary" href="javascript:void(0)">体温（℃）</a> <p class="text-success hidden">110/70</p>
+					</div>				
 					</c:forEach>
 				</div>
-				<div id="last">
-					<h4>系统回顾与既往史</h4>
-					<c:forEach begin="1" end="10" step="1">
-						<div>
-							<a class="question" class="text-primary" href="javascript:void(0)">你最近常常感到疲倦吗？</a> <p class="text-success hidden">我精神最近很不好</p>
-						</div>
+				<div>
+					<h4>皮肤粘膜</h4>
+					<c:forEach begin="1" end="2" step="1">
+					<div>
+						<a class="check" class="text-primary" href="javascript:void(0)">脉率（次/分）</a> <p class="text-success hidden">70</p>
+					</div>
+					<div>
+						<a class="check" class="text-primary" href="javascript:void(0)">血压（mmHg）</a> <p class="text-success hidden">110/70</p>
+					</div>
+					<div>
+						<a class="check" class="text-primary" href="javascript:void(0)">体温（℃）</a> <p class="text-success hidden">110/70</p>
+					</div>
 					</c:forEach>
 				</div>
-				<div id="person">
-					<h4>个人史</h4>
-					<c:forEach begin="1" end="10" step="1">
-						<div>
-							<a class="question" class="text-primary" href="javascript:void(0)">你最近常常感到疲倦吗？</a> <p class="text-success hidden">我精神最近很不好</p>
-						</div>
-					</c:forEach>
+				<div>
+				<h4>淋巴结</h4>
+				<c:forEach begin="1" end="2" step="1">
+				<div>
+					<a class="check" class="text-primary" href="javascript:void(0)">脉率（次/分）</a> <p class="text-success hidden">70</p>
+				</div>
+				<div>
+					<a class="check" class="text-primary" href="javascript:void(0)">血压（mmHg）</a> <p class="text-success hidden">110/70</p>
+				</div>
+				<div>
+					<a class="check" class="text-primary" href="javascript:void(0)">体温（℃）</a> <p class="text-success hidden">110/70</p>
+				</div>
+				</c:forEach>
+				</div>
+				<div>
+				<h4>头颈部</h4>
+				<c:forEach begin="1" end="2" step="1">
+				<div>
+					<a class="check" class="text-primary" href="javascript:void(0)">脉率（次/分）</a> <p class="text-success hidden">70</p>
+				</div>
+				<div>
+					<a class="check" class="text-primary" href="javascript:void(0)">血压（mmHg）</a> <p class="text-success hidden">110/70</p>
+				</div>
+				<div>
+					<a class="check" class="text-primary" href="javascript:void(0)">体温（℃）</a> <p class="text-success hidden">110/70</p>
+				</div>
+				</c:forEach>
 				</div>
 			</div>
 		</div>

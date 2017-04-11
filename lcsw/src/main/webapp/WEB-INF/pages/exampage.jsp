@@ -16,7 +16,13 @@
 		background-color: #434343;
 		
 	}
-	
+	#slider{
+		    top: 0;  
+   		 	bottom:0;  
+    		position:fixed;  
+    		overflow-y:scroll;  
+    		overflow-x:hidden;
+	}
 	
 </style>
 <script type="text/javascript">
@@ -45,17 +51,33 @@
 	         }); 
 	        return false;
 		});
+		/* 滑动侧边栏初始化  */
+		 var slider = $("#slider").slideReveal({
+			  	trigger: $("#history"),
+			  	width: 500,
+			  	top: 50,
+		 		position: "right",
+		 		push: false,
+		 		show: function(obj) {
+			        $.get("/lcsw/exam/historyInfo.action",function(data){ 
+			        	obj.html(data);   
+			         }); 
+				},
+				hidden: function(obj) {
+					
+				}
+		});
 	});
 </script>
 </head>
 <body>
-<div id="mian">
+
 	<nav id="header" class="navbar navbar-default navbar-fixed-top ">
 		<div class="navbar-header">
 			<a class="navbar-brand" id="caseInfo" target="/lcsw/exam/caseInfo.action" href="#">病例信息</a>
 		</div>
 		
-		<a href="#" class="navbar-link navbar-text navbar-right">退出练习</a>
+		<a href="#" class="navbar-link navbar-text" style="float: right;">退出练习</a>
 		
 	</nav>
 	<div id="body" class="container-fluid" style="padding-top: 50px;">
@@ -77,11 +99,14 @@
 			</div>
 		</div>
 	</div>
+	<div id="slider" style="background-color: #fff2cc;">
+		
+	</div>
 	<nav class="navbar navbar-default navbar-fixed-bottom">
-		<a href="#" class="navbar-link navbar-text navbar-right">历史记录</a>
+		<a id="history" href="#" class="navbar-link navbar-text" style="float: right;">历史记录</a>
 	</nav>
 	
-</div>	
+
 	
 </body>
 </html>

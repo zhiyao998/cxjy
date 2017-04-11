@@ -9,6 +9,7 @@ public class ExamController {
 	
 	@RequestMapping("/main")
 	public String mainpage(){
+		
 		return "/exampage";
 	}
 	
@@ -55,5 +56,10 @@ public class ExamController {
 	@RequestMapping("/patientMgmtInfo")
 	public String patientMgmtInfo(){
 		return "/exam/patientMgmtInfo";
+	}
+	
+	@RequestMapping("/historyInfo")
+	public String historyInfo(){
+		return "/exam/historyInfo";
 	}
 }
