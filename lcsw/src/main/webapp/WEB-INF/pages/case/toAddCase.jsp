@@ -22,8 +22,13 @@ $(function() {
 	    'success': function(data) {
 			if (data.status) {
 				var Newcase = data.Newcase;
+				var steps = new Array();
+				steps = data.Newcase.caseStep.split(",");
+				for(var i=0; i < steps.length; i++){
+					var test = $("input[value='" + steps[i] +"']");
+					$(test).attr("checked",true);
+				}
 				$("#caseTitle").textbox("setValue",Newcase.caseTitle);
-				$("#patientInfo").textbox("setValue",Newcase.patientInfo);
 				$("#chiefComplain").textbox("setValue",Newcase.chiefComplain);
 				$("#caseType").combobox("select",Newcase.caseType)
 			}
@@ -34,13 +39,18 @@ function submitNewCase() {
 	$('#inputForm').form('submit', {
 		onSubmit : function() {
 			var flag = $(this).form('enableValidation').form('validate');
+			var step = $("input:checked");
+			if(step.length == 0){
+				alert("请选择至少一个考察步骤!");
+				return false;
+			}
 			if(flag){
 				var json = $("#inputForm").serializeArray();
 			  	var url = $(this).attr("action");
 				$.post(url, json, function(data) {
 					if (data.status) {
 							//ok后的回调方法，去关闭父页面的窗口元素
-							parent.open($("#nextTitle").val(),$("#nextUrl").val(),$("#nextWidth").val(),$("#nextHight").val());
+							parent.open(data.nextStep);
 							parent.$('#${windowid}').window('close');
 					}
 				}, "json");
@@ -66,20 +76,25 @@ function submitNewCase() {
 						<input class="easyui-textbox" type="text" id="caseTitle" name="caseTitle" data-options="required:true">
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<label for="patientInfo">病人信息：</label>
-					</td>
-					<td>
-						<input class="easyui-textbox" id="patientInfo" name="patientInfo" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></input>
-					</td>
-				</tr>
 				<tr style="height: 30%;width: 50%">
 					<td>
 						<label for="chiefComplain">主诉：</label>
 					</td>
 					<td>
 						<textarea rows="5" cols="30" class="easyui-textbox" id="chiefComplain" name="chiefComplain" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6">
+						请选择您需要考察的步骤:
+						<input type="hidden" value="0" name="caseStep">
+						<input type="checkbox" value="1" name="caseStep">问诊
+						<input type="checkbox" value="2" name="caseStep">体格检查
+						<input type="checkbox" value="3" name="caseStep">初步诊断
+						<input type="checkbox" value="4" name="caseStep">辅助检查
+						<input type="checkbox" value="5" name="caseStep">确诊判断
+						<input type="checkbox" value="6" name="caseStep">治疗方案
+						<input type="checkbox" value="7" name="caseStep">病人管理
 					</td>
 				</tr>
 				<tr>
@@ -99,11 +114,8 @@ function submitNewCase() {
 				</tr>
 			</table>
 			<input type="hidden" name="creater" value="rongyu">
+			<input type="hidden" id="step" value="1">
 		</form>
-			<input type="hidden" id="nextUrl" value="/lcsw/inquiry/toAdd.action">
-			<input type="hidden" id="nextTitle" value="添加问诊信息">
-			<input type="hidden" id="nextHight" value="600">
-			<input type="hidden" id="nextWidth" value="800">
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 		<a id="submit" href="#" onclick="submitNewCase()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  

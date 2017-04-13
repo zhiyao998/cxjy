@@ -27,7 +27,7 @@
 				$.post(url, json, function(data) {
 					if (data.status) {
 							//ok后的回调方法，去关闭父页面的窗口元素
-							parent.open($("#nextTitle").val(),$("#nextUrl").val(),$("#nextWidth").val(),$("#nextHight").val());
+							parent.open($("#nextTitle").val(),$("#nextUrl").val());
 							parent.$('#${windowid}').window('close');
 					}
 				}, "json");
@@ -90,8 +90,6 @@
 		</form>
 			<input type="hidden" id="nextUrl" value="/lcsw/inquiry/toEdit.action">
 			<input type="hidden" id="nextTitle" value="编辑问诊信息">
-			<input type="hidden" id="nextHight" value="600">
-			<input type="hidden" id="nextWidth" value="800">
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 		<a id="submit" href="#" onclick="editNewCase()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  

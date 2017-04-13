@@ -82,6 +82,12 @@ public class InquiryController {
 	public CaseQuery insertInquiry(HttpServletRequest request,@RequestBody List<Inquiry> inquirys){
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		caseQuery.setInquirys(inquirys);
+		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
+		for(int i =0 ; i<caseStep.length;i++){
+			if(caseStep[i].equals("1")&& i+1 < caseStep.length){
+				caseQuery.setNextStep(caseStep[i+1]);
+			}
+		}
 		request.getSession().setAttribute("CaseQuery",caseQuery);
 		return caseQuery;
 	}

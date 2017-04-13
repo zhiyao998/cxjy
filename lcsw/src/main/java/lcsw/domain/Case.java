@@ -5,11 +5,11 @@ public class Case {
 	
 	private Integer caseId;
 	private String caseTitle;
-	private String patientInfo;
 	private String chiefComplain;
 	private Date createTime;
 	private String creater;
 	private Integer caseType;
+	private String caseStep;
 
 	public Integer getCaseId() {
 		return caseId;
@@ -32,20 +32,6 @@ public class Case {
 	public void setCaseTitle(String caseTitle) {
 		this.caseTitle = caseTitle;
 	}
-
-
-
-	public String getPatientInfo() {
-		return patientInfo;
-	}
-
-
-
-	public void setPatientInfo(String patientInfo) {
-		this.patientInfo = patientInfo;
-	}
-
-
 
 	public String getChiefComplain() {
 		return chiefComplain;
@@ -93,14 +79,27 @@ public class Case {
 		this.caseType = caseType;
 	}
 
+	public String getCaseStep() {
+		return caseStep;
+	}
+
+
+
+	public void setCaseStep(String caseStep) {
+		this.caseStep = caseStep;
+	}
+
 
 
 	@Override
 	public String toString() {
-		return "Case [case_id=" + caseId + ", case_title=" + caseTitle + ", patientInfo=" + patientInfo
-				+ ", chiefComplain=" + chiefComplain + ", createTime=" + createTime + ", creater=" + creater
-				+ ", caseType=" + caseType + "]";
-	}	
+		return "Case [caseId=" + caseId + ", caseTitle=" + caseTitle + ", chiefComplain=" + chiefComplain
+				+ ", createTime=" + createTime + ", creater=" + creater + ", caseType=" + caseType + ", caseStep="
+				+ caseStep + "]";
+	}
+
+
+
 	
 	
 }

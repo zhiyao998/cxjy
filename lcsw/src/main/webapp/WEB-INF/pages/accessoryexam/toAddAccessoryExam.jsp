@@ -41,6 +41,7 @@ form div{
 
 <script type="text/javascript">
 var isChange = false;
+var nextStep = null;
 $(function() {	
 	selectByResultType();
 	$('#resultType').combobox({
@@ -183,6 +184,7 @@ function submitAccessoryExam() {
 					if (data.status) {
 						alert("提交成功");
 						isChange = true;
+						nextStep = data.nextStep;
 					}
 				}
 			});
@@ -193,7 +195,7 @@ function submitAccessoryExam() {
 
 function next() {
 	if(isChange){
-		parent.open($("#nextTitle").val(),$("#nextUrl").val(),$("#nextWidth").val(),$("#nextHight").val());
+		parent.open(nextStep);
 		parent.$('#${windowid}').window('close');
 	}else{
 		alert("尚未选择辅助信息");
@@ -217,14 +219,7 @@ function next() {
 		<div id="main">
 			
 		</div>
-			<input type="hidden" id="nextUrl" value="/lcsw/diagnose/toAddDiagnose.action">
-			<input type="hidden" id="nextTitle" value="添加确诊信息">
-			<input type="hidden" id="nextHight" value="600">
-			<input type="hidden" id="nextWidth" value="800">
-			<input type="hidden" id="lastUrl" value="/lcsw/firstVisit/toAddFirstVisit.action">
-			<input type="hidden" id="lastTitle" value="添加初诊信息">
-			<input type="hidden" id="lastHight" value="600">
-			<input type="hidden" id="lastWidth" value="800">
+	<input type="hidden" id="step" value="4">
 			
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">

@@ -37,7 +37,13 @@ public class FirstVisitController {
 //		int flag = caseService.insert(c);
 		caseQuery.setStatus(true);
 		caseQuery.setFirstVisit(firstVisit);
-		request.getSession().setAttribute("CaseQuery", caseQuery);
+		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
+		for(int i =0 ; i<caseStep.length;i++){
+			if(caseStep[i].equals("3")&& i+1 < caseStep.length){
+				caseQuery.setNextStep(caseStep[i+1]);
+			}
+		}
+		request.getSession().setAttribute("CaseQuery",caseQuery);
 		return caseQuery;	
 	}
 	

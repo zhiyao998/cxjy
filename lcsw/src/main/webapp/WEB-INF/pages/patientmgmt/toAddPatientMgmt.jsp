@@ -122,10 +122,7 @@ function submitPatientMgmt() {
     			
     			</table>
     		</div>    
-			<input type="hidden" id="lastUrl" value="/lcsw/treatment/toAddTreatment">
-			<input type="hidden" id="lastTitle" value="添加问诊信息">
-			<input type="hidden" id="lastHight" value="600">
-			<input type="hidden" id="lastWidth" value="800">    
+    		<input type="hidden" id="step" value="6">   
 		</div>
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 			<a id="last" href="#" onclick="lastPage()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  

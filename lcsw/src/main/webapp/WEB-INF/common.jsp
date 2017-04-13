@@ -22,8 +22,35 @@ function closeWindow(){
 function closeWindow(id) {
 	$('#' +id).window('close', true);
 }
-function open(title, url, width, hight) {
+function open(step) {
 	//生成随机数
+	switch (step) {
+	case "0":
+		url="/lcsw/case/toAdd.action";
+		break;
+	case "1":
+		url ="/lcsw/inquiry/toAdd.action";
+		break;
+	case "2":
+		url="/lcsw/physicalExam/toAddPhysicalExam.action";
+		break;
+	case "3":
+		url="/lcsw/firstVisit/toAddFirstVisit.action";
+		break;
+	case "4":
+		url="/lcsw/AccessoryExam/toAddAccessoryExam.action";
+		break;
+	case "5":
+		url="/lcsw/diagnose/toAddDiagnose.action";
+		break;
+	case "6":
+		url="/lcsw/treatment/toAddTreatment.action";
+		break;
+	default:
+		url="/lcsw/case/management.action";
+		break;
+	}
+	
 	var windowid = "windowid" +Math.floor(Math.random() *Math.pow(10, 12));
 	if (url.indexOf("?") != -1) {
 		url = url +"&windowid=" +windowid;
@@ -34,9 +61,8 @@ function open(title, url, width, hight) {
 			+ url + '" ></iframe></div>';
 	$("body").append(html);
 	$('#'+windowid).window({
-		title : title,
-		width : width,
-		height : hight,
+		width : "900",
+		height : "500",
 		modal : true,
 		//当window关闭时把这个窗口的代码清除。
 		onClose : function() {
@@ -63,8 +89,14 @@ function  resertForm(){
 }
 
 function last() {
-	parent.open($("#lastTitle").val(),$("#lastUrl").val(),$("#lastWidth").val(),$("#lastHight").val());
-	parent.$('#${windowid}').window('close');
+	var step = $("#step").val();
+	$.post("/lcsw/case/last.action", { 'step':step}, function(data) {
+		if (data.status) {
+				//ok后的回调方法，去关闭父页面的窗口元素
+				parent.open(data.lastStep);
+				parent.$('#${windowid}').window('close');
+		}
+	}, "json");
 }
 
 /* 设置输入框的可编辑性  */

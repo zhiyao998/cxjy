@@ -42,6 +42,7 @@ public class PatientMgmtController {
 		System.out.println(managements);
 		request.getSession().setAttribute("CaseQuery",caseQuery);
 		System.out.println(caseQuery);
+		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
 		int flag = 0;
 		if(caseQuery.getNewCase().getCaseId() == null)
 			flag = caseQueryService.insert(caseQuery);

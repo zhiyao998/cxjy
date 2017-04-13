@@ -36,6 +36,12 @@ public class TreatmentController {
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		caseQuery.setTreatments(treatments);
 		System.out.println(treatments);
+		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
+		for(int i =0 ; i<caseStep.length;i++){
+			if(caseStep[i].equals("6")&& i+1 < caseStep.length){
+				caseQuery.setNextStep(caseStep[i+1]);
+			}
+		}
 		request.getSession().setAttribute("CaseQuery",caseQuery);
 		return caseQuery;
 	}

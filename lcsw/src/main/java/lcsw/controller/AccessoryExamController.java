@@ -102,6 +102,12 @@ public class AccessoryExamController {
 		}
 		caseQuery.setAccessoryExams(newList);
 		System.out.println(newList.size());
+		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
+		for(int i =0 ; i<caseStep.length;i++){
+			if(caseStep[i].equals("4")&& i+1 < caseStep.length){
+				caseQuery.setNextStep(caseStep[i+1]);
+			}
+		}
 		request.getSession().setAttribute("CaseQuery",caseQuery);
 		return caseQuery;
 	}
@@ -122,15 +128,17 @@ public class AccessoryExamController {
 		a.setScore(Double.valueOf(request.getParameter("score")));
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		List<AccessoryExam> list = caseQuery.getAccessoryExams();
-		int index = list.size();
-		for(int i = 0;i < list.size();i++){
-			if(list.get(i).getAccessoryExamType().equals(a.getAccessoryExamType()) && list.get(i).getAccessoryExamOrder().equals(a.getAccessoryExamOrder())){
-				index = i;
+		if(!list.isEmpty()){
+			int index = list.size();
+			for(int i = 0;i < list.size();i++){
+				if(list.get(i).getAccessoryExamType().equals(a.getAccessoryExamType()) && list.get(i).getAccessoryExamOrder().equals(a.getAccessoryExamOrder())){
+					index = i;
+				}
 			}
+			list.remove(index);
 		}
-		list.remove(index);
 		list.add(a);
-
+		
 		
 		caseQuery.setAccessoryExams(list);
 		return caseQuery;

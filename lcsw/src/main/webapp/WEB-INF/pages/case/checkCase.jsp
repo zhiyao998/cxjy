@@ -73,10 +73,6 @@ body{
 				<label>${requestScope.caseQuery.newCase.caseTitle }</label>	
 			</div>
 			<div>
-				<label>病人信息</label>
-				<label>${requestScope.caseQuery.newCase.patientInfo }</label>
-			</div>
-			<div>
 				<label>主诉</label>
 				<label>${requestScope.caseQuery.newCase.chiefComplain }</label>
 			</div>

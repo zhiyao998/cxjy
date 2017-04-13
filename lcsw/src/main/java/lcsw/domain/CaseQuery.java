@@ -14,6 +14,8 @@ public class CaseQuery {
 	private List<Treatment> treatments = new ArrayList<Treatment>();
 	private List<PatientManagement> patientManagements = new ArrayList<PatientManagement>();
 	private boolean status;
+	private String lastStep;
+	private String nextStep;
 	
 	
 	public boolean isStatus() {
@@ -70,14 +72,27 @@ public class CaseQuery {
 	public void setPatientManagements(List<PatientManagement> patientManagements) {
 		this.patientManagements = patientManagements;
 	}
+	
+	public String getLastStep() {
+		return lastStep;
+	}
+	public void setLastStep(String lastStep) {
+		this.lastStep = lastStep;
+	}
+	public String getNextStep() {
+		return nextStep;
+	}
+	public void setNextStep(String nextSteps) {
+		this.nextStep = nextSteps;
+	}
 	@Override
 	public String toString() {
 		return "CaseQuery [newCase=" + newCase + ", inquirys=" + inquirys + ", physicalExams=" + physicalExams
 				+ ", firstVisit=" + firstVisit + ", accessoryExams=" + accessoryExams + ", diagnose=" + diagnose
 				+ ", treatments=" + treatments + ", patientManagements=" + patientManagements + ", status=" + status
-				+ "]";
+				+ ", lastStep=" + lastStep + ", nextStep=" + nextStep + "]";
 	}
-
+	
 	
 	
 }

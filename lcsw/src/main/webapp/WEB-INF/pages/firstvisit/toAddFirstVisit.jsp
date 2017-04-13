@@ -38,7 +38,7 @@ function submitFirstVisit() {
 				$.post(url, json, function(data) {
 					if (data.status) {
 							//ok后的回调方法，去关闭父页面的窗口元素
-							parent.open($("#nextTitle").val(),$("#nextUrl").val(),$("#nextWidth").val(),$("#nextHight").val());
+							parent.open(data.nextStep);
 							parent.$('#${windowid}').window('close');
 					}
 				}, "json");
@@ -115,14 +115,7 @@ function submitFirstVisit() {
 				</tr>
 			</table>
 		</form>
-			<input type="hidden" id="nextUrl" value="/lcsw/AccessoryExam/toAddAccessoryExam.action">
-			<input type="hidden" id="nextTitle" value="添加问诊信息">
-			<input type="hidden" id="nextHight" value="600">
-			<input type="hidden" id="nextWidth" value="800">
-			<input type="hidden" id="lastUrl" value="/lcsw/physicalExam/toAddPhysicalExam.action">
-			<input type="hidden" id="lastTitle" value="添加体检信息">
-			<input type="hidden" id="lastHight" value="600">
-			<input type="hidden" id="lastWidth" value="800">
+			<input type="hidden" id="step" value="3">
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 		<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  

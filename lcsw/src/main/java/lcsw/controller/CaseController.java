@@ -125,11 +125,31 @@ public class CaseController {
 	public CaseQuery insertCase(HttpServletRequest request,Case newCase){
 		Date d =new Date();
 		newCase.setCreateTime(new java.sql.Date(d.getTime()));
+		String caseStep[] = newCase.getCaseStep().split(",");
 		System.out.println(newCase);
 		CaseQuery caseQuery = new CaseQuery();
 		caseQuery.setNewCase(newCase);
 		caseQuery.setStatus(true);
+		caseQuery.setLastStep("");
+		caseQuery.setNextStep(caseStep[1]);
 		request.getSession().setAttribute("CaseQuery", caseQuery);
 		return caseQuery;	
+	}
+	
+	@RequestMapping("/last")
+	@ResponseBody
+	public Map last(HttpServletRequest request){
+		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
+		Map m = new HashMap<String,Object>();
+		String step = request.getParameter("step");
+		for(int i =0 ; i<caseStep.length;i++){
+			if(caseStep[i].equals(step)&& !step.equals("0")){
+				m.put("status", true);
+				m.put("lastStep", caseStep[i-1]);
+				break;
+			}
+		}
+		return m;	
 	}
 }

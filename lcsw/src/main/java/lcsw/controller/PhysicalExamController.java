@@ -80,6 +80,12 @@ public class PhysicalExamController {
 		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
 		caseQuery.setPhysicalExams(physicalExams);
 		System.out.println(physicalExams);
+		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
+		for(int i =0 ; i<caseStep.length;i++){
+			if(caseStep[i].equals("2")&& i+1 < caseStep.length){
+				caseQuery.setNextStep(caseStep[i+1]);
+			}
+		}
 		request.getSession().setAttribute("CaseQuery",caseQuery);
 		return caseQuery;
 	}

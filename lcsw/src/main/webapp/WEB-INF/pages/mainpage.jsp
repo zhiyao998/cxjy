@@ -18,6 +18,7 @@
         .easyui-accordion ul li a
         {
             line-height: 24px;
+            text-decoration: none;
         }
         .easyui-accordion ul li div
         {
@@ -92,8 +93,8 @@ $(function () {
 <title>首页</title>
 </head>
 <body>
-<div id="cc" class="easyui-layout" data-options="fit:true">   
-    <div data-options="region:'north',title:'后台管理',split:true" style="overflow: hidden; height: 30px; background: #D2E0F2 repeat-x center 50%;
+<div id="mianpage" class="easyui-layout" data-options="fit:true">   
+    <div data-options="region:'north',title:'临床思维系统',collapsible:false" style="overflow: hidden; height: 30px; background: #D2E0F2 repeat-x center 50%;
         line-height: 20px; color: #fff;"></div>   
 	<div data-options="region:'west',split:true,title:'菜单导航'" style="width:200px;">
 		<div class="easyui-accordion" fit="true">
@@ -139,7 +140,12 @@ $(function () {
                     	临床思维系统</h1>
             </div>
         </div>
-    </div>   
+    </div> 
+    <div data-options="region:'south'" id="rights" style="height: 30px;">
+    	<div align="center">
+    		<p>@2017 ALL RIGHTS RESERED</p>
+    	</div>
+    </div>  
 </div>  
 	
 	
