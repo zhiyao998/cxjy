@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import lcsw.domain.CaseQuery;
 import lcsw.domain.Inquiry;
 import lcsw.domain.PhysicalExam;
+import lcsw.service.CaseQueryService;
 import lcsw.service.PhysicalExamService;
+import lcsw.service.SessionProvider;
 
 @Controller()
 @RequestMapping(value="/physicalExam")
@@ -24,6 +27,10 @@ public class PhysicalExamController {
 	
 	@Resource
 	private PhysicalExamService physicalExamService;
+	@Resource
+	private CaseQueryService caseQueryService;
+	@Resource
+	private SessionProvider sessionProvider;
 	
 	@RequestMapping(value="/toAddPhysicalExam")
 	public String toAddPhysicalExam(HttpServletRequest request){
@@ -33,8 +40,8 @@ public class PhysicalExamController {
 	
 	@RequestMapping("/selectByType")
 	@ResponseBody
-	public Map<String,Object> selectByType(HttpServletRequest request){
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+	public Map<String,Object> selectByType(HttpServletRequest request,HttpServletResponse response){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		Integer caseId = null;
 		String tpye = request.getParameter("physicalExamType");
 		List<PhysicalExam> newList = new ArrayList<PhysicalExam>();
@@ -76,17 +83,33 @@ public class PhysicalExamController {
 	
 	@RequestMapping(value="/next")
 	@ResponseBody
-	public CaseQuery insertInquiry(HttpServletRequest request,@RequestBody List<PhysicalExam> physicalExams){
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+	public Map insertInquiry(HttpServletRequest request,HttpServletResponse response,@RequestBody List<PhysicalExam> physicalExams){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		caseQuery.setPhysicalExams(physicalExams);
 		System.out.println(physicalExams);
+		int flag = 0;
+		Map map = new HashMap<String,Object>();
 		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
 		for(int i =0 ; i<caseStep.length;i++){
-			if(caseStep[i].equals("2")&& i+1 < caseStep.length){
-				caseQuery.setNextStep(caseStep[i+1]);
+			if(caseStep[i].equals("2")){
+				if(i+1 < caseStep.length){
+					caseQuery.setNextStep(caseStep[i+1]);
+					sessionProvider.setCaseQuery(request, response, caseQuery);
+					map.put("status",1);
+					map.put("CaseQuery",  caseQuery);
+					return map;
+				}else{
+					if(caseQuery.getNewCase().getCaseId() == null)
+						flag = caseQueryService.insert(caseQuery);
+					else
+						flag = caseQueryService.updateByPrimaryKey(caseQuery);
+					map.put("status", 2);
+					sessionProvider.clearCaseQuery(request, response);
+					return map;
+				}
 			}
 		}
-		request.getSession().setAttribute("CaseQuery",caseQuery);
-		return caseQuery;
+		map.put("status", 0);
+		return map;
 	}
 }

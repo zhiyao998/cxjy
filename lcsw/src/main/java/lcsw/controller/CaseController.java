@@ -19,6 +19,7 @@ import lcsw.domain.Case;
 import lcsw.domain.CaseQuery;
 import lcsw.service.CaseQueryService;
 import lcsw.service.CaseService;
+import lcsw.service.SessionProvider;
 
 @Controller
 @RequestMapping("/case")
@@ -28,6 +29,8 @@ public class CaseController {
 	private CaseService caseService;
 	@Resource
 	private CaseQueryService caseQueryService;
+	@Resource
+	private SessionProvider sessionProvider;
 	
 	@RequestMapping("/list")
 	@ResponseBody
@@ -38,8 +41,8 @@ public class CaseController {
 	
 	@RequestMapping("/clear")
 	@ResponseBody
-	public HashMap clear(HttpServletRequest request){
-		request.getSession().removeAttribute("CaseQuery");
+	public HashMap clear(HttpServletRequest request,HttpServletResponse response){
+		sessionProvider.clearCaseQuery(request, response);
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		System.out.println("-------------------clear  session-----------------------");
 		map.put("status", true);
@@ -52,10 +55,10 @@ public class CaseController {
 	}
 	
 	@RequestMapping("/checkCase")
-	public String checkCase(HttpServletRequest request){
+	public String checkCase(HttpServletRequest request,HttpServletResponse response){
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		CaseQuery caseQuery = caseQueryService.selectByPrimaryKey(id);
-		request.setAttribute("caseQuery", caseQuery);
+		sessionProvider.setCaseQuery(request, response, caseQuery);
 		return "/case/checkCase";
 	}
 	
@@ -66,11 +69,11 @@ public class CaseController {
 	}
 	
 	@RequestMapping("/toEdit")
-	public String toEdit(HttpServletRequest request){
+	public String toEdit(HttpServletRequest request,HttpServletResponse response){
 		request.setAttribute("windowid", request.getParameter("windowid"));
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		CaseQuery caseQuery = caseQueryService.selectByPrimaryKey(id);
-		request.setAttribute("caseQuery", caseQuery);
+		sessionProvider.setCaseQuery(request, response, caseQuery);
 		return "/case/toEditCase";
 	}
 	
@@ -102,9 +105,7 @@ public class CaseController {
 	@RequestMapping("/getlastCase")
 	@ResponseBody
 	public Map<String,Object> getlastCase(HttpServletRequest request,HttpServletResponse response){
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
-		System.out.println(request.getSession().getAttribute("CaseQuery"));
-		System.out.println("getlastCase" + caseQuery);
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		if(caseQuery != null){
 			if(caseQuery.getNewCase() == null){
@@ -122,24 +123,27 @@ public class CaseController {
 	
 	@RequestMapping("/next")
 	@ResponseBody
-	public CaseQuery insertCase(HttpServletRequest request,Case newCase){
+	public CaseQuery insertCase(HttpServletRequest request,HttpServletResponse response,Case newCase){
 		Date d =new Date();
 		newCase.setCreateTime(new java.sql.Date(d.getTime()));
 		String caseStep[] = newCase.getCaseStep().split(",");
 		System.out.println(newCase);
-		CaseQuery caseQuery = new CaseQuery();
+		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		if(caseQuery == null){
+			caseQuery = new CaseQuery();
+		}
 		caseQuery.setNewCase(newCase);
 		caseQuery.setStatus(true);
 		caseQuery.setLastStep("");
 		caseQuery.setNextStep(caseStep[1]);
-		request.getSession().setAttribute("CaseQuery", caseQuery);
+		sessionProvider.setCaseQuery(request, response, caseQuery);
 		return caseQuery;	
 	}
 	
 	@RequestMapping("/last")
 	@ResponseBody
-	public Map last(HttpServletRequest request){
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+	public Map last(HttpServletRequest request,HttpServletResponse response){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
 		Map m = new HashMap<String,Object>();
 		String step = request.getParameter("step");

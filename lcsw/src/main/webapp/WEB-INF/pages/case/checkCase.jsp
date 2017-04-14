@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -59,7 +59,7 @@ body{
 </style>
 <script type="text/javascript">
 	$(function() {
-		$("#caseType option[value='" + ${requestScope.caseQuery.newCase.caseType} + "']").attr("selected","selected");
+		$("#caseType option[value='" + ${sessionScope.CaseQuery.newCase.caseType} + "']").attr("selected","selected");
 	});
 </script>
 
@@ -70,19 +70,19 @@ body{
 		<div id="basic">
 			<div>
 				<label>病例名称</label>
-				<label>${requestScope.caseQuery.newCase.caseTitle }</label>	
+				<label>${sessionScope.CaseQuery.newCase.caseTitle }</label>	
 			</div>
 			<div>
 				<label>主诉</label>
-				<label>${requestScope.caseQuery.newCase.chiefComplain }</label>
+				<label>${sessionScope.CaseQuery.newCase.chiefComplain }</label>
 			</div>
 			<div>
 				<label>创建人</label>
-				<label>${requestScope.caseQuery.newCase.creater }</label>
+				<label>${sessionScope.CaseQuery.newCase.creater }</label>
 			</div>
 			<div>
 				<label>创建时间</label>
-				<label>${requestScope.caseQuery.newCase.createTime }</label>
+				<label>${sessionScope.CaseQuery.newCase.createTime }</label>
 			</div>
 			<div>
 			<select id="caseType" disabled="disabled" >
@@ -108,7 +108,7 @@ body{
     					<tr>
     				</thead>
     				<tbody>
-    				<c:forEach items="${requestScope.caseQuery.inquirys }" var="i"> 
+    				<c:forEach items="${sessionScope.CaseQuery.inquirys }" var="i"> 
     				<c:if test="${i.inquiryType == 1 }">
     						<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' data-options='multiline:true' value="${i.inquiryTitle }"></input></td>
     						<td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' type='text' data-options='multiline:true' value=" ${i.patientAnswer }"></input></td>
@@ -128,7 +128,7 @@ body{
     					<tr>
     				</thead>
     				<tbody>
-    				<c:forEach items="${requestScope.caseQuery.inquirys }" var="i"> 
+    				<c:forEach items="${sessionScope.CaseQuery.inquirys }" var="i"> 
     				<c:if test="${i.inquiryType == 2 }">
     					<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' data-options='multiline:true' value="${i.inquiryTitle }"></input></td>
     					<td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' type='text' data-options='multiline:true' value=" ${i.patientAnswer }"></input></td>
@@ -148,7 +148,7 @@ body{
     					<tr>
     				</thead>
     				<tbody>
-    				<c:forEach items="${requestScope.caseQuery.inquirys }" var="i"> 
+    				<c:forEach items="${sessionScope.CaseQuery.inquirys }" var="i"> 
     				<c:if test="${i.inquiryType == 3 }">
     					<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' data-options='multiline:true' value="${i.inquiryTitle }"></input></td>
     					<td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' type='text' data-options='multiline:true' value=" ${i.patientAnswer }"></input></td>
@@ -171,7 +171,7 @@ body{
     					<tr>
     				</thead>
     				<tbody>
-    				<c:forEach items="${requestScope.caseQuery.physicalExams }" var="p">   
+    				<c:forEach items="${sessionScope.CaseQuery.physicalExams }" var="p">   
 			 		<c:if test="${p.physicalExamType == 1 }">
     					<tr><td><input class='easyui-textbox'  disabled='true'  value="${p.physicalExamName }"></input></td>
     					<td><input class='easyui-textbox'  disabled='true' type='text'  value=" ${p.physicalExamResult }"></input></td>
@@ -191,7 +191,7 @@ body{
     					<tr>
     				</thead>
     				<tbody> 
-    				<c:forEach items="${requestScope.caseQuery.physicalExams }" var="p">  
+    				<c:forEach items="${sessionScope.CaseQuery.physicalExams }" var="p">  
 			 		<c:if test="${p.physicalExamType == 2 }">
     					<tr><td><input class='easyui-textbox'  disabled='true'  value="${p.physicalExamName }"></input></td>
     					<td><input class='easyui-textbox'  disabled='true' type='text'  value=" ${p.physicalExamResult }"></input></td>
@@ -211,7 +211,7 @@ body{
     					<tr>
     				</thead>
     				<tbody>   
-    				<c:forEach items="${requestScope.caseQuery.physicalExams }" var="p">  
+    				<c:forEach items="${sessionScope.CaseQuery.physicalExams }" var="p">  
 			 		<c:if test="${p.physicalExamType == 3 }">
     					<tr><td><input class='easyui-textbox'  disabled='true'  value="${p.physicalExamName }"></input></td>
     					<td><input class='easyui-textbox'  disabled='true' type='text' value=" ${p.physicalExamResult }"></input></td>
@@ -231,7 +231,7 @@ body{
     					<tr>
     				</thead>
     				<tbody>   
-    				<c:forEach items="${requestScope.caseQuery.physicalExams }" var="p">  
+    				<c:forEach items="${sessionScope.CaseQuery.physicalExams }" var="p">  
 			 		<c:if test="${p.physicalExamType == 4 }">
     					<tr><td><input class='easyui-textbox'  disabled='true' value="${p.physicalExamName }"></input></td>
     					<td><input class='easyui-textbox'  disabled='true' type='text' value=" ${p.physicalExamResult }"></input></td>
@@ -251,7 +251,7 @@ body{
     					<tr>
     				</thead>
     				<tbody>   
-    				<c:forEach items="${requestScope.caseQuery.physicalExams }" var="p">  
+    				<c:forEach items="${sessionScope.CaseQuery.physicalExams }" var="p">  
 			 		<c:if test="${p.physicalExamType == 5 }">
     					<tr><td><input class='easyui-textbox'  disabled='true' value="${p.physicalExamName }"></input></td>
     					<td><input class='easyui-textbox'  disabled='true' type='text' value=" ${p.physicalExamResult }"></input></td>
@@ -271,7 +271,7 @@ body{
     					<tr>
     				</thead>
     				<tbody>
-    				<c:forEach items="${requestScope.caseQuery.physicalExams }" var="p">     
+    				<c:forEach items="${sessionScope.CaseQuery.physicalExams }" var="p">     
 			 		<c:if test="${p.physicalExamType == 6 }">
     					<tr><td><input class='easyui-textbox'  disabled='true' value="${p.physicalExamName }"></input></td>
     					<td><input class='easyui-textbox'  disabled='true' type='text' value=" ${p.physicalExamResult }"></input></td>
@@ -291,7 +291,7 @@ body{
     					<tr>
     				</thead>
     				<tbody>
-    				<c:forEach items="${requestScope.caseQuery.physicalExams }" var="p">     
+    				<c:forEach items="${sessionScope.CaseQuery.physicalExams }" var="p">     
 			 		<c:if test="${p.physicalExamType == 7 }">
     					<tr><td><input class='easyui-textbox'  disabled='true' value="${p.physicalExamName }"></input></td>
     					<td><input class='easyui-textbox' disabled='true' type='text' value=" ${p.physicalExamResult }"></input></td>
@@ -310,7 +310,7 @@ body{
 						<label>分值：</label>
 					</td>
 					<td>
-						<input style='width:50px' disabled='true' class='easyui-numberbox' value="${requestScope.caseQuery.firstVisit.score }">
+						<input style='width:50px' disabled='true' class='easyui-numberbox' value="${sessionScope.CaseQuery.firstVisit.score }">
 					</td>
 				</tr>
 				<tr>
@@ -318,7 +318,7 @@ body{
 						<label for="fvResultA">确诊选项A：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true'  data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.firstVisit.fvResultA }">
+						<input class="easyui-textbox" type="text" disabled='true'  data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.firstVisit.fvResultA }">
 					</td>
 				</tr>
 				<tr style="height: 30%;width: 50%">
@@ -326,7 +326,7 @@ body{
 						<label for="fvResultB">确诊选项B：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.firstVisit.fvResultB }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.firstVisit.fvResultB }">
 					</td>
 				</tr>
 				<tr>
@@ -334,7 +334,7 @@ body{
 						<label for="fvResultC">确诊选项C：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.firstVisit.fvResultC }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.firstVisit.fvResultC }">
 					</td>
 				</tr>
 				<tr>
@@ -342,7 +342,7 @@ body{
 						<label for="fvResultD">确诊选项D：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.firstVisit.fvResultD }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.firstVisit.fvResultD }">
 					</td>
 				</tr>
 				<tr>
@@ -350,7 +350,7 @@ body{
 						<label for="fvResultE">确诊选项E：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.firstVisit.fvResultE }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.firstVisit.fvResultE }">
 					</td>
 				</tr>
 				<tr>
@@ -358,7 +358,7 @@ body{
 						<label>请添加初诊信息分析：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.firstVisit.analysis }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.firstVisit.analysis }">
 					</td>
 				</tr>
 			</table>
@@ -377,7 +377,7 @@ body{
 					<tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${requestScope.caseQuery.accessoryExams }" var="a">
+				<c:forEach items="${sessionScope.CaseQuery.accessoryExams }" var="a">
 					<c:if test="${a.resultType == 1 }">
 						<tr>
 							<td>${a.accessoryExamName }</td>
@@ -393,7 +393,7 @@ body{
 		</div>
 		<label>影像检查</label>
 		<div style="width: 100%">
-			<c:forEach items="${requestScope.caseQuery.accessoryExams }" var="a">
+			<c:forEach items="${sessionScope.CaseQuery.accessoryExams }" var="a">
 				<c:if test="${a.resultType == 2 }">
 					<label>${a.accessoryExamName }</label>
 					<img alt="" src="${a.accessoryExamResult }">
@@ -409,7 +409,7 @@ body{
 						<label>分值：</label>
 					</td>
 					<td>
-						<input style='width:50px' disabled='true' class='easyui-numberbox' value="${requestScope.caseQuery.diagnose.score }">
+						<input style='width:50px' disabled='true' class='easyui-numberbox' value="${sessionScope.CaseQuery.diagnose.score }">
 					</td>
 				</tr>
 				<tr>
@@ -417,7 +417,7 @@ body{
 						<label for="fvResultA">确诊选项A：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true'  data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.diagnose.diagnoseResultA }">
+						<input class="easyui-textbox" type="text" disabled='true'  data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.diagnose.diagnoseResultA }">
 					</td>
 				</tr>
 				<tr style="height: 30%;width: 50%">
@@ -425,7 +425,7 @@ body{
 						<label for="fvResultB">确诊选项B：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.diagnose.diagnoseResultB }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.diagnose.diagnoseResultB }">
 					</td>
 				</tr>
 				<tr>
@@ -433,7 +433,7 @@ body{
 						<label for="fvResultC">确诊选项C：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.diagnose.diagnoseResultC }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.diagnose.diagnoseResultC }">
 					</td>
 				</tr>
 				<tr>
@@ -441,7 +441,7 @@ body{
 						<label for="fvResultD">确诊选项D：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.diagnose.diagnoseResultD }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.diagnose.diagnoseResultD }">
 					</td>
 				</tr>
 				<tr>
@@ -449,7 +449,7 @@ body{
 						<label for="fvResultE">确诊选项E：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.diagnose.diagnoseResultE }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.diagnose.diagnoseResultE }">
 					</td>
 				</tr>
 				<tr>
@@ -457,7 +457,7 @@ body{
 						<label>请添加确诊信息分析：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${requestScope.caseQuery.diagnose.diagnoseAnswer }">
+						<input class="easyui-textbox" type="text" disabled='true' data-options="multiline:true" style="height: 80px;width: 240px" value="${sessionScope.CaseQuery.diagnose.diagnoseAnswer }">
 					</td>
 				</tr>
 			</table>
@@ -472,7 +472,7 @@ body{
 					<tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${requestScope.caseQuery.treatments}" var="t">
+				<c:forEach items="${sessionScope.CaseQuery.treatments}" var="t">
 						<tr>
 							<td>${t.treatmentPlan }</td>
 							<td>${t.score }</td>
@@ -491,7 +491,7 @@ body{
 					<tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${requestScope.caseQuery.patientManagements}" var="pm">
+				<c:forEach items="${sessionScope.CaseQuery.patientManagements}" var="pm">
 						<tr>
 							<td>${pm.managementPlan }</td>
 							<td>${pm.score }</td>

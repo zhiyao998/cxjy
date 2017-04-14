@@ -36,10 +36,14 @@ function submitDiagnose() {
 				var json = $("#inputForm").serializeArray();
 			  	var url = $(this).attr("action");
 				$.post(url, json, function(data) {
-					if (data.status) {
-							//ok后的回调方法，去关闭父页面的窗口元素
-							parent.open(data.nextStep);
-							parent.$('#${windowid}').window('close');
+					if (data.status == 1) {
+						parent.open(1,data.CaseQuery.nextStep);
+						parent.$('#${windowid}').window('close');
+					}else if(data.status == 2){
+						parent.$('#grid').datagrid('reload');
+						parent.$('#${windowid}').window('close');
+					}else{
+						alert("操作失败");
 					}
 				}, "json");
 			}

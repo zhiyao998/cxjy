@@ -6,43 +6,41 @@
 <title>问诊信息</title>
 <%@ include file="../../common.jsp"%>
 <style type="text/css">
-table, td
-  {
-  border: 1px solid pink;
-  }
 td,th
   {
   padding:15px;
   text-align: center;
+  border: 1px solid pink;
   }
 </style>
 <script type="text/javascript">
 $(function() {		
-	$("li").onClickRow(function() {
-		debugger;
-		$.post("/lcsw/inquiry/selectByType.action", {"inquiryType":$(this).val()}, function(data) {	
-			if (data.status) {
-					var list = data.list;
-					var panel =$("#aa");
-					panel.empty();
-					panel.append("<table><thead><tr><th style='width: 200px'>问诊问题</th><th style='width: 200px'>病人回应</th><th>分值</th><th>是否修改</th><tr></thead><tbody>");
-					$.each(list, function(index, content){
-						if(content.caseId == 0){
-							panel.append("<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
-								"<td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
-								"<td><input style='width:50px' disabled='true' class='easyui-numberbox' value='0'><input type='hidden' value='" + content.inquiryId + "'></td>"+
-								"<td><input type='hidden' value='" + content.inquiryType + "'><input style='width: 60px' type='checkbox' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
-						}else{
-							panel.append("<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
-									"<td><input class='easyui-textbox' style='height: 80px;width: 200px' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
-									"<td><input style='width:50px' class='easyui-numberbox' value='" + content.score + "'><input type='hidden' value='" + content.inquiryId + "'></td>" +
-									"<td><input type='hidden' value='" + content.inquiryType + "'><input  type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
-						}
-					});
-					$("#aa").append("</tbody></table>");
-					$.parser.parse("#aa");
-				}
-		}, "json");
+	$("ul").datalist({
+		onClickRow: function(index, row) {
+			$.post("/lcsw/inquiry/selectByType.action", {"inquiryType":row.value}, function(data) {	
+				if (data.status) {
+						var list = data.list;
+						var panel =$("#aa");
+						panel.empty();
+						panel.append("<table><thead><tr><th style='width: 200px'>问诊问题</th><th style='width: 200px'>病人回应</th><th>分值</th><th>是否加入病例</th><tr></thead><tbody>");
+						$.each(list, function(index, content){
+							if(content.caseId == 0){
+								panel.append("<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
+									"<td><input class='easyui-textbox' style='height: 80px;width: 200px' disabled='true' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
+									"<td><input style='width:50px' disabled='true' class='easyui-numberbox' value='0'><input type='hidden' value='" + content.inquiryId + "'></td>"+
+									"<td><input type='hidden' value='" + content.inquiryType + "'><input style='width: 60px' type='checkbox' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
+							}else{
+								panel.append("<tr><td><input class='easyui-textbox' style='height: 80px;width: 200px' data-options='multiline:true' value='"+content.inquiryTitle+"'></input></td>"+ 
+										"<td><input class='easyui-textbox' style='height: 80px;width: 200px' type='text' data-options='multiline:true' value='" +content.patientAnswer+"'></input></td>"+
+										"<td><input style='width:50px' class='easyui-numberbox' value='" + content.score + "'><input type='hidden' value='" + content.inquiryId + "'></td>" +
+										"<td><input type='hidden' value='" + content.inquiryType + "'><input  type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
+							}
+						});
+						$("#aa").append("</tbody></table>");
+						$.parser.parse("#aa");
+					}
+			}, "json");
+		}
 	});
 });
 
@@ -88,9 +86,14 @@ function submitInquery() {
 	    'data': json,
 	    'dataType': 'json',
 	    'success': function(data) {
-			if (data.status) {
-				parent.open(data.nextStep);
+			if (data.status == 1) {
+				parent.open(1,data.CaseQuery.nextStep);
 				parent.$('#${windowid}').window('close');
+			}else if(data.status == 2){
+				parent.$('#grid').datagrid('reload');
+				parent.$('#${windowid}').window('close');
+			}else{
+				alert("操作失败");
 			}
 		}
 	});
@@ -112,11 +115,11 @@ function submitInquery() {
 		
 		<div data-options="region:'center',border:false" style="padding: 10px;width: 100%">
 			<div id="aa">   
-   
+   			
 			</div>
 			<input type="hidden" id="step" value="1">
 		</div>
-		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
+		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #e0e8f5">
 			<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
 			<a id="next" href="#" onclick="submitInquery()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
 			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  

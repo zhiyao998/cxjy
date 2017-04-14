@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -15,7 +15,13 @@
 </style>
 <script type="text/javascript">
 	$(function() {
-		$("#caseType").combobox("select",${caseQuery.newCase.caseType});
+		$("#caseType").combobox("select", ${CaseQuery.newCase.caseType});
+		var steps = new Array();
+		steps = "${CaseQuery.newCase.caseStep}".split(",");
+		for(var i=0; i < steps.length; i++){
+			var test = $("input[value='" + steps[i] +"']");
+			$(test).attr("checked",true);
+		}
 	});
 	function editNewCase() {
 	$('#inputForm').form('submit', {
@@ -26,10 +32,10 @@
 			  	var url = $(this).attr("action");
 				$.post(url, json, function(data) {
 					if (data.status) {
-							//ok后的回调方法，去关闭父页面的窗口元素
-							parent.open($("#nextTitle").val(),$("#nextUrl").val());
-							parent.$('#${windowid}').window('close');
-					}
+						//ok后的回调方法，去关闭父页面的窗口元素
+						parent.open(1,data.nextStep);
+						parent.$('#${windowid}').window('close');
+				}
 				}, "json");
 			}
 			//返回flase ，否则会提交表单
@@ -44,22 +50,14 @@
 		
 	<div data-options="region:'center',border:false" style="padding: 10px;">
 		<form action="/lcsw/case/next.action" method="post" id="inputForm">
-			<input type="hidden" name="caseId" value="${caseQuery.newCase.caseId }">
+			<input type="hidden" name="caseId" value="${CaseQuery.newCase.caseId }">
 			<table>
 				<tr>
 					<td>
 						<label for="caseTitle">题目：</label>
 					</td>
 					<td >
-						<input class="easyui-textbox" type="text" id="caseTitle" name="caseTitle" data-options="required:true" value="${caseQuery.newCase.caseTitle }">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="patientInfo">病人信息：</label>
-					</td>
-					<td>
-						<input class="easyui-textbox" id="patientInfo" name="patientInfo" data-options="required:true,multiline:true" style="height: 80px;width: 240px" value="${caseQuery.newCase.patientInfo }"></input>
+						<input class="easyui-textbox" type="text" id="caseTitle" name="caseTitle" data-options="required:true" value="${CaseQuery.newCase.caseTitle }">
 					</td>
 				</tr>
 				<tr style="height: 30%;width: 50%">
@@ -67,7 +65,20 @@
 						<label for="chiefComplain">主诉：</label>
 					</td>
 					<td>
-						<input class="easyui-textbox" id="chiefComplain" name="chiefComplain" data-options="required:true,multiline:true" style="height: 80px;width: 240px" value="${caseQuery.newCase.chiefComplain }">
+						<input class="easyui-textbox" id="chiefComplain" name="chiefComplain" data-options="required:true,multiline:true" style="height: 80px;width: 240px" value="${CaseQuery.newCase.chiefComplain }">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6">
+						请选择您需要考察的步骤:
+						<input type="hidden" value="0" name="caseStep">
+						<input type="checkbox" value="1" name="caseStep">问诊
+						<input type="checkbox" value="2" name="caseStep">体格检查
+						<input type="checkbox" value="3" name="caseStep">初步诊断
+						<input type="checkbox" value="4" name="caseStep">辅助检查
+						<input type="checkbox" value="5" name="caseStep">确诊判断
+						<input type="checkbox" value="6" name="caseStep">治疗方案
+						<input type="checkbox" value="7" name="caseStep">病人管理
 					</td>
 				</tr>
 				<tr>
@@ -88,8 +99,6 @@
 			</table>
 			<input type="hidden" name="creater" value="rongyu">
 		</form>
-			<input type="hidden" id="nextUrl" value="/lcsw/inquiry/toEdit.action">
-			<input type="hidden" id="nextTitle" value="编辑问诊信息">
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 		<a id="submit" href="#" onclick="editNewCase()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  

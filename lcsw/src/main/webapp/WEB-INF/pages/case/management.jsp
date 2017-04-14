@@ -19,13 +19,13 @@
     <script type="text/javascript">
 		var toolbar = [{
 			text:'增加病例',
-			iconCls:'icon-add',
+			iconCls:'fa-plus-square',
 			handler:function(){
-				open("0");
+				open(1,"0");
 			}
 		},{
 			text:'删除病例',
-			iconCls:'icon-remove',
+			iconCls:'fa-remove',
 			handler:function(){
 				$.messager.confirm('确认对话框', '确认你是否要删除数据？', function(r) {
 					if (r) {
@@ -50,7 +50,7 @@
 			}
 		},{
 			text:'修改病例',
-			iconCls:'icon-edit',
+			iconCls:'fa-edit',
 			handler:function(){
 				var row = $('#grid').datagrid('getSelections');
 				var ids = [];
@@ -58,11 +58,11 @@
 					ids[i] = row[i].caseId;
 				}
 				var url = "/lcsw/case/toEdit.action?id="+ids[0];
-				open("编辑病例",url,800,600);				 
+				open(0,url);				 
 			}
 		},{
 			text:'查看病例',
-			iconCls:'icon-edit',
+			iconCls:'fa-check',
 			handler:function(){
 				var row = $('#grid').datagrid('getSelections');
 				var ids = [];
@@ -70,7 +70,7 @@
 					ids[i] = row[i].caseId;
 				}
 				var url = "/lcsw/case/checkCase.action?id="+ids[0];
-				open("查看病例",url,800,600);				
+				open(0,url);				
 			}
 		}];
 	</script>

@@ -80,9 +80,14 @@ function submitTreatment() {
 	    'data': json,
 	    'dataType': 'json',
 	    'success': function(data) {
-			if (data.status) {
-				parent.open(data.nextStep);
+			if (data.status == 1) {
+				parent.open(1,data.CaseQuery.nextStep);
 				parent.$('#${windowid}').window('close');
+			}else if(data.status == 2){
+				parent.$('#grid').datagrid('reload');
+				parent.$('#${windowid}').window('close');
+			}else{
+				alert("操作失败");
 			}
 		}
 	});

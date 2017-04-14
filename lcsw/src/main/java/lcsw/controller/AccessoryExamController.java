@@ -5,10 +5,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lcsw.domain.AccessoryExam;
 import lcsw.domain.CaseQuery;
 import lcsw.service.AccessoryExamService;
+import lcsw.service.CaseQueryService;
+import lcsw.service.SessionProvider;
 import lcsw.util.random.IDUtils;
 import lcsw.util.upload.FileUpload;
 
@@ -29,6 +34,10 @@ public class AccessoryExamController {
 	
 	@Resource
 	private AccessoryExamService accessoryExamService;
+	@Resource
+	private CaseQueryService caseQueryService;
+	@Resource
+	private SessionProvider sessionProvider;
 	
 	@RequestMapping(value="/toAddAccessoryExam")
 	public String toAddAccessoryExam(HttpServletRequest request){
@@ -46,10 +55,10 @@ public class AccessoryExamController {
 	
 	@RequestMapping(value="/selectByAccessoryExamType")
 	@ResponseBody
-	public List<AccessoryExam> selectByAccessoryExamType(HttpServletRequest request){
+	public List<AccessoryExam> selectByAccessoryExamType(HttpServletRequest request,HttpServletResponse response){
 		String accessoryExamType = request.getParameter("accessoryExamType") ;
 		Integer caseId = null;
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		List<AccessoryExam> list = accessoryExamService.selectByAccessoryExamType(accessoryExamType);
 		if(caseQuery.getAccessoryExams().isEmpty() && caseQuery.getNewCase().getCaseId() == null){
 			return list;
@@ -78,10 +87,10 @@ public class AccessoryExamController {
 		}
 	}
 	
-	@RequestMapping(value="/next")
+	@RequestMapping(value="/submitData")
 	@ResponseBody
-	public CaseQuery next(HttpServletRequest request,@RequestBody List<AccessoryExam> accessoryExams){
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+	public CaseQuery submitData(HttpServletRequest request,HttpServletResponse response,@RequestBody List<AccessoryExam> accessoryExams){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		List<AccessoryExam> list = caseQuery.getAccessoryExams();
 		List<AccessoryExam> newList = new ArrayList<AccessoryExam>();
 		if(list.isEmpty()){
@@ -110,6 +119,36 @@ public class AccessoryExamController {
 		}
 		request.getSession().setAttribute("CaseQuery",caseQuery);
 		return caseQuery;
+	}
+	
+	@RequestMapping(value="/next")
+	@ResponseBody
+	public Map next(HttpServletRequest request,HttpServletResponse response){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
+		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
+		int flag = 0;
+		Map map = new HashMap<String,Object>();
+		for(int i =0 ; i<caseStep.length;i++){
+			if(caseStep[i].equals("4")){
+				if(i+1 < caseStep.length){
+					caseQuery.setNextStep(caseStep[i+1]);
+					sessionProvider.setCaseQuery(request, response, caseQuery);
+					map.put("status",1);
+					map.put("CaseQuery",  caseQuery);
+					return map;
+				}else{
+					if(caseQuery.getNewCase().getCaseId() == null)
+						flag = caseQueryService.insert(caseQuery);
+					else
+						flag = caseQueryService.updateByPrimaryKey(caseQuery);
+					map.put("status", 2);
+					sessionProvider.clearCaseQuery(request, response);
+					return map;
+				}
+			}
+		}
+		map.put("status", 0);
+		return map;
 	}
 	
 	@RequestMapping(value="filesUpload")

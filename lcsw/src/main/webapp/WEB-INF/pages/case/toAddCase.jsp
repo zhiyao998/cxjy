@@ -23,7 +23,7 @@ $(function() {
 			if (data.status) {
 				var Newcase = data.Newcase;
 				var steps = new Array();
-				steps = data.Newcase.caseStep.split(",");
+				steps = Newcase.caseStep.split(",");
 				for(var i=0; i < steps.length; i++){
 					var test = $("input[value='" + steps[i] +"']");
 					$(test).attr("checked",true);
@@ -50,7 +50,7 @@ function submitNewCase() {
 				$.post(url, json, function(data) {
 					if (data.status) {
 							//ok后的回调方法，去关闭父页面的窗口元素
-							parent.open(data.nextStep);
+							parent.open(1,data.nextStep);
 							parent.$('#${windowid}').window('close');
 					}
 				}, "json");

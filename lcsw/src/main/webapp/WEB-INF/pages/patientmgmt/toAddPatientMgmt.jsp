@@ -48,8 +48,14 @@ function add(button,type) {
 
 function lastPage() {
 	submitPatientMgmt();
-	parent.open($("#lastTitle").val(),$("#lastUrl").val(),$("#lastWidth").val(),$("#lastHight").val());
-	parent.$('#${windowid}').window('close');
+	var step = $("#step").val();
+	$.post("/lcsw/case/last.action", { 'step':step}, function(data) {
+		if (data.status) {
+				//ok后的回调方法，去关闭父页面的窗口元素
+				parent.open(1,data.lastStep);
+				parent.$('#${windowid}').window('close');
+		}
+	}, "json");
 }
 
 function submitPatientMgmt() {

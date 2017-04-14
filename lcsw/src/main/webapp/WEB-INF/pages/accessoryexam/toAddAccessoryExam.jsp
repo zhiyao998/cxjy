@@ -177,14 +177,13 @@ function submitAccessoryExam() {
 			        'Content-Type': 'application/json' 
 			    },
 			    'type': 'POST',
-			    'url': "/lcsw/AccessoryExam/next.action",
+			    'url': "/lcsw/AccessoryExam/submitData.action",
 			    'data': json,
 			    'dataType': 'json',
 			    'success': function(data) {
 					if (data.status) {
 						alert("提交成功");
 						isChange = true;
-						nextStep = data.nextStep;
 					}
 				}
 			});
@@ -195,8 +194,26 @@ function submitAccessoryExam() {
 
 function next() {
 	if(isChange){
-		parent.open(nextStep);
-		parent.$('#${windowid}').window('close');
+		$.ajax({
+		    headers: { 
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json' 
+		    },
+		    'type': 'POST',
+		    'url': "/lcsw/AccessoryExam/next.action",
+		    'dataType': 'json',
+		    'success': function(data) {
+				if (data.status == 1) {
+					parent.open(1,data.CaseQuery.nextStep);
+					parent.$('#${windowid}').window('close');
+				}else if(data.status == 2){
+					parent.$('#grid').datagrid('reload');
+					parent.$('#${windowid}').window('close');
+				}else{
+					alert("操作失败");
+				}
+			}
+		});
 	}else{
 		alert("尚未选择辅助信息");
 	}

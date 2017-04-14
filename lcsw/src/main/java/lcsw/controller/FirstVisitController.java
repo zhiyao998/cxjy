@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lcsw.domain.CaseQuery;
 import lcsw.domain.FirstVisit;
+import lcsw.service.CaseQueryService;
 import lcsw.service.FirstVisitService;
+import lcsw.service.SessionProvider;
 
 @Controller
 @RequestMapping(value="/firstVisit")
@@ -22,6 +24,10 @@ public class FirstVisitController {
 	
 	@Resource
 	public FirstVisitService firstVisitService;
+	@Resource
+	private CaseQueryService caseQueryService;
+	@Resource
+	private SessionProvider sessionProvider;
 	
 	@RequestMapping("/toAddFirstVisit")
 	public String toAddFirstVisit(HttpServletRequest request){
@@ -31,26 +37,41 @@ public class FirstVisitController {
 	
 	@RequestMapping("/next")
 	@ResponseBody
-	public CaseQuery insertCase(HttpServletRequest request,FirstVisit firstVisit){
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+	public Map insertCase(HttpServletRequest request,HttpServletResponse response,FirstVisit firstVisit){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		System.out.println(firstVisit);
-//		int flag = caseService.insert(c);
+		int flag = 0;
+		Map map = new HashMap<String,Object>();
 		caseQuery.setStatus(true);
 		caseQuery.setFirstVisit(firstVisit);
 		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
 		for(int i =0 ; i<caseStep.length;i++){
-			if(caseStep[i].equals("3")&& i+1 < caseStep.length){
-				caseQuery.setNextStep(caseStep[i+1]);
+			if(caseStep[i].equals("3")){
+				if(i+1 < caseStep.length){
+					caseQuery.setNextStep(caseStep[i+1]);
+					sessionProvider.setCaseQuery(request, response, caseQuery);
+					map.put("status",1);
+					map.put("CaseQuery",  caseQuery);
+					return map;
+				}else{
+					if(caseQuery.getNewCase().getCaseId() == null)
+						flag = caseQueryService.insert(caseQuery);
+					else
+						flag = caseQueryService.updateByPrimaryKey(caseQuery);
+					map.put("status", 2);
+					sessionProvider.clearCaseQuery(request, response);
+					return map;
+				}
 			}
 		}
-		request.getSession().setAttribute("CaseQuery",caseQuery);
-		return caseQuery;	
+		map.put("status", true);
+		return map;	
 	}
 	
 	@RequestMapping("/getlastFirstVisit")
 	@ResponseBody
 	public Map<String,Object> getlastFirstVisit(HttpServletRequest request,HttpServletResponse response){
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		Integer caseId = null;
 		if(caseQuery != null){

@@ -9,12 +9,28 @@
 	request.setAttribute("ctx", ctx);
 %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link rel="stylesheet" type="text/css" href="/lcsw/public/easyui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="/lcsw/public/easyui/themes/icon.css">
-<script type="text/javascript" src="/lcsw/public/easyui/jquery.min.js"></script>
-<script type="text/javascript" src="/lcsw/public/easyui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="/lcsw/public/easyui/easyui-lang-zh_CN.js?id=2"></script>
-<script type="text/javascript" src="/lcsw/public/form/jquery.form.3.5.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx }/public/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="${ctx }/public/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="${ctx }/public/Font-Awesome/css/font-awesome.min.css">
+<script type="text/javascript" src="${ctx }/public/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx }/public/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx }/public/easyui/easyui-lang-zh_CN.js?id=2"></script>
+<script type="text/javascript" src="${ctx }/public/form/jquery.form.3.5.js"></script>
+<style>
+	.l-btn-icon,.panel-icon,.menu-icon,.tabs-icon {
+    font-family:FontAwesome;
+    font-size:14px !important;
+    line-height:normal !important;
+    text-rendering:auto;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    color:#6699cc;text-align:center;
+}
+.tabs-icon {
+    font-size:16px !important;
+    font-weight:normal;
+}
+</style>
 <script type="text/javascript">
 function closeWindow(){
 	parent.closeWindow('${windowid}');
@@ -22,34 +38,39 @@ function closeWindow(){
 function closeWindow(id) {
 	$('#' +id).window('close', true);
 }
-function open(step) {
+function open(type,step) {
 	//生成随机数
-	switch (step) {
-	case "0":
-		url="/lcsw/case/toAdd.action";
-		break;
-	case "1":
-		url ="/lcsw/inquiry/toAdd.action";
-		break;
-	case "2":
-		url="/lcsw/physicalExam/toAddPhysicalExam.action";
-		break;
-	case "3":
-		url="/lcsw/firstVisit/toAddFirstVisit.action";
-		break;
-	case "4":
-		url="/lcsw/AccessoryExam/toAddAccessoryExam.action";
-		break;
-	case "5":
-		url="/lcsw/diagnose/toAddDiagnose.action";
-		break;
-	case "6":
-		url="/lcsw/treatment/toAddTreatment.action";
-		break;
-	default:
-		url="/lcsw/case/management.action";
-		break;
+	if(type == 1){
+		switch (step) {
+		case "0":
+			url="/lcsw/case/toAdd.action";
+			break;
+		case "1":
+			url ="/lcsw/inquiry/toAdd.action";
+			break;
+		case "2":
+			url="/lcsw/physicalExam/toAddPhysicalExam.action";
+			break;
+		case "3":
+			url="/lcsw/firstVisit/toAddFirstVisit.action";
+			break;
+		case "4":
+			url="/lcsw/AccessoryExam/toAddAccessoryExam.action";
+			break;
+		case "5":
+			url="/lcsw/diagnose/toAddDiagnose.action";
+			break;
+		case "6":
+			url="/lcsw/treatment/toAddTreatment.action";
+			break;			
+		default:
+			url="/lcsw/patientMgmt/toAddPatientMgmt.action";
+			break;
+		}
+	}else{
+		url=step;
 	}
+
 	
 	var windowid = "windowid" +Math.floor(Math.random() *Math.pow(10, 12));
 	if (url.indexOf("?") != -1) {

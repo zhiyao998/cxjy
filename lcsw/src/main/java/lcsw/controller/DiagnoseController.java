@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lcsw.domain.CaseQuery;
 import lcsw.domain.Diagnose;
+import lcsw.service.CaseQueryService;
 import lcsw.service.DiagnoseService;
+import lcsw.service.SessionProvider;
 
 @Controller
 @RequestMapping(value="diagnose")
@@ -21,6 +23,10 @@ public class DiagnoseController {
 	
 	@Resource
 	private DiagnoseService diagnoseService;
+	@Resource
+	private CaseQueryService caseQueryService;
+	@Resource
+	private SessionProvider sessionProvider;
 	
 	@RequestMapping(value="/toAddDiagnose")
 	public String toAddDiagnose(HttpServletRequest request){
@@ -30,26 +36,42 @@ public class DiagnoseController {
 	
 	@RequestMapping("/next")
 	@ResponseBody
-	public CaseQuery insertCase(HttpServletRequest request,Diagnose diagnose){
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+	public Map insertCase(HttpServletRequest request,HttpServletResponse response,Diagnose diagnose){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		System.out.println(diagnose);
 //		int flag = caseService.insert(c);
 		caseQuery.setStatus(true);
 		caseQuery.setDiagnose(diagnose);
 		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
+		int flag = 0;
+		Map map = new HashMap<String,Object>();
 		for(int i =0 ; i<caseStep.length;i++){
-			if(caseStep[i].equals("5")&& i+1 < caseStep.length){
-				caseQuery.setNextStep(caseStep[i+1]);
+			if(caseStep[i].equals("5")){
+				if(i+1 < caseStep.length){
+					caseQuery.setNextStep(caseStep[i+1]);
+					sessionProvider.setCaseQuery(request, response, caseQuery);
+					map.put("status",1);
+					map.put("CaseQuery",  caseQuery);
+					return map;
+				}else{
+					if(caseQuery.getNewCase().getCaseId() == null)
+						flag = caseQueryService.insert(caseQuery);
+					else
+						flag = caseQueryService.updateByPrimaryKey(caseQuery);
+					map.put("status", 2);
+					sessionProvider.clearCaseQuery(request, response);
+					return map;
+				}
 			}
 		}
-		request.getSession().setAttribute("CaseQuery", caseQuery);
-		return caseQuery;	
+		map.put("status", 0);
+		return map;
 	}
 	
 	@RequestMapping("/getlastDiagnose")
 	@ResponseBody
-	public Map<String,Object> getlastDiagnose(HttpServletRequest request){
-		CaseQuery caseQuery = (CaseQuery) request.getSession().getAttribute("CaseQuery");
+	public Map<String,Object> getlastDiagnose(HttpServletRequest request,HttpServletResponse response){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
 		Integer caseId = null;
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		if(caseQuery != null){
