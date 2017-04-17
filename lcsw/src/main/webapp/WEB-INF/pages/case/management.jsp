@@ -27,50 +27,62 @@
 			text:'删除病例',
 			iconCls:'fa-remove',
 			handler:function(){
-				$.messager.confirm('确认对话框', '确认你是否要删除数据？', function(r) {
-					if (r) {
-						var row = $('#grid').datagrid('getSelections');
-						var ids = [];
-						for(var i=0;i<row.length;i++){
-							ids[i] = row[i].caseId;
+				var row = $('#grid').datagrid('getSelections');
+				if(row.length > 0){
+					$.messager.confirm('确认对话框', '确认你是否要删除数据？', function(r) {
+						if (r) {
+							var ids = [];
+							for(var i=0;i<row.length;i++){
+								ids[i] = row[i].caseId;
+							}
+	 						$.post("/lcsw/case/delete.action", {
+								'id':row[0].caseId,
+								'ids':JSON.stringify(ids)
+							}, function(data) {
+	 							if (data.status) {
+									$.messager.alert('系统消息', "删除成功", 'info',
+											function() {
+												$('#grid').datagrid('reload');
+											});
+								} 
+							}, "json"); 
 						}
- 						$.post("/lcsw/case/delete.action", {
-							'id':row[0].caseId,
-							'ids':JSON.stringify(ids)
-						}, function(data) {
- 							if (data.status) {
-								$.messager.alert('系统消息', "删除成功", 'info',
-										function() {
-											$('#grid').datagrid('reload');
-										});
-							} 
-						}, "json"); 
-					}
-				});
+					});
+				}else{
+					alert("请至少选中一项");
+				}
 			}
 		},{
 			text:'修改病例',
 			iconCls:'fa-edit',
 			handler:function(){
 				var row = $('#grid').datagrid('getSelections');
-				var ids = [];
-				for(var i=0;i<row.length;i++){
-					ids[i] = row[i].caseId;
+				if(row.length > 0){
+					var ids = [];
+					for(var i=0;i<row.length;i++){
+						ids[i] = row[i].caseId;
+					}
+					var url = "/lcsw/case/toEdit.action?id="+ids[0];
+					open(0,url);
+				}else{
+					alert("请选择需要修改的病例");	
 				}
-				var url = "/lcsw/case/toEdit.action?id="+ids[0];
-				open(0,url);				 
 			}
 		},{
 			text:'查看病例',
 			iconCls:'fa-check',
 			handler:function(){
 				var row = $('#grid').datagrid('getSelections');
-				var ids = [];
-				for(var i=0;i<row.length;i++){
-					ids[i] = row[i].caseId;
+				if(row.length > 0){
+					var ids = [];
+					for(var i=0;i<row.length;i++){
+						ids[i] = row[i].caseId;
+					}
+					var url = "/lcsw/case/checkCase.action?id="+ids[0];
+					open(0,url);	
+				}else{
+					alert("请至少选中一项");
 				}
-				var url = "/lcsw/case/checkCase.action?id="+ids[0];
-				open(0,url);				
 			}
 		}];
 	</script>

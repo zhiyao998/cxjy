@@ -14,14 +14,18 @@ td,th
   }
 </style>
 <script type="text/javascript">
+var isChange = false;
 $(function() {		
 	$("ul").datalist({
-		onClickRow: function(index, row) {
+		onSelect: function(index, row) {
+			var panel =$("#aa");
+			if(panel.children().length > 0){
+				submitInquery();
+				panel.empty();
+			}
 			$.post("/lcsw/inquiry/selectByType.action", {"inquiryType":row.value}, function(data) {	
 				if (data.status) {
 						var list = data.list;
-						var panel =$("#aa");
-						panel.empty();
 						panel.append("<table><thead><tr><th style='width: 200px'>问诊问题</th><th style='width: 200px'>病人回应</th><th>分值</th><th>是否加入病例</th><tr></thead><tbody>");
 						$.each(list, function(index, content){
 							if(content.caseId == 0){
@@ -36,7 +40,7 @@ $(function() {
 										"<td><input type='hidden' value='" + content.inquiryType + "'><input  type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.inquiryOrder) +"'/></td>"+"</tr>");
 							}
 						});
-						$("#aa").append("</tbody></table>");
+						panel.append("</tbody></table>");
 						$.parser.parse("#aa");
 					}
 			}, "json");
@@ -48,16 +52,17 @@ function submitInquery() {
 	var json = "[";
 	var flag = true;
 	$(":checkbox").each(function(c) {
-		var pre = $(this).parent().prevAll();
-		var td1 = pre[0];
-		var td2 = pre[1];
-		var td3 = pre[2];
-		var input1 = $(td1).children()[0];
-		var input2 = $(td2).children()[0];
-		var input3 = $(td3).children()[0];
-		var input4 = $(this).prev();
-		var input5 = $(td1).children()[2];
 		if(this.checked){
+			isChange = true;
+			var pre = $(this).parent().prevAll();
+			var td1 = pre[0];
+			var td2 = pre[1];
+			var td3 = pre[2];
+			var input1 = $(td1).children()[0];
+			var input2 = $(td2).children()[0];
+			var input3 = $(td3).children()[0];
+			var input4 = $(this).prev();
+			var input5 = $(td1).children()[2];
 			var score = $(input1).val();
 			var answer = $(input2).val();
 			var title = $(input3).val();
@@ -73,30 +78,50 @@ function submitInquery() {
 		}
 	});
 	json += "]";
-	if(json=="[]")
-		alert("请选择至少一条问诊信息！");
-	else{
+	if(json=="[]"){
+		
+	}else{
 	$.ajax({
 	    headers: { 
 	        'Accept': 'application/json',
 	        'Content-Type': 'application/json' 
 	    },
 	    'type': 'POST',
-	    'url': "/lcsw/inquiry/next.action",
+	    'url': "/lcsw/inquiry/submitInquery.action",
 	    'data': json,
 	    'dataType': 'json',
 	    'success': function(data) {
-			if (data.status == 1) {
-				parent.open(1,data.CaseQuery.nextStep);
-				parent.$('#${windowid}').window('close');
-			}else if(data.status == 2){
-				parent.$('#grid').datagrid('reload');
-				parent.$('#${windowid}').window('close');
-			}else{
-				alert("操作失败");
-			}
+	    	
 		}
 	});
+	}
+}
+
+function next() {
+	submitInquery();
+	if(isChange){
+		$.ajax({
+		    headers: { 
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json' 
+		    },
+		    'type': 'POST',
+		    'url': "/lcsw/inquiry/next.action",
+		    'dataType': 'json',
+		    'success': function(data) {
+				if (data.status == 1) {
+					parent.open(1,data.CaseQuery.nextStep);
+					parent.$('#${windowid}').window('close',true);
+				}else if(data.status == 2){
+					parent.$('#grid').datagrid('reload');
+					parent.$('#${windowid}').window('close');
+				}else{
+					alert("操作失败");
+				}
+			}
+		});
+	}else{
+		alert("尚未选择辅助信息");
 	}
 }
 
@@ -106,7 +131,7 @@ function submitInquery() {
 	<div class="easyui-layout" data-options="fit:true">
 		
 		<div data-options="region:'west',border:false" style="width: 20%;height: 100%;">
-			<ul class="easyui-datalist" title="问诊类型" style="height: 100%;"> 
+			<ul class="easyui-datalist" style="height: 100%;"> 
     			<li value="1">一般情况及现病史</li> 
     			<li value="2">系统回顾与既往史</li> 
    				<li value="3">个人史</li> 
@@ -115,14 +140,14 @@ function submitInquery() {
 		
 		<div data-options="region:'center',border:false" style="padding: 10px;width: 100%">
 			<div id="aa">   
-   			
+   				
 			</div>
 			<input type="hidden" id="step" value="1">
 		</div>
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #e0e8f5">
-			<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
-			<a id="next" href="#" onclick="submitInquery()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
-			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+			<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'fa-arrow-circle-left'">上一步</a>  
+			<a id="next" href="#" onclick="next()" class="easyui-linkbutton" data-options="iconCls:' fa-arrow-circle-right'">下一步</a>  
+			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton " data-options="iconCls:'fa-window-close'">关闭</a>  
 		</div>
 	</div>
 

@@ -62,7 +62,7 @@ public class PhysicalExamController {
 			}
 			for(int i = 0; i < list.size(); i++){
 				boolean flag = true;
-				for(PhysicalExam p1:physicalExams){
+				for(PhysicalExam p1:physicalExams){  
 					if(list.get(i).getPhysicalExamType().equals(p1.getPhysicalExamType()) && list.get(i).getPhysicalExamOrder().equals(p1.getPhysicalExamOrder())){
 						flag = false;
 						break;
@@ -81,12 +81,41 @@ public class PhysicalExamController {
 		return map;
 	}
 	
+	@RequestMapping(value="submitPhysicalExam")
+	@ResponseBody
+	public Map submitPhysicalExam(HttpServletRequest request,HttpServletResponse response,@RequestBody List<PhysicalExam> physicalExams){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<PhysicalExam> list = caseQuery.getPhysicalExams();
+		List<PhysicalExam> newList = new ArrayList<PhysicalExam>();
+		if(list.isEmpty()){
+			caseQuery.setPhysicalExams(physicalExams);
+		}else{
+			for(PhysicalExam p:physicalExams){
+				newList.add(p);
+			}
+			for(int i = 0; i < list.size(); i++){
+				boolean flag = true;
+				for(PhysicalExam p1:physicalExams){
+					if(list.get(i).getPhysicalExamType().equals(p1.getPhysicalExamType()) && list.get(i).getPhysicalExamOrder().equals(p1.getPhysicalExamOrder())){
+						flag = false;
+					}
+					if(flag){
+						newList.add(list.get(i));
+					}
+				}
+			}
+			caseQuery.setPhysicalExams(newList);
+		}	
+		map.put("status", true);
+		return map;
+	}
+		
+	
 	@RequestMapping(value="/next")
 	@ResponseBody
-	public Map insertInquiry(HttpServletRequest request,HttpServletResponse response,@RequestBody List<PhysicalExam> physicalExams){
+	public Map insertInquiry(HttpServletRequest request,HttpServletResponse response){
 		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
-		caseQuery.setPhysicalExams(physicalExams);
-		System.out.println(physicalExams);
 		int flag = 0;
 		Map map = new HashMap<String,Object>();
 		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");

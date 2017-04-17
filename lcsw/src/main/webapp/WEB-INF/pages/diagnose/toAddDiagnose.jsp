@@ -38,7 +38,7 @@ function submitDiagnose() {
 				$.post(url, json, function(data) {
 					if (data.status == 1) {
 						parent.open(1,data.CaseQuery.nextStep);
-						parent.$('#${windowid}').window('close');
+						parent.$('#${windowid}').window('close',true);
 					}else if(data.status == 2){
 						parent.$('#grid').datagrid('reload');
 						parent.$('#${windowid}').window('close');
@@ -127,9 +127,9 @@ function submitDiagnose() {
 		<input type="hidden" id="step" value="4">
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
-		<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
-		<a id="submit" href="#" onclick="submitDiagnose()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
-		<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+		<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'fa-arrow-circle-left'">上一步</a>  
+		<a id="submit" href="#" onclick="submitDiagnose()" class="easyui-linkbutton" data-options="iconCls:'fa-arrow-circle-right'">下一步</a>  
+		<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'fa-window-close'">关闭</a>  
 	</div>
 	
 	</div>

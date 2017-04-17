@@ -32,6 +32,7 @@
 }
 </style>
 <script type="text/javascript">
+var flag = false;
 function closeWindow(){
 	parent.closeWindow('${windowid}');
 }
@@ -70,7 +71,6 @@ function open(type,step) {
 	}else{
 		url=step;
 	}
-
 	
 	var windowid = "windowid" +Math.floor(Math.random() *Math.pow(10, 12));
 	if (url.indexOf("?") != -1) {
@@ -88,17 +88,18 @@ function open(type,step) {
 		//当window关闭时把这个窗口的代码清除。
 		onClose : function() {
 			$('#'+windowid).window('destroy');
+		},
+		onBeforeClose : function() {
+			$.post("/lcsw/case/clear.action",null,function(data){
+				if(data.status){
+				}
+			});
 		}
 	});
 }
 
 function closeWin() {
-	$.post("/lcsw/case/clear.action",null,function(data){
-		if(data.status){
-			resertForm();
-			parent.$('#${windowid}').window('close');
-		}
-	});
+	parent.$('#${windowid}').window('close');
 }
 
 function  resertForm(){
@@ -114,8 +115,8 @@ function last() {
 	$.post("/lcsw/case/last.action", { 'step':step}, function(data) {
 		if (data.status) {
 				//ok后的回调方法，去关闭父页面的窗口元素
-				parent.open(data.lastStep);
-				parent.$('#${windowid}').window('close');
+				parent.open(1,data.lastStep);
+				parent.$('#${windowid}').window('close',true);
 		}
 	}, "json");
 }

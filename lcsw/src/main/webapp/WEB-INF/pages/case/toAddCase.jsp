@@ -28,6 +28,9 @@ $(function() {
 					var test = $("input[value='" + steps[i] +"']");
 					$(test).attr("checked",true);
 				}
+				if(Newcase.caseId != null){
+					$("#caseId").textbox("setValue",Newcase.caseId);
+				}
 				$("#caseTitle").textbox("setValue",Newcase.caseTitle);
 				$("#chiefComplain").textbox("setValue",Newcase.chiefComplain);
 				$("#caseType").combobox("select",Newcase.caseType)
@@ -51,7 +54,7 @@ function submitNewCase() {
 					if (data.status) {
 							//ok后的回调方法，去关闭父页面的窗口元素
 							parent.open(1,data.nextStep);
-							parent.$('#${windowid}').window('close');
+							parent.$('#${windowid}').window('close',true);
 					}
 				}, "json");
 			}
@@ -67,6 +70,7 @@ function submitNewCase() {
 		
 	<div data-options="region:'center',border:false" style="padding: 10px;">
 		<form action="/lcsw/case/next.action" method="post" id="inputForm">
+			<input type="hidden" name="caseId">
 			<table>
 				<tr>
 					<td>
@@ -118,8 +122,8 @@ function submitNewCase() {
 		</form>
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
-		<a id="submit" href="#" onclick="submitNewCase()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
-		<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+		<a id="submit" href="#" onclick="submitNewCase()" class="easyui-linkbutton" data-options="iconCls:'fa-arrow-circle-right'">下一步</a>  
+		<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'fa-window-close'">关闭</a>  
 	</div>
 	
 	</div>

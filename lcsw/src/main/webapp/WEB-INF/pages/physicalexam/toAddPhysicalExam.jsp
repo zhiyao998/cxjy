@@ -6,51 +6,43 @@
 <title>新增体检信息</title>
 <%@ include file="../../common.jsp"%>
 <style type="text/css">
-table, td
-  {
-  border: 1px solid pink;
-  }
 td,th
   {
   padding:15px;
   text-align: center;
+  border: 1px solid pink;
   }
 </style>
 <script type="text/javascript">
 $(function() {	
-	$("#aa").accordion('getSelected').panel('collapse');
-	/*初始化  */
- 	$('#aa').accordion({   
-	    onSelect:function(title, index)
-	    {
-			$.post("/lcsw/physicalExam/selectByType.action", {"physicalExamType":index+1}, function(data) {
+	$("ul").datalist({ 
+		onClickRow: function(index, row) {
+			var panel =$("#aa");
+			if(panel.children().length > 0){
+				submitPhysicalExam();
+				panel.empty();
+			}
+			$.post("/lcsw/physicalExam/selectByType.action", {"physicalExamType":row.value}, function(data) {
 				if (data.status) {
 						var list = data.list;
-						var panel =$("#aa").accordion('getSelected');
-						if(panel[0].children.length==0){
-							panel.append("<table><thead><tr><th style='width: 200px'>体检项目</th><th style='width: 200px'>体检结果</th><th>分值</th><th>是否修改</th><tr></thead><tbody>");
-							$.each(list, function(index, content){ 
-								if(content.caseId == 0){
-									panel.append("<tr><td><input disabled='true' class='easyui-textbox' value='"+content.physicalExamName+"'></input></td>"+ 
-										"<td><input disabled='true' type='text' class='easyui-textbox' value='" +content.physicalExamResult+"'></input></td>"+
-										"<td><input style='width:50px' disabled='true' class='easyui-numberbox' value='0'><input type='hidden' value='" + content.physicalExamId + "''></td>"+
-										"<td><input type='hidden' value='" + content.physicalExamType + "'><input style='width: 60px' type='checkbox' onclick='change(this)' value='"+ (content.physicalExamOrder) +"'/></td>"+"</tr>");
-								}else{
-									panel.append("<tr><td><input class='easyui-textbox' value='"+content.physicalExamName+"'></input></td>"+ 
-											"<td><input type='text' class='easyui-textbox' value='" +content.physicalExamResult+"'></input></td>"+
-											"<td><input style='width:50px' class='easyui-numberbox' value='" + content.score + "'><input type='hidden' value='" + content.physicalExamId + "''></td>" +
-											"<td><input type='hidden' value='" + content.physicalExamType + "'><input style='width: 60px' type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.physicalExamOrder) +"'/></td>"+"</tr>");
-								}
-							});
-							$("#aa").accordion('getSelected').append("</tbody></table>");
-							$.parser.parse("#aa");
-						}
+						panel.append("<table><thead><tr><th style='width: 200px'>体检项目</th><th style='width: 200px'>体检结果</th><th style='width:50px'>分值</th><th style='width: 60px'>是否修改</th><tr></thead><tbody>");
+						$.each(list, function(index, content){ 
+							if(content.caseId == 0){
+								panel.append("<tr><td style='width: 200px'><input disabled='true' class='easyui-textbox' value='"+content.physicalExamName+"'></input></td>"+ 
+									"<td style='width: 200px'><input disabled='true' type='text' class='easyui-textbox' value='" +content.physicalExamResult+"'></input></td>"+
+									"<td><input style='width:50px' disabled='true' class='easyui-numberbox' value='0'><input type='hidden' value='" + content.physicalExamId + "''></td>"+
+									"<td><input type='hidden' value='" + content.physicalExamType + "'><input style='width: 60px' type='checkbox' onclick='change(this)' value='"+ (content.physicalExamOrder) +"'/></td>"+"</tr>");
+							}else{
+								panel.append("<tr><td style='width: 200px'><input class='easyui-textbox' value='"+content.physicalExamName+"'></input></td>"+ 
+										"<td style='width: 200px'><input type='text' class='easyui-textbox' value='" +content.physicalExamResult+"'></input></td>"+
+										"<td><input style='width:50px' class='easyui-numberbox' value='" + content.score + "'><input type='hidden' value='" + content.physicalExamId + "''></td>" +
+										"<td><input type='hidden' value='" + content.physicalExamType + "'><input style='width: 60px' type='checkbox' checked='checked' onclick='change(this)' value='"+ (content.physicalExamOrder) +"'/></td>"+"</tr>");
+							}
+						});
+						panel.append("</tbody></table>");
+						$.parser.parse("#aa");
 				}
 			}, "json");
-	    },
-	    onUnselect:function(title, index){
-/* 	    	var panel = $("#aa").accordion("getPanel",index);
-	    	panel.empty(); */
 	    }
 	}); 	
 });
@@ -85,8 +77,9 @@ function submitPhysicalExam() {
 		}
 	});
 	json += "]";
-	if(json=="[]")
-		alert("请选择至少一条体检信息！");
+	if(json=="[]"){
+		
+	}
 	else{
 	$.ajax({
 	    headers: { 
@@ -94,21 +87,42 @@ function submitPhysicalExam() {
 	        'Content-Type': 'application/json' 
 	    },
 	    'type': 'POST',
-	    'url': "/lcsw/physicalExam/next.action",
+	    'url': "/lcsw/physicalExam/submitPhysicalExam.action",
 	    'data': json,
 	    'dataType': 'json',
 	    'success': function(data) {
-			if (data.status == 1) {
-				parent.open(1,data.CaseQuery.nextStep);
-				parent.$('#${windowid}').window('close');
-			}else if(data.status == 2){
-				parent.$('#grid').datagrid('reload');
-				parent.$('#${windowid}').window('close');
-			}else{
-				alert("操作失败");
-			}
+	    	isChange = true;
 		}
 	});
+	}
+}
+
+function next() {
+	debugger;
+	submitPhysicalExam()
+	if(isChange){
+		$.ajax({
+		    headers: { 
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json' 
+		    },
+		    'type': 'POST',
+		    'url': "/lcsw/physicalExam/next.action",
+		    'dataType': 'json',
+		    'success': function(data) {
+				if (data.status == 1) {
+					parent.open(1,data.CaseQuery.nextStep);
+					parent.$('#${windowid}').window('close',true);
+				}else if(data.status == 2){
+					parent.$('#grid').datagrid('reload');
+					parent.$('#${windowid}').window('close');
+				}else{
+					alert("操作失败");
+				}
+			}
+		});
+	}else{
+		alert("尚未选择辅助信息");
 	}
 }
 </script>
@@ -116,29 +130,28 @@ function submitPhysicalExam() {
 <body>
 	<div class="easyui-layout" data-options="fit:true">
 		
+		<div data-options="region:'west',border:false" style="width: 20%;height: 100%;">
+			<ul class="easyui-datalist" style="height: 100%;"> 
+    			<li value="1">生命体征</li> 
+    			<li value="2">一般情况</li> 
+   				<li value="3">皮肤粘膜</li> 
+   				<li value="4">淋巴结</li> 
+   				<li value="5">头颈部</li> 
+   				<li value="6">胸</li> 
+   				<li value="7">肺</li> 
+			</ul>  
+		</div>
+		
 		<div data-options="region:'center',border:false" style="padding: 10px;width: 100%">
-			<div id="aa" class="easyui-accordion" style="width: 100%;height:500px;">   
-    			<div title="生命体征" style="padding:10px;">     
-    			</div>   
-    			<div title="一般情况"  style="padding:10px;">   
-    			</div>   
-    			<div title="皮肤粘膜" style="padding:10px;">     
-    			</div>
-    			<div title="淋巴结" style="padding:10px;">     
-    			</div>   
-    			<div title="头颈部" style="padding:10px;">     
-    			</div>   
-    			<div title="胸" style="padding:10px;">     
-    			</div>   
-    			<div title="肺" style="padding:10px;">     
-    			</div>      
+			<div id="aa">   
+     
 			</div>
 			<input type="hidden" id="step" value="2">    
 		</div>
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
-			<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
-			<a id="next" href="#" onclick="submitPhysicalExam()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">下一步</a>  
-			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+			<a id="last" href="#" onclick="last()" class="easyui-linkbutton" data-options="iconCls:'fa-arrow-circle-left'">上一步</a>  
+			<a id="next" href="#" onclick="next()" class="easyui-linkbutton" data-options="iconCls:'fa-arrow-circle-right'">下一步</a>  
+			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'fa-window-close'">关闭</a>  
 		</div>
 	</div>
 </body>

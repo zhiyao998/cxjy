@@ -80,128 +80,143 @@ public class CaseQueryServiceImpl implements CaseQueryService {
 
 	@Override
 	public List<CaseQuery> selectAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	@Transactional
 	public int updateByPrimaryKey(CaseQuery record) {
-		
+
 		Case c = record.getNewCase();
 		Integer caseId = c.getCaseId();
 		int flag = caseMapper.updateByPrimaryKey(c);
+		String caseStep = c.getCaseStep();
+		List<Integer> ids = new ArrayList<Integer>();
+		ids.add(caseId);
 		
+		if(caseStep.contains("1")){
+			InquiryMapper.deleteByCaseId(ids);
+			List<Inquiry> inquiries = record.getInquirys();
+			if(!inquiries.isEmpty()){
+				for(int i = 0; i < inquiries.size(); i++){
+					inquiries.get(i).setCaseId(caseId);
+					inquiries.get(i).setInquiryId(null);
+				}		
+				flag *= InquiryMapper.insertByBatch(inquiries);
+			}
+		}else{
+			InquiryMapper.deleteByCaseId(ids);
+		}
 		
-		List<AccessoryExam> accessoryExam = record.getAccessoryExams();
-		if(!accessoryExam.isEmpty()){
-			List<AccessoryExam> insertAccessoryExamList = new ArrayList<AccessoryExam>();
-			List<AccessoryExam> updateAccessoryExamList = new ArrayList<AccessoryExam>();
-			for(AccessoryExam a : accessoryExam){
-				a.setCaseId(caseId);
-				if(a.getAccessoryExamId() != null){
-					updateAccessoryExamList.add(a);
-				}else{
-					insertAccessoryExamList.add(a);
+		if(caseStep.contains("2")){
+			List<PhysicalExam> physicalExams = record.getPhysicalExams();
+			if(!physicalExams.isEmpty()){
+				for(int i = 0 ; i < physicalExams.size(); i++){
+						physicalExams.get(i).setCaseId(caseId);
+						physicalExams.get(i).setPhysicalExamId(null);
 				}
-			}
-			if(!insertAccessoryExamList.isEmpty())
-				flag *= accessoryExamMapper.insertByBatch(insertAccessoryExamList);
-			if(!updateAccessoryExamList.isEmpty())
-				flag *= accessoryExamMapper.updateByBatch(updateAccessoryExamList);
-		}
-		
-		Diagnose d = record.getDiagnose();
-		if(d != null){
-			d.setCaseId(caseId);
-			if(d.getDiagnoseId() == null){
-				flag *= diagnoseMapper.insert(d);
-			}else{
-				flag *= diagnoseMapper.updateByPrimaryKey(d);
-			}
-		}
-		
-		FirstVisit f = record.getFirstVisit();
-		if(f != null){
-			f.setCaseId(caseId);
-			if(f.getFirstVisitId() == null){
-				flag *= firstVisitMapper.insert(f);
-			}else{
-				flag *= firstVisitMapper.updateByPrimaryKey(f);
-			}
-		}
+				flag *= physicalExamMapper.insertByBatch(physicalExams);
 
-		List<Inquiry> inquiries = record.getInquirys();
-		if(!inquiries.isEmpty()){
-			List<Inquiry> insertInquiryList = new ArrayList<Inquiry>();
-			List<Inquiry> updateInquiryList = new ArrayList<Inquiry>();
-			for(Inquiry a : inquiries){
-				a.setCaseId(caseId);
-				if(a.getInquiryId() != null){
-					updateInquiryList.add(a);
-				}else{
-					insertInquiryList.add(a);
-				}
-			}		
-			if(!insertInquiryList.isEmpty())
-				flag *= InquiryMapper.insertByBatch(insertInquiryList);
-			if(!updateInquiryList.isEmpty())
-				flag *= InquiryMapper.updateByBatch(updateInquiryList);
+			}
+		}else{
+			physicalExamMapper.deleteByCaseId(ids);
 		}
-
-		List<PatientManagement> managements = record.getPatientManagements();
-		if(!managements.isEmpty()){
-			List<PatientManagement> insertPatientManagementList = new ArrayList<PatientManagement>();
-			List<PatientManagement> updatePatientManagementList = new ArrayList<PatientManagement>();
-			for(PatientManagement a : managements){
-				a.setCaseId(caseId);
-				if(a.getPatientManagementId() != null){
-					updatePatientManagementList.add(a);
+		
+		if(caseStep.contains("3")){
+			FirstVisit f = record.getFirstVisit();
+			if(f != null){
+				f.setCaseId(caseId);
+				if(f.getFirstVisitId() == null){
+					flag *= firstVisitMapper.insert(f);
 				}else{
-					insertPatientManagementList.add(a);
+					flag *= firstVisitMapper.updateByPrimaryKey(f);
 				}
 			}
-			if(!insertPatientManagementList.isEmpty())
-			flag *= patientManagementMapper.insertByBatch(insertPatientManagementList);
-			if(!updatePatientManagementList.isEmpty())
-				flag *= patientManagementMapper.updateByBatch(updatePatientManagementList);
+		}else{
+			firstVisitMapper.deleteByCaseId(ids);
+		}
+		
+		if(caseStep.contains("4")){
+			List<AccessoryExam> accessoryExam = record.getAccessoryExams();
+			if(!accessoryExam.isEmpty()){
+				List<AccessoryExam> insertAccessoryExamList = new ArrayList<AccessoryExam>();
+				List<AccessoryExam> updateAccessoryExamList = new ArrayList<AccessoryExam>();
+				for(AccessoryExam a : accessoryExam){
+					a.setCaseId(caseId);
+					if(a.getAccessoryExamId() != null){
+						updateAccessoryExamList.add(a);
+					}else{
+						insertAccessoryExamList.add(a);
+					}
+				}
+				if(!insertAccessoryExamList.isEmpty())
+					flag *= accessoryExamMapper.insertByBatch(insertAccessoryExamList);
+				if(!updateAccessoryExamList.isEmpty())
+					flag *= accessoryExamMapper.updateByBatch(updateAccessoryExamList);
+			}
+		}else{
+			accessoryExamMapper.deleteByCaseId(ids);
+		}
+		
+		if(caseStep.contains("5")){
+			Diagnose d = record.getDiagnose();
+			if(d != null){
+				d.setCaseId(caseId);
+				if(d.getDiagnoseId() == null){
+					flag *= diagnoseMapper.insert(d);
+				}else{
+					flag *= diagnoseMapper.updateByPrimaryKey(d);
+				}
+			}
+		}else{
+			diagnoseMapper.deleteByCaseId(ids);
+		}
+		
+		if(caseStep.contains("6")){
+			List<Treatment> treatments = record.getTreatments();
+			if(!treatments.isEmpty()){
+				List<Treatment> insertTreatmentList = new ArrayList<Treatment>();
+				List<Treatment> updateTreatmentList = new ArrayList<Treatment>();
+				for(Treatment a : treatments){
+					a.setCaseId(caseId);
+					if(a.getTreatmentId() != null){
+						updateTreatmentList.add(a);
+					}else{
+						insertTreatmentList.add(a);
+					}
+				}
+				if(!insertTreatmentList.isEmpty())  
+					flag *= treatmentMapper.insertByBatch(insertTreatmentList);
+				if(!updateTreatmentList.isEmpty())
+					flag *= treatmentMapper.updateByBatch(updateTreatmentList);
+			}
+		}else{
+			treatmentMapper.deleteByCaseId(ids);
 		}
 	
-		List<PhysicalExam> physicalExams = record.getPhysicalExams();
-		if(!physicalExams.isEmpty()){
-			List<PhysicalExam> insertPhysicalExamList = new ArrayList<PhysicalExam>();
-			List<PhysicalExam> updatePhysicalExamList = new ArrayList<PhysicalExam>();
-			for(PhysicalExam a : physicalExams){
-				if(a.getPhysicalExamId() != null){
+
+		if(caseStep.contains("7")){
+			List<PatientManagement> managements = record.getPatientManagements();
+			if(!managements.isEmpty()){
+				List<PatientManagement> insertPatientManagementList = new ArrayList<PatientManagement>();
+				List<PatientManagement> updatePatientManagementList = new ArrayList<PatientManagement>();
+				for(PatientManagement a : managements){
 					a.setCaseId(caseId);
-					updatePhysicalExamList.add(a);
-				}else{
-					insertPhysicalExamList.add(a);
+					if(a.getPatientManagementId() != null){
+						updatePatientManagementList.add(a);
+					}else{
+						insertPatientManagementList.add(a);
+					}
 				}
+				if(!insertPatientManagementList.isEmpty())
+				flag *= patientManagementMapper.insertByBatch(insertPatientManagementList);
+				if(!updatePatientManagementList.isEmpty())
+					flag *= patientManagementMapper.updateByBatch(updatePatientManagementList);
 			}
-			if(!insertPhysicalExamList.isEmpty())
-				flag *= physicalExamMapper.insertByBatch(insertPhysicalExamList);
-			if(!updatePhysicalExamList.isEmpty())
-				flag *= physicalExamMapper.updateByBatch(updatePhysicalExamList);
+		}else{
+			patientManagementMapper.deleteByCaseId(ids);
 		}
-		
-		List<Treatment> treatments = record.getTreatments();
-		if(!treatments.isEmpty()){
-			List<Treatment> insertTreatmentList = new ArrayList<Treatment>();
-			List<Treatment> updateTreatmentList = new ArrayList<Treatment>();
-			for(Treatment a : treatments){
-				a.setCaseId(caseId);
-				if(a.getTreatmentId() != null){
-					updateTreatmentList.add(a);
-				}else{
-					insertTreatmentList.add(a);
-				}
-			}
-			if(!insertTreatmentList.isEmpty())  
-				flag *= treatmentMapper.insertByBatch(insertTreatmentList);
-			if(!updateTreatmentList.isEmpty())
-				flag *= treatmentMapper.updateByBatch(updateTreatmentList);
-		}
+
 		return flag;
 	}
 

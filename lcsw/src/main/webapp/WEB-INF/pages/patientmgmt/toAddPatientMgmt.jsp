@@ -131,9 +131,9 @@ function submitPatientMgmt() {
     		<input type="hidden" id="step" value="6">   
 		</div>
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
-			<a id="last" href="#" onclick="lastPage()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">上一步</a>  
-			<a id="next" href="#" onclick="submitPatientMgmt()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">提交</a>  
-			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'icon-no'">关闭</a>  
+			<a id="last" href="#" onclick="lastPage()" class="easyui-linkbutton" data-options="iconCls:'fa-arrow-circle-left'">上一步</a>  
+			<a id="next" href="#" onclick="submitPatientMgmt()" class="easyui-linkbutton" data-options="iconCls:'fa-arrow-circle-right'">提交</a>  
+			<a id="close" href="#" onclick="closeWin()" class="easyui-linkbutton" data-options="iconCls:'fa-window-close'">关闭</a>  
 		</div>
 	</div>
 </body>

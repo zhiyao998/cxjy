@@ -42,6 +42,7 @@ public class CaseController {
 	@RequestMapping("/clear")
 	@ResponseBody
 	public HashMap clear(HttpServletRequest request,HttpServletResponse response){
+		request.setAttribute("windowid", request.getParameter("windowid"));
 		sessionProvider.clearCaseQuery(request, response);
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		System.out.println("-------------------clear  session-----------------------");
@@ -56,6 +57,7 @@ public class CaseController {
 	
 	@RequestMapping("/checkCase")
 	public String checkCase(HttpServletRequest request,HttpServletResponse response){
+		request.setAttribute("windowid", request.getParameter("windowid"));
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		CaseQuery caseQuery = caseQueryService.selectByPrimaryKey(id);
 		sessionProvider.setCaseQuery(request, response, caseQuery);

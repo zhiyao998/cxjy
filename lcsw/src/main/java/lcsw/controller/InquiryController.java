@@ -68,8 +68,9 @@ public class InquiryController {
 			for(int i = 0; i < list.size(); i++){
 				boolean flag = true;
 				for(Inquiry i1:inquiries){
-					if(list.get(i).getInquiryOrder().equals(i1.getInquiryOrder()) && list.get(i).getInquiryType().equals(i1.getInquiryType()))
+					if(list.get(i).getInquiryOrder().equals(i1.getInquiryOrder()) && list.get(i).getInquiryType().equals(i1.getInquiryType())){
 						flag = false;
+					}
 				}
 				if(flag){
 					newList.add(list.get(i));
@@ -83,11 +84,39 @@ public class InquiryController {
 		return map;
 	}
 	
+	@RequestMapping(value="submitInquery")
+	@ResponseBody
+	public Map submitInquery(HttpServletRequest request,HttpServletResponse response,@RequestBody List<Inquiry> inquirys){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);	
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<Inquiry> list = caseQuery.getInquirys();
+		List<Inquiry> newList = new ArrayList<Inquiry>();
+		if(list.isEmpty()){
+			caseQuery.setInquirys(inquirys);
+		}else{
+			for(Inquiry i:inquirys){
+				newList.add(i);
+			}
+			for(int i = 0; i < list.size(); i++){
+				boolean flag = true;
+				for(Inquiry i1:inquirys){
+					if(list.get(i).getInquiryOrder().equals(i1.getInquiryOrder()) && list.get(i).getInquiryType().equals(i1.getInquiryType()))
+						flag = false;
+				}
+				if(flag){
+					newList.add(list.get(i));
+				}
+			}
+			caseQuery.setInquirys(newList);
+		}	
+		map.put("status", true);
+		return map;
+	}
+	
 	@RequestMapping(value="/next")
 	@ResponseBody
-	public Map insertInquiry(HttpServletRequest request,HttpServletResponse response,@RequestBody List<Inquiry> inquirys){
-		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);
-		caseQuery.setInquirys(inquirys);
+	public Map insertInquiry(HttpServletRequest request,HttpServletResponse response){
+		CaseQuery caseQuery = sessionProvider.getCaseQuery(request, response);		
 		String caseStep[] = caseQuery.getNewCase().getCaseStep().split(",");
 		int flag = 0;
 		Map map = new HashMap<String,Object>();
