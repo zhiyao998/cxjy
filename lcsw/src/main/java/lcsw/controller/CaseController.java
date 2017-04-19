@@ -70,6 +70,17 @@ public class CaseController {
 		return "/case/toAddCase";
 	}
 	
+	@RequestMapping(value="/addCase")
+	public String addCase(HttpServletRequest request){
+		return "/case/addCase";
+	}
+	
+	@RequestMapping(value="/addQuestion")
+	public String addQuestion(HttpServletRequest request){
+		request.setAttribute("windowid", request.getParameter("windowid"));
+		return "/case/addQuestion";
+	}
+	
 	@RequestMapping("/toEdit")
 	public String toEdit(HttpServletRequest request,HttpServletResponse response){
 		request.setAttribute("windowid", request.getParameter("windowid"));

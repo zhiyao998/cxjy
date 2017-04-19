@@ -7,7 +7,7 @@
 <title>病例管理</title>
 </head>
 <body>
-		<table id="grid" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,url:'/lcsw/case/list.action',toolbar:toolbar"" style="width:100%;">
+		<table id="grid" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,url:'/lcsw/case/list.action',toolbar:toolbar" style="width:100%;">
     		<thead>
     			<th data-options="field:'caseId',checkbox:true"">病例id</th>   
     			<th data-options="field:'caseTitle'" style="width:22%;">病例名称</th>   
@@ -83,6 +83,12 @@
 				}else{
 					alert("请至少选中一项");
 				}
+			}
+		},{
+			text:'增加新病例',
+			iconCls:'fa-plus-square',
+			handler:function(){
+				parent.addtab('增加病例',"/lcsw/case/addCase.action");
 			}
 		}];
 	</script>

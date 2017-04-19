@@ -67,9 +67,10 @@ public class InquiryController {
 			}
 			for(int i = 0; i < list.size(); i++){
 				boolean flag = true;
-				for(Inquiry i1:inquiries){
+				for(Inquiry i1:newList){
 					if(list.get(i).getInquiryOrder().equals(i1.getInquiryOrder()) && list.get(i).getInquiryType().equals(i1.getInquiryType())){
 						flag = false;
+						break;
 					}
 				}
 				if(flag){

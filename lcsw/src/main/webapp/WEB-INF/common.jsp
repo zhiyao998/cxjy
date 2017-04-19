@@ -9,7 +9,7 @@
 	request.setAttribute("ctx", ctx);
 %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link rel="stylesheet" type="text/css" href="${ctx }/public/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="${ctx }/public/easyui/themes/bootstrap/easyui.css">
 <link rel="stylesheet" type="text/css" href="${ctx }/public/easyui/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="${ctx }/public/Font-Awesome/css/font-awesome.min.css">
 <script type="text/javascript" src="${ctx }/public/easyui/jquery.min.js"></script>
@@ -33,6 +33,29 @@
 </style>
 <script type="text/javascript">
 var flag = false;
+
+function addtab(title,url) {
+	var chiose = $('#tabs').tabs("exists",title);
+	if(chiose){
+		$('#tabs').tabs("select",title);
+	}else{
+		// 在用户点击的时候提示
+	       $('#tabs').tabs('add', {
+	            title: title,
+	            content: createFrame(url),
+	            closable: true,
+	            width: $('#mainPanle').width() - 10,
+	            height: $('#mainPanle').height() - 26
+	        });
+	}
+}
+
+function createFrame(url) {
+    var s = '<iframe name="mainFrame" scrolling="no" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+    return s;
+}
+
+
 function closeWindow(){
 	parent.closeWindow('${windowid}');
 }
