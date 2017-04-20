@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lcsw.mapper.QuestionMapper">
+
+	<!--延迟加载  -->
+  <resultMap id="QuestionMap" type="Question" >
+    <id column="question_id" property="questionId" jdbcType="INTEGER" />
+    <result column="case_id" property="caseId" jdbcType="INTEGER" />
+    <result column="question_title" property="title" jdbcType="VARCHAR" />
+    <result column="question_answers" property="answer" jdbcType="VARCHAR" />
+    <result column="question_ftheme" property="ftheme" jdbcType="VARCHAR" />
+    <result column="question_stheme" property="stheme" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="QuestionMap">
+  		select question_id,case_id,question_title,question_answers,question_ftheme,question_stheme from tbl_question where question_id = #{id}
+  	</select>
+  	
+  	<select id="selectByCaseId" parameterType="java.lang.Integer" resultMap="QuestionMap">
+  		select question_id,case_id,question_title,question_answers,question_ftheme,question_stheme from tbl_question where case_id = #{id}
+  	</select>
+  	
+  	<insert id="insert" parameterType="question" keyProperty="questionId" useGeneratedKeys="true">
+    	insert into tbl_question (case_id,question_title,question_answers,question_ftheme,question_stheme)
+    	values (#{caseId,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},
+      	#{answer,jdbcType=VARCHAR},#{ftheme,jdbcType=VARCHAR}, #{stheme,jdbcType=VARCHAR})
+  	</insert>
+	
+	 <update id="updateByPrimaryKey" parameterType="question" >
+    	update tbl_question
+    	set case_id = #{caseId,jdbcType=INTEGER}
+    		question_title = #{title,jdbcType=VARCHAR},
+      		question_answers = #{answer,jdbcType=VARCHAR},
+      		question_ftheme = #{ftheme,jdbcType=VARCHAR},
+      		question_stheme = #{stheme,jdbcType=VARCHAR}
+    	where question_id = #{questionId,jdbcType=INTEGER}
+  </update>
+  
+  	<delete id="deleteByPrimaryKey" parameterType="java.util.List">
+  		delete from tbl_question
+    	where question_id in 
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    		#{item}
+    	</foreach>
+ 	 </delete>
+
+	 <delete id="deleteByCaseId" parameterType="java.util.List">
+  		delete from tbl_question
+    	    	where case_id in 
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    		#{item}
+    	</foreach>	
+ 	 </delete>
+</mapper>
