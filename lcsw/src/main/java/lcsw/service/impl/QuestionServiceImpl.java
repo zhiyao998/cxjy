@@ -1,5 +1,6 @@
 package lcsw.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import lcsw.domain.Question;
+import lcsw.mapper.AnswerMapper;
 import lcsw.mapper.QuestionMapper;
 import lcsw.service.QuestionService;
 
@@ -15,9 +17,20 @@ public class QuestionServiceImpl implements QuestionService {
 	
 	@Resource
 	private QuestionMapper qusetionMapper;
+	@Resource
+	private AnswerMapper answerMapper;
 	
 	@Override
 	public int deleteByPrimaryKey(List<Integer> ids) {
+		for(Integer id:ids){
+			Question question = selectByPrimaryKey(id);
+			String answers[] = question.getAnswers().split(","); 
+			List<Integer> a = new ArrayList<Integer>();
+			for(int i = 0; i < answers.length; i++){
+				a.add(Integer.parseInt(answers[i])); 
+			}
+			answerMapper.deleteByPrimaryKey(a);
+		}
 		return qusetionMapper.deleteByPrimaryKey(ids);
 	}
 

@@ -10,7 +10,26 @@
 		$("#center").hide();
 	});
 	function addQuestion() {
-		open(0,"/lcsw/question/toAddQuestion.action");
+		open(0,"/lcsw/question/toAddQuestion.action?caseId=" + $("#caseId").val());
+	};
+	function editQuestion(id) {
+		open(0,"/lcsw/question/toEditQuestion.action?questionId=" + id);
+	};
+	function deleteQuestion(id) {
+		$.messager.confirm('确认对话框', '确认你是否要删除数据？', function(r) {
+			if (r) {
+	 			$.post("/lcsw/question/deleteQuestion.action", {
+					'id':id,
+					}, function(data) {
+	 					if (data.status) {
+							$.messager.alert('系统消息', "删除成功", 'info',
+								function() {
+									$('#answerList').datagrid('reload');
+							});
+						} 
+					}, "json"); 
+			}
+		});
 	};
 	function addCaseInfo() {
 		$("#inputForm").form("submit",{
@@ -28,6 +47,7 @@
 								if($("#editInfo").linkbutton("options").disabled == true){
 									if(data.Newcase.caseId != null){
 										$("#caseId").val(data.Newcase.caseId);
+										$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + $("#caseId").val()});
 									}
 									$("#chiefComplain").textbox("disable");
 									$("#caseType").combobox("disable");
@@ -48,6 +68,9 @@
 			$("#chiefComplain").textbox("enable");
 			$("#caseType").combobox("enable");
 		}
+	}
+	function formatOpt(val,row,index) {
+		return "<button onclick='editQuestion(" + row.questionId + ")'>编辑</button> <button onclick='deleteQuestion(" + row.questionId + ")'>删除</button>";
 	}
 	
 </script>
@@ -94,13 +117,13 @@
 			</form>
 		</div>
 		<div id="center" data-options="region:'center',border:false" style="padding: 10px;width: 100%">
-			<table class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,toolbar:toolbar" style="width:100%;">
+			<table id="answerList" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,toolbar:toolbar" style="width:100%;">
 				<thead>
 					<tr> 
-    					<th data-options="field:'question'" style="width:22%;">题目简介</th>   
-            			<th data-options="field:'first_theme'"  style="width:22%;">题目类型</th>
-            			<th data-options="field:'answers'" style="width: 22%;">答案简略</th>   
-            			<th data-options="field:'opt'"  style="width:22%;">操作</th> 
+    					<th data-options="field:'title'" style="width:22%;">题目简介</th>   
+            			<th data-options="field:'ftheme'"  style="width:22%;">题目类型</th>
+            			<th data-options="field:'ftheme'" style="width: 22%;">主题词</th>   
+            			<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:22%;">操作</th> 
 					</tr>
 				</thead>
 				<tbody  id="questions">
