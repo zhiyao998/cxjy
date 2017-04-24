@@ -50,6 +50,13 @@ function addtab(title,url) {
 	}
 }
 
+
+function back(){
+	var tab = window.parent.$('#tabs').tabs('getSelected');
+	var index = window.parent.$('#tabs').tabs('getTabIndex',tab);
+	window.parent.$('#tabs').tabs('close',index);
+}
+
 function createFrame(url) {
     var s = '<iframe name="mainFrame" scrolling="no" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
     return s;

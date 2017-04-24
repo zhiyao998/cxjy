@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lcsw.domain.Case;
 import lcsw.domain.CaseQuery;
+import lcsw.domain.Question;
 import lcsw.service.CaseQueryService;
 import lcsw.service.CaseService;
+import lcsw.service.QuestionService;
 import lcsw.service.SessionProvider;
 
 @Controller
@@ -31,6 +33,8 @@ public class CaseController {
 	private CaseQueryService caseQueryService;
 	@Resource
 	private SessionProvider sessionProvider;
+	@Resource
+	private QuestionService questionService;
 	
 	@RequestMapping("/list")
 	@ResponseBody
@@ -73,6 +77,24 @@ public class CaseController {
 	@RequestMapping(value="/addCase")
 	public String addCase(HttpServletRequest request){
 		return "/case/addCase";
+	}
+	
+	@RequestMapping(value="/editCase")
+	public String editCase(HttpServletRequest request){
+		Integer id = Integer.valueOf(request.getParameter("id"));
+		request.setAttribute("caseId", id);
+		return "/case/addCase";
+	}
+	
+	@RequestMapping(value="/getCase")
+	@ResponseBody
+	public Map getCase(HttpServletRequest request){
+		Map map = new HashMap<String,Object>();
+		String caseId = request.getParameter("caseId");
+		Case newCase = caseService.selectByPrimaryKey(Integer.parseInt(caseId));
+		map.put("newCase", newCase);
+		map.put("status", true);
+		return map;
 	}
 	
 	@RequestMapping("/toEdit")

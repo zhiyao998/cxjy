@@ -7,7 +7,29 @@
 <%@ include file="../../common.jsp"%>
 <script type="text/javascript">
 	$(function() {
-		$("#center").hide();
+		var caseId = $("#caseId").val();
+		if(caseId == null || caseId == ""){
+			$("#center").hide();
+		}else{
+			$.ajax({
+			    'type': 'POST',
+			    'url': "/lcsw/case/getCase.action?caseId=" + caseId,
+			    'dataType': 'json',
+			    'success': function(data) {
+					if (data.status) {
+						var newCase = data.newCase;
+						$("#caseType").combobox("select",newCase.caseType);
+						$("#chiefComplain").textbox("setValue",newCase.chiefComplain);
+						$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + caseId});
+						$("#answerList").datagrid("load");
+						$("#chiefComplain").textbox("disable");
+						$("#caseType").combobox("disable");
+						$("#editInfo").linkbutton("enable");
+						$("#addInfo").linkbutton("disable");
+					}
+				}
+			});
+		}
 	});
 	function addQuestion() {
 		open(0,"/lcsw/question/toAddQuestion.action?caseId=" + $("#caseId").val());
@@ -72,7 +94,7 @@
 	function formatOpt(val,row,index) {
 		return "<button onclick='editQuestion(" + row.questionId + ")'>编辑</button> <button onclick='deleteQuestion(" + row.questionId + ")'>删除</button>";
 	}
-	
+
 </script>
 
 <style type="text/css">
@@ -84,7 +106,7 @@
 	<div class="easyui-layout" data-options="fit:true">
 		<div data-options="region:'north',border:false" style="width:100%;">
 			<form action="/lcsw/question/addCaseInfo.action" method="post" id="inputForm">
-				<input type="hidden" id="caseId" name="caseId">
+				<input type="hidden" id="caseId" name="caseId" value="${requestScope.caseId }">
 				<table id="caseInfo" style="text-align: center;">
 					<tr style="height: 30%;width: 50%">
 						<td>
@@ -114,6 +136,7 @@
 						<td><a id="addInfo" href="#" onclick="addCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a> </td>
 					</tr>
 				</table>
+				<input id="creater" type="hidden" value="rongyu">
 			</form>
 		</div>
 		<div id="center" data-options="region:'center',border:false" style="padding: 10px;width: 100%">
@@ -141,7 +164,6 @@
 	</script>
 		</div>
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #e0e8f5">
-			<a id="next" href="#" onclick="addCase()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a>  
 			<a id="close" href="#" onclick="back();" class="easyui-linkbutton " data-options="iconCls:'fa-arrow-left'">返回</a>  
 		</div>
 	</div>

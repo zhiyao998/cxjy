@@ -10,7 +10,7 @@
 		<table id="grid" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,url:'/lcsw/case/list.action',toolbar:toolbar" style="width:100%;">
     		<thead>
     			<th data-options="field:'caseId',checkbox:true"">病例id</th>   
-    			<th data-options="field:'caseTitle'" style="width:22%;">病例名称</th>   
+    			<th data-options="field:'chiefComplain'" style="width:22%;">病例名称</th>   
             	<th data-options="field:'createTime'"  style="width:22%;">创建时间</th>   
             	<th data-options="field:'creater'"  style="width:22%;">创建人</th> 
             	<th data-options="field:'caseType'" style="width:22%;">病例类型</th>
@@ -89,6 +89,21 @@
 			iconCls:'fa-plus-square',
 			handler:function(){
 				parent.addtab('增加病例',"/lcsw/case/addCase.action");
+			}
+		},{
+			text:'编辑新病例',
+			iconCls:'fa-plus-square',
+			handler:function(){
+				var row = $('#grid').datagrid('getSelections');
+				if(row.length > 0){
+					var ids = [];
+					for(var i=0;i<row.length;i++){
+						ids[i] = row[i].caseId;
+					}
+					parent.addtab('编辑病例',"/lcsw/case/editCase.action?id="+ids[0]);
+				}else{
+					alert("请选择需要修改的病例");	
+				}
 			}
 		}];
 	</script>

@@ -1,6 +1,7 @@
 package lcsw.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,16 +80,25 @@ public class QuestionController {
 		Question question = questionItem.getQuestion();
 		String a = question.getAnswers();
 		List<Answer> answers = questionItem.getAnswers();
-		if(question.getCaseId() == null){
-			
+		if(question.getQuestionId() == null || question.getQuestionId().equals("")){
+			questionService.insert(question);
+		}else{
+			questionService.updateByPrimaryKey(question);
 		}
-		questionService.insert(question);
 		for(int i = 0; i < answers.size(); i++){
 			if(i == 0){
-				answerService.insert(answers.get(i));
+				if(answers.get(i).getAnswerId() == null || answers.get(i).getAnswerId().equals("")){
+					answerService.insert(answers.get(i));
+				}else{
+					answerService.updateByPrimaryKey(answers.get(i));
+				}
 				a = "" + answers.get(i).getAnswerId();
 			}else{
-				answerService.insert(answers.get(i));
+				if(answers.get(i).getAnswerId() == null || answers.get(i).getAnswerId().equals("")){
+					answerService.insert(answers.get(i));
+				}else{
+					answerService.updateByPrimaryKey(answers.get(i));
+				}
 				a += "," + answers.get(i).getAnswerId();
 			}
 		}
@@ -106,6 +116,8 @@ public class QuestionController {
 	@RequestMapping(value="/addCaseInfo")
 	@ResponseBody
 	public Map addCaseInfo(HttpServletRequest request,HttpServletResponse response,Case newCase){
+		Date d =new Date();
+		newCase.setCreateTime(new java.sql.Date(d.getTime()));
 		Map map = new HashMap<String,Object>();
 		if(newCase.getCaseId() == null){
 			caseService.insert(newCase);
@@ -127,6 +139,18 @@ public class QuestionController {
 		String questionId = request.getParameter("id");
 		list.add(Integer.parseInt(questionId));
 		questionService.deleteByPrimaryKey(list);
+		map.put("status", true);
+		return map;
+	}
+	
+	@RequestMapping(value="/deleteAnswer")
+	@ResponseBody
+	public Map deleteAnswer(HttpServletRequest request,HttpServletResponse response){
+		Map map = new HashMap<String,Object>();
+		List<Integer> list = new ArrayList<Integer>();
+		String answerId = request.getParameter("id");
+		list.add(Integer.parseInt(answerId));
+		answerService.deleteByPrimaryKey(list);
 		map.put("status", true);
 		return map;
 	}
