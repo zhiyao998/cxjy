@@ -38,8 +38,7 @@
   </update>
   
   	<delete id="deleteByPrimaryKey" parameterType="java.util.List">
-  		delete from tbl_question
-    	where question_id in 
+  		delete from tbl_question where question_id in 
     	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
     		#{item}
     	</foreach>

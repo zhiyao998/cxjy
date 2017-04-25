@@ -15,4 +15,5 @@ public interface CaseService {
 	public int insert(Case record);
 	
 	public int deleteByPrimaryKey(List<Integer> ids);
+	
 }

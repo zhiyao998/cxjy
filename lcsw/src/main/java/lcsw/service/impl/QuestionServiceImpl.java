@@ -24,19 +24,32 @@ public class QuestionServiceImpl implements QuestionService {
 	public int deleteByPrimaryKey(List<Integer> ids) {
 		for(Integer id:ids){
 			Question question = selectByPrimaryKey(id);
-			String answers[] = question.getAnswers().split(","); 
-			List<Integer> a = new ArrayList<Integer>();
-			for(int i = 0; i < answers.length; i++){
-				a.add(Integer.parseInt(answers[i])); 
+			if(question.getAnswers() != null && question.getAnswers() != ""){
+				String answers[] = question.getAnswers().split(",");
+				List<Integer> a = new ArrayList<Integer>();
+				for(int i = 0; i < answers.length; i++){
+					a.add(Integer.parseInt(answers[i])); 
+				}
+				answerMapper.deleteByPrimaryKey(a);
 			}
-			answerMapper.deleteByPrimaryKey(a);
 		}
 		return qusetionMapper.deleteByPrimaryKey(ids);
 	}
 
 	@Override
 	public int deleteByCaseId(List<Integer> ids) {
-		return qusetionMapper.deleteByCaseId(ids);
+		int flag = 1;
+		for(Integer i: ids){
+			List<Question> questions = qusetionMapper.selectByCaseId(i);
+			if(!questions.isEmpty()){
+				List<Integer> quIntegersId = new ArrayList<Integer>();
+				for(Question q : questions){
+					quIntegersId.add(q.getQuestionId());
+				}
+				flag *= deleteByPrimaryKey(quIntegersId);
+			}
+		}
+		return flag;
 	}
 
 	@Override

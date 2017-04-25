@@ -5,38 +5,34 @@
 	<!--延迟加载  -->
   <resultMap id="CaseMap" type="lcsw.domain.Case" >
     <id column="case_id" property="caseId" jdbcType="INTEGER" />
-    <result column="case_title" property="caseTitle" jdbcType="VARCHAR" />
     <result column="chief_complain" property="chiefComplain" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="DATE" />
     <result column="creater" property="creater" jdbcType="VARCHAR" />
     <result column="case_type" property="caseType" jdbcType="INTEGER" />
-    <result column="case_step" property="caseStep" jdbcType="VARCHAR" />
+    <result column="title_type" property="titleType" jdbcType="VARCHAR" />
   </resultMap>
   
   
   	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="CaseMap">
-  		select case_id,case_title,chief_complain,create_time,creater,case_type,case_step from tbl_case where case_id = #{id}
+  		select case_id,chief_complain,create_time,creater,case_type,title_type from tbl_case where case_id = #{id}
   	</select>
   	
   	<select id="selectAll" parameterType="java.lang.Integer" resultMap="CaseMap">
-  		select case_id,case_title,chief_complain,create_time,creater,case_type,case_step from tbl_case
+  		select case_id,chief_complain,create_time,creater,case_type,title_type from tbl_case
   	</select>
   	
   	<insert id="insert" parameterType="case" keyProperty="caseId" useGeneratedKeys="true">
-    	insert into tbl_case (case_title, chief_complain, create_time, creater, case_type,case_step)
-    	values (#{caseTitle,jdbcType=VARCHAR},
-      	#{chiefComplain,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, #{creater,jdbcType=VARCHAR}, 
-    	 #{caseType,jdbcType=INTEGER},#{caseStep,jdbcType=VARCHAR})
+    	insert into tbl_case (chief_complain, create_time, creater, case_type, title_type)
+    	values (#{chiefComplain,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, #{creater,jdbcType=VARCHAR}, #{caseType,jdbcType=INTEGER}, #{titleType,jdbcType=VARCHAR})
   	</insert>
 	
 	 <update id="updateByPrimaryKey" parameterType="case" >
     	update tbl_case
-    	set case_title = #{caseTitle,jdbcType=VARCHAR},
-      		chief_complain = #{chiefComplain,jdbcType=VARCHAR},
+    	set chief_complain = #{chiefComplain,jdbcType=VARCHAR},
       		create_time = #{createTime,jdbcType=DATE},
       		creater = #{creater,jdbcType=VARCHAR},
       		case_type = #{caseType,jdbcType=INTEGER},
-      		case_step = #{caseStep,jdbcType=VARCHAR}
+      		title_type = #{titleType,jdbcType=VARCHAR}
     	where case_id = #{caseId,jdbcType=INTEGER}
   </update>
   

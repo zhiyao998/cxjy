@@ -9,10 +9,10 @@
 	function addNewAnswer() {
 		var html = "";
 		var type = $('#accessoryexamType').combobox("getValue");
-		if(type != "1"){
-			html = "<tr><td><input class='easyui-textbox' data-options='required:true'></td><td><input class='easyui-textbox' data-options='required:true'></td><td><input class='easyui-numberspinner' style='width:50px;' required='required' data-options='min:-10,max:10,editable:true'></td><td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td><td><input type='hidden'></td></tr>";
+		if(type != "2"){
+			html = "<tr><td><input class='easyui-textbox' data-options='required:true'></td><td><input class='easyui-textbox' data-options='required:true'></td><td><input class='easyui-numberbox' style='width:50px;' required='required' data-options='min:-10,max:10,editable:true'></td><td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td><td><input type='hidden'></td></tr>";
 		}else{
-			html = "<tr><td><input class='easyui-textbox' data-options='required:true'></td><td><input class='easyui-filebox' data-options='required:true'></td><td><input class='easyui-numberspinner' style='width:50px;' required='required' data-options='min:-10,max:10,editable:true'></td><td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td></tr>";
+			html = "<tr><td><input class='easyui-textbox' data-options='required:true'></td><td><input class='easyui-filebox' data-options='required:true'></td><td><input class='easyui-numberbox' style='width:50px;' required='required' data-options='min:-10,max:10,editable:true'></td><td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td></tr>";
 		}
 		$("#answers").append(html);
 		$.parser.parse("#answers");
@@ -36,55 +36,64 @@
 		$(tr).remove();
 	};
 	function submitQuestion() {
-		var json = "{";
-		var id = $("#questionId").val();
-		var ftheme = $("#ftheme").combobox("getText");
-		var stheme = $("#stheme").combobox("getValue");
-		var title = $("#title").textbox("getValue");
-		var caseid = $("#caseId").val();
-		json += "\"question\":{\"questionId\":\""+ id +"\",\"ftheme\":\""+ ftheme +"\",\"stheme\":\""+ stheme +"\",\"title\":\""+ title + "\",\"caseId\":\""+ caseid  +"\"}";
- 		var trs = $("#answers tr");
-		json += ",\"answers\":[";
-		var flag = true;
-		var length = 0;
-		$(trs).each(function() {
-			var tds = $(this).children();
-			if(length < 3){
-				var id = $(tds[3]).children()[0].value;
-			}else{
-				var id = $(tds[4]).children()[0].value;
-			}
-			var info = $(tds[0]).children()[0].value;
-			var analysis = $(tds[1]).children()[0].value;
-			var score = $(tds[2]).children()[0].value;
-			if(info != "" || analysis != "" || score != ""){
+		var flag1 = $("#inputForm").form('enableValidation').form('validate'); 
+		if(flag1){
+			var json1 = $("#inputForm").serializeArray();
+			alert(JSON.stringify(json1));
+			var json = "{";
+			var id = $("#questionId").val();
+			var ftheme = $("#ftheme").combobox("getText");
+			var stheme = $("#stheme").combobox("getValue");
+			var title = $("#title").textbox("getValue");
+			var caseid = $("#caseId").val();
+			json += "\"question\":{\"questionId\":\""+ id +"\",\"ftheme\":\""+ ftheme +"\",\"stheme\":\""+ stheme +"\",\"title\":\""+ title + "\",\"caseId\":\""+ caseid  +"\"}";
+	 		var trs = $("#answers tr");
+			json += ",\"answers\":[";
+			var flag = true;
+			var length = 0;
+			$(trs).each(function() {
+				var tds = $(this).children();
+				var type = $('#accessoryexamType').combobox("getValue");
+				if(type == "2"){
+					var id = $(tds[4]).children()[0].value;
+				}else{
+					if(length < 3){
+						var id = $(tds[3]).children()[0].value;
+					}else{
+						var id = $(tds[4]).children()[0].value;
+					}
+				}
+				var info = $(tds[0]).children()[0].value;
+				var analysis = $(tds[1]).children()[0].value;
+				var score = $(tds[2]).children()[0].value;
 				if(flag){
 					json += "{\"answerId\":\""+ id +"\",\"info\":\""+ info +"\",\"analysis\":\""+ analysis +"\",\"score\":\""+ score + "\"}";
 					flag = false;
 				}else{
-					json += ",{\"answerId\":\""+ id +"\",\"info\":\""+ info +"\",\"analysis\":\""+ analysis +"\",\"score\":\""+ score + "\"}";
+					json += ",{\"answerId\":\""+ id +"\",\"info\":\""+ info +"\",\"analysis\":\""+ analysis +"\",\"score\":\""+ score + "\"}";					
 				}
-			}
-			length++;
-		});
-		json += "]}"; 
-		$.ajax({
-		    headers: { 
-		        'Accept': 'application/json',
-		        'Content-Type': 'application/json' 
-		    },
-		    'type': 'POST',
-		    'url': "/lcsw/question/addQuestion.action",
-		    'data': json,
-		    
-		    'dataType': 'json',
-		    'success': function(data) {
-		    	if(data.status){
-		    		parent.$("#answerList").datagrid('reload');
-			    	parent.$('#${windowid}').window('close');
-		    	}
-			}
-		});
+				length++;
+			});
+			json += "]}"; 
+			$.ajax({
+			    headers: { 
+			        'Accept': 'application/json',
+			        'Content-Type': 'application/json' 
+			    },
+			    'type': 'POST',
+			    'url': "/lcsw/question/addQuestion.action",
+			    'data': json,
+			    
+			    'dataType': 'json',
+			    'success': function(data) {
+			    	if(data.status){
+			    		parent.$("#answerList").datagrid('reload');
+				    	parent.$('#${windowid}').window('close');
+			    	}
+				}
+			});
+		}
+
 	}
 	$(function() {
 		if($("#questionId").val() != null && $("#questionId").val() != ""){
@@ -103,7 +112,7 @@
 							for(var i = 3; i < answers.length; i++){
 								html = "<tr><td><input id='info"+ i +"' class='easyui-textbox' data-options='required:true'></td>" + 
 										"<td><input id='analysis" + i + "' class='easyui-textbox' data-options='required:true'></td>" + 
-										"<td><input id='score" + i +"' class='easyui-numberspinner' style='width:50px;' required='required' data-options='min:-10,max:10,editable:true'></td>" + 
+										"<td><input id='score" + i +"' class='easyui-numberbox' style='width:50px;' required='required' data-options='min:-10,max:10,editable:true'></td>" + 
 										"<td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td>" + 
 										"<td><input id='id" + i + "' type='hidden'></td></tr>";
 								$("#answers").append(html);
@@ -114,28 +123,17 @@
 						for(var i = 0; i < trs.length; i++) {
 							$("#info" + i).textbox("setValue",answers[i].info);
 							$("#analysis" + i).textbox("setValue",answers[i].analysis);
-							$("#score" + i).numberspinner("setValue",answers[i].score);
+							$("#score" + i).numberbox("setValue",answers[i].score);
 							$("#id" + i).val(answers[i].answerId);
 						}
 					}
 				}
 			});	
 		}	
-		$("#type").hide();
-		$('#ftheme').combobox({
-			onSelect: function(){
-				var value = $('#ftheme').combobox("getValue");
-				if(value == "辅助检查"){
-					$("#type").show();
-				}else{
-					$("#type").hide();
-				}				
-			}
-		});
 		$('#accessoryexamType').combobox({
 			onSelect: function(){
 				var type = $('#accessoryexamType').combobox("getValue");
-				if(type == "1"){
+				if(type == "2"){
 					$("#answers").empty();
 				}			
 			}
@@ -148,6 +146,7 @@
 <div class="easyui-layout" data-options="fit:true">
 		
 	<div id="main" data-options="region:'center',border:false" style="padding: 10px;">
+	<form id="inputForm" method="post">  
 		<input type="hidden" id="questionId" name="questionId" value="${requestScope.questionId }">
 		<input type="hidden" id="caseId" name="caseId" value="${requestScope.caseId }">
 		<table>
@@ -178,13 +177,12 @@
 			</tr>
 			<tr id="type">
 				<td>
-					<label for="accessoryexamType">辅助检查类型：</label>
+					<label for="accessoryexamType">答案类型：</label>
 				</td>
 				<td>
 					<select id="accessoryexamType" name="accessoryexamType" class="easyui-combobox" data-options="required:true" style="width:100px;">
-						<option value="0"></option>
-						<option value="1">影像检查</option>   
-    					<option value="2">实验室检查</option> 
+						<option value="1">文本</option>   
+    					<option value="2">图像</option> 
 					</select>
 				</td>
 			</tr>
@@ -210,24 +208,25 @@
 				<tr>
 					<td><input id="info0" class='easyui-textbox' data-options='required:true'></td>
 					<td><input id="analysis0" class='easyui-textbox' data-options='required:true'></td>
-					<td><input id="score0" class="easyui-numberspinner" style="width:50px;" required="required" data-options="min:-10,max:10,editable:true"></td>
+					<td><input id="score0" class="easyui-numberbox" style="width:50px;" required="required" data-options="min:-10,max:10,editable:true"></td>
 					<td><input id="id0" type="hidden"></td>
 				</tr>
 				<tr>
 					<td><input id="info1" class='easyui-textbox' data-options='required:true'></td>
 					<td><input id="analysis1" class='easyui-textbox' data-options='required:true'></td>
-					<td><input id="score1" class="easyui-numberspinner" style="width:50px;" required="required" data-options="min:-10,max:10,editable:true"></td>
+					<td><input id="score1" class="easyui-numberbox" style="width:50px;" required="required" data-options="min:-10,max:10,editable:true"></td>
 					<td><input id="id1" type="hidden"></td>
 				</tr>
 				<tr>
 					<td><input id="info2" class='easyui-textbox' data-options='required:true'></td>
 					<td><input id="analysis2" class='easyui-textbox' data-options='required:true'></td>
-					<td><input id="score2" class="easyui-numberspinner" style="width:50px;" required="required" data-options="min:-10,max:10,editable:true"></td>
+					<td><input id="score2" class="easyui-numberbox" style="width:50px;" required="required" data-options="min:-10,max:10,editable:true"></td>
 					<td><input id="id2" type="hidden"></td>
 				</tr>
 			</tbody>
 		</table>
 		<a href="#" onclick="addNewAnswer()" class="easyui-linkbutton" data-options="iconCls:'fa-plus-square'">增加答案</a>  
+	</form>
 	</div>	
 	<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #D3D3D3">
 		<a id="close" href="#" onclick="submitQuestion()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a>  

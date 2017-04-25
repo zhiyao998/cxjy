@@ -19,11 +19,13 @@
 					if (data.status) {
 						var newCase = data.newCase;
 						$("#caseType").combobox("select",newCase.caseType);
+						$("#titleType").combobox("select",newCase.titleType);
 						$("#chiefComplain").textbox("setValue",newCase.chiefComplain);
 						$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + caseId});
 						$("#answerList").datagrid("load");
 						$("#chiefComplain").textbox("disable");
 						$("#caseType").combobox("disable");
+						$("#titleType").combobox("disable");
 						$("#editInfo").linkbutton("enable");
 						$("#addInfo").linkbutton("disable");
 					}
@@ -32,10 +34,25 @@
 		}
 	});
 	function addQuestion() {
-		open(0,"/lcsw/question/toAddQuestion.action?caseId=" + $("#caseId").val());
+		var rows = $('#answerList').datagrid('getRows');
+		var caseId = $("#caseId").val();
+		$.ajax({
+		    'type': 'POST',
+		    'url': "/lcsw/case/getCase.action?caseId=" + caseId,
+		    'dataType': 'json',
+		    'success': function(data) {
+				if (data.status) {
+					if(data.newCase.titleType == "A2" && rows.length > 0){
+						alert("A2题型只允许一个分支！");
+					}else{
+						open("/lcsw/question/toAddQuestion.action?caseId=" + $("#caseId").val());
+					}
+				}
+			}
+		});
 	};
 	function editQuestion(id) {
-		open(0,"/lcsw/question/toEditQuestion.action?questionId=" + id);
+		open("/lcsw/question/toEditQuestion.action?questionId=" + id);
 	};
 	function deleteQuestion(id) {
 		$.messager.confirm('确认对话框', '确认你是否要删除数据？', function(r) {
@@ -73,6 +90,7 @@
 									}
 									$("#chiefComplain").textbox("disable");
 									$("#caseType").combobox("disable");
+									$("#titleType").combobox("disable");
 									$("#editInfo").linkbutton("enable");
 									$("#addInfo").linkbutton("disable");
 								}
@@ -89,6 +107,7 @@
 			$("#editInfo").linkbutton("disable");
 			$("#chiefComplain").textbox("enable");
 			$("#caseType").combobox("enable");
+			$("#titleType").combobox("enable");
 		}
 	}
 	function formatOpt(val,row,index) {
@@ -107,6 +126,7 @@
 		<div data-options="region:'north',border:false" style="width:100%;">
 			<form action="/lcsw/question/addCaseInfo.action" method="post" id="inputForm">
 				<input type="hidden" id="caseId" name="caseId" value="${requestScope.caseId }">
+				<input id="creater" type="hidden" name="creater" value="rongyu">
 				<table id="caseInfo" style="text-align: center;">
 					<tr style="height: 30%;width: 50%">
 						<td>
@@ -121,7 +141,7 @@
 							<label for="caseType">病例类型：</label>
 						</td>
 						<td>
-							<select id="caseType" name="caseType" class="easyui-combobox" data-options="required:true" style="width:200px;">
+							<select id="caseType" name="caseType" class="easyui-combobox" data-options="required:true" style="width:150px;">
 								<option value="1">普通科</option>   
     							<option value="2">口腔科</option>   
     							<option value="3">内科</option>   
@@ -130,22 +150,30 @@
     							<option value="6">皮肤科</option>   
 							</select>  
 						</td>
+						<td>
+							<label for="titleType">题目类型：</label>
+						</td>
+						<td>
+							<select id="titleType" name="titleType" class="easyui-combobox" data-options="required:true" style="width:150px;">
+								<option value="A2">A2</option>   
+    							<option value="A3">A3</option>    
+							</select>  
+						</td>
 					</tr>
 					<tr>
 						<td><a id="editInfo" href="#" onclick="editCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-pencil',disabled:true">编辑</a> </td>
 						<td><a id="addInfo" href="#" onclick="addCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a> </td>
 					</tr>
 				</table>
-				<input id="creater" type="hidden" value="rongyu">
 			</form>
 		</div>
 		<div id="center" data-options="region:'center',border:false" style="padding: 10px;width: 100%">
-			<table id="answerList" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,toolbar:toolbar" style="width:100%;">
+			<table id="answerList" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,toolbar:toolbar,pagination:true,fit:true" style="width:100%;">
 				<thead>
 					<tr> 
     					<th data-options="field:'title'" style="width:22%;">题目简介</th>   
-            			<th data-options="field:'ftheme'"  style="width:22%;">题目类型</th>
-            			<th data-options="field:'ftheme'" style="width: 22%;">主题词</th>   
+            			<th data-options="field:'ftheme',sortable:true"  style="width:22%;">题目类型</th>
+            			<th data-options="field:'ftheme',sortable:true" style="width: 22%;">主题词</th>   
             			<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:22%;">操作</th> 
 					</tr>
 				</thead>

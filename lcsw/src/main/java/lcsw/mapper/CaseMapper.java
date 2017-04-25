@@ -10,8 +10,6 @@ public interface CaseMapper {
 
     int insert(Case record);
 
-//    int insertSelective(Case record);
-
     Case selectByPrimaryKey(Integer id);
     
     List<Case> selectAll();
