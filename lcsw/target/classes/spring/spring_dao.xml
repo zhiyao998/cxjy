@@ -12,15 +12,6 @@
 	
 	<context:property-placeholder location="classpath:/resource/*.properties" />
 	
-	   <!-- 注解事务mybatis -->
-    <bean id="transactionManager"
-          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-    
-    <!-- 自动扫描事务注解 -->
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class = "true"/>
-	
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 	<!--数据源配置  -->
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
@@ -47,17 +38,88 @@
 	</bean>
 	
 	<!--mybatis  sessionFactory配置-->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
-       	<!--  自动扫描到net/togogo/springmybatisproject/dao的xml文件-->
+       	<!--  自动扫描xml文件-->
 		<property name="mapperLocations" value="classpath:lcsw/mapper/*.xml"/>
+		<property name="configLocation" value="classpath:spring/mybatis-config.xml"/>
 		<!-- 声明别名，这样的话，在mapper xml文件描述类名时就可以不用完整路径了(即不用加包名了)-->
 		<property name="typeAliasesPackage" value="lcsw.domain"/>
+		<!-- 全局配置注入 -->
+	    <property name="globalConfig" ref="globalConfig" />
+	    <property name="plugins">
+            <array>
+                <!-- 分页插件配置 -->
+                <bean id="paginationInterceptor" class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">
+                    <property name="dialectType" value="mysql"/>
+                </bean>
+            </array>
+        </property>
+	</bean>
+	
+	<bean id="globalConfig" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+	    <!-- 
+			AUTO->`0`("数据库ID自增")
+		 	INPUT->`1`(用户输入ID")
+			ID_WORKER->`2`("全局唯一ID")
+			UUID->`3`("全局唯一ID")
+		-->
+	    <property name="idType" value="0" />
+		<!--
+			MYSQL->`mysql`
+			ORACLE->`oracle`
+			DB2->`db2`
+			H2->`h2`
+			HSQL->`hsql`
+			SQLITE->`sqlite`
+			POSTGRE->`postgresql`
+			SQLSERVER2005->`sqlserver2005`
+			SQLSERVER->`sqlserver`
+		-->
+		<!-- Oracle需要添加该项 -->
+	    <property name="dbType" value="mysql" />
+	    <!-- 全局表为下划线命名设置 true -->
+	    <property name="dbColumnUnderline" value="true" />
 	</bean>
 	
 	<!-- 自动扫描mybatis定义的dao(mapper)类  ，spring扫描到这些dao类之后，就会向spring容器注册这些dao类对象-->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage"  value="lcsw.mapper"/>
 	</bean>
+	
+	    <!-- 配置事务管理 -->
+    <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+	
+    <!-- 事务管理 属性 -->
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="append*" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="modify*" propagation="REQUIRED"/>
+            <tx:method name="edit*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="remove*" propagation="REQUIRED"/>
+            <tx:method name="repair" propagation="REQUIRED"/>
+
+            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="find*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="load*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="select*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="datagrid*" propagation="REQUIRED" read-only="true"/>
+
+            <tx:method name="*" propagation="REQUIRED" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置切面 -->
+    <aop:config>
+        <aop:pointcut id="transactionPointcut" expression="execution(* lcsw.service.impl..*.*(..))"/>
+        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
+    </aop:config>
 	
 </beans>

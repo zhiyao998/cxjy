@@ -12,10 +12,14 @@
 <link rel="stylesheet" type="text/css" href="${ctx }/public/easyui/themes/bootstrap/easyui.css">
 <link rel="stylesheet" type="text/css" href="${ctx }/public/easyui/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="${ctx }/public/Font-Awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="${ctx }/public/css/accordionStyle.css">
 <script type="text/javascript" src="${ctx }/public/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx }/public/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="${ctx }/public/easyui/easyui-lang-zh_CN.js?id=2"></script>
 <script type="text/javascript" src="${ctx }/public/form/jquery.form.3.5.js"></script>
+<script type="text/javascript" src="${ctx }/public/js/accordionIndex.js"></script>
+<script type="text/javascript" src="${ctx }/public/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx }/public/ckeditor/adapters/jquery.js"></script>
 <style>
 	.l-btn-icon,.panel-icon,.menu-icon,.tabs-icon {
     font-family:FontAwesome;
@@ -54,6 +58,7 @@ function addtab(title,url) {
 function back(){
 	var tab = window.parent.$('#tabs').tabs('getSelected');
 	var index = window.parent.$('#tabs').tabs('getTabIndex',tab);
+	var casetab = window.parent.$('#tabs');
 	window.parent.$('#tabs').tabs('close',index);
 }
 

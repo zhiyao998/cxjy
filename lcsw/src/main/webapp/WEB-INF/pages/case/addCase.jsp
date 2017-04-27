@@ -7,6 +7,7 @@
 <%@ include file="../../common.jsp"%>
 <script type="text/javascript">
 	$(function() {
+		$('#chiefComplain').ckeditor();
 		var caseId = $("#caseId").val();
 		if(caseId == null || caseId == ""){
 			$("#center").hide();
@@ -20,11 +21,11 @@
 						var newCase = data.newCase;
 						$("#caseType").combobox("select",newCase.caseType);
 						$("#titleType").combobox("select",newCase.titleType);
-						$("#chiefComplain").textbox("setValue",newCase.chiefComplain);
+						$("#chiefComplain").val(newCase.chiefComplain);
 						$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + caseId});
 						$("#answerList").datagrid("load");
-						$("#chiefComplain").textbox("disable");
 						$("#caseType").combobox("disable");
+						$("#chiefComplain").attr("disabled",true);
 						$("#titleType").combobox("disable");
 						$("#editInfo").linkbutton("enable");
 						$("#addInfo").linkbutton("disable");
@@ -88,8 +89,8 @@
 										$("#caseId").val(data.Newcase.caseId);
 										$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + $("#caseId").val()});
 									}
-									$("#chiefComplain").textbox("disable");
 									$("#caseType").combobox("disable");
+									$("#chiefComplain").attr("disabled",true);
 									$("#titleType").combobox("disable");
 									$("#editInfo").linkbutton("enable");
 									$("#addInfo").linkbutton("disable");
@@ -104,8 +105,8 @@
 	function editCaseInfo() {
 		if($("#addInfo").linkbutton("options").disabled == true){
 			$("#addInfo").linkbutton("enable");
+			$("#chiefComplain").attr("disabled",false);
 			$("#editInfo").linkbutton("disable");
-			$("#chiefComplain").textbox("enable");
 			$("#caseType").combobox("enable");
 			$("#titleType").combobox("enable");
 		}
@@ -123,17 +124,16 @@
 </head>
 <body>
 	<div class="easyui-layout" data-options="fit:true">
-		<div data-options="region:'north',border:false" style="width:100%;">
+		<div data-options="region:'west',border:true" style="width:35%;height: 100%">
 			<form action="/lcsw/question/addCaseInfo.action" method="post" id="inputForm">
 				<input type="hidden" id="caseId" name="caseId" value="${requestScope.caseId }">
 				<input id="creater" type="hidden" name="creater" value="rongyu">
 				<table id="caseInfo" style="text-align: center;">
-					<tr style="height: 30%;width: 50%">
-						<td>
-							<label for="chiefComplain">主诉：</label>
-						</td>
-						<td>
-							<textarea rows="5" cols="50" class="easyui-textbox" id="chiefComplain" name="chiefComplain" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></textarea>
+					<tr>
+						<td colspan="2">
+							<h3>主诉</h3>
+							<textarea class="easyui-validatebox" name="chiefComplain" id="chiefComplain" rows="5" cols="80" style="height: 200px;">
+            				</textarea>
 						</td>
 					</tr>
 					<tr>
@@ -150,6 +150,8 @@
     							<option value="6">皮肤科</option>   
 							</select>  
 						</td>
+					</tr>
+					<tr>
 						<td>
 							<label for="titleType">题目类型：</label>
 						</td>
@@ -167,13 +169,13 @@
 				</table>
 			</form>
 		</div>
-		<div id="center" data-options="region:'center',border:false" style="padding: 10px;width: 100%">
-			<table id="answerList" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,toolbar:toolbar,pagination:true,fit:true" style="width:100%;">
+		<div id="center" data-options="region:'center',border:false" style="padding: 10px;hei: 100%">
+			<table id="answerList" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,toolbar:toolbar,pagination:true,fit:true,remoteSort:true" style="width:100%;">
 				<thead>
 					<tr> 
     					<th data-options="field:'title'" style="width:22%;">题目简介</th>   
-            			<th data-options="field:'ftheme',sortable:true"  style="width:22%;">题目类型</th>
-            			<th data-options="field:'ftheme',sortable:true" style="width: 22%;">主题词</th>   
+            			<th data-options="field:'ftheme',sortable:true"  style="width:22%;">一级主题词</th>
+            			<th data-options="field:'stheme',sortable:true" style="width: 22%;">二级主题词</th>   
             			<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:22%;">操作</th> 
 					</tr>
 				</thead>

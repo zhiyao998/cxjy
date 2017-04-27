@@ -2,20 +2,11 @@ package lcsw.mapper;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+
 import lcsw.domain.Case;
 
-public interface CaseMapper {
-
-    int deleteByPrimaryKey(List<Integer> ids);
-
-    int insert(Case record);
-
-    Case selectByPrimaryKey(Integer id);
-    
-    List<Case> selectAll();
-
-    int updateByPrimaryKey(Case record);
-	
-    
-	
+public interface CaseMapper extends BaseMapper<Case>{
+	List<Case> selectCaseList(Pagination page, Integer state);
 }

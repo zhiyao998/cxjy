@@ -18,7 +18,7 @@ public class AnswerServiceImpl implements AnswerService {
 
 	@Override
 	public int deleteByPrimaryKey(List<Integer> ids) {
-		return answerMapper.deleteByPrimaryKey(ids);
+		return answerMapper.deleteBatchIds(ids);
 	}
 
 	@Override
@@ -28,12 +28,12 @@ public class AnswerServiceImpl implements AnswerService {
 
 	@Override
 	public Answer selectByPrimaryKey(Integer id) {
-		return answerMapper.selectByPrimaryKey(id);
+		return answerMapper.selectById(id);
 	}
 
 	@Override
 	public int updateByPrimaryKey(Answer record) {
-		return answerMapper.updateByPrimaryKey(record);
+		return answerMapper.updateById(record);
 	}
 
 }

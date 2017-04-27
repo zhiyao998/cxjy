@@ -6,6 +6,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+
 import lcsw.domain.Case;
 import lcsw.mapper.CaseMapper;
 import lcsw.service.CaseService;
@@ -18,12 +22,12 @@ public class CaseServiceImpl implements CaseService {
 
 	@Override
 	public Case selectByPrimaryKey(Integer id) {
-		return caseMapper.selectByPrimaryKey(id);
+		return caseMapper.selectById(id);
 	}
 
 	@Override
 	public int updateByPrimaryKey(Case record) {
-		return caseMapper.updateByPrimaryKey(record);
+		return caseMapper.updateById(record);
 	}
 
 	@Override
@@ -32,13 +36,14 @@ public class CaseServiceImpl implements CaseService {
 	}
 
 	@Override
-	public List<Case> selectAll() {
-		return caseMapper.selectAll();
+	public Page<Case> selectCaseList(Page<Case> page, Integer state) {
+	    page.setRecords(caseMapper.selectCaseList(page, state));
+	    return page;
 	}
-
+	
 	@Override
 	public int deleteByPrimaryKey(List<Integer> ids) {
-		return caseMapper.deleteByPrimaryKey(ids);
+		return caseMapper.deleteBatchIds(ids);
 	}
 
 }

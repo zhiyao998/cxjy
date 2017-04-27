@@ -1,11 +1,35 @@
 package lcsw.domain;
 
-public class Question {
+import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+
+@TableName(value="tbl_question")
+public class Question implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@TableId(value="question_id")
 	private Integer questionId;
+	
+	@TableField(value="case_id")
 	private Integer caseId;
+	
+	@TableField(value="title")
 	private String title;
+	
+	@TableField(value="ftheme")
 	private String ftheme;
+	
+	@TableField(value="stheme")
 	private String stheme;
+	
+	@TableField(value="answers")
 	private String answers;
 	
 	

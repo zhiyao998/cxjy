@@ -1,9 +1,29 @@
 package lcsw.domain;
 
-public class Answer {
+import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+
+@TableName(value="tbl_answer")
+public class Answer implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@TableId(value="answer_id")
 	private Integer answerId;
+	
+	@TableField(value="answer_info")
 	private String info;
+	
+	@TableField(value="answer_analysis")
 	private String analysis;
+	
+	@TableField(value="score")
 	private Integer score;
 	
 	

@@ -2,13 +2,15 @@ package lcsw.service;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.plugins.Page;
+
 import lcsw.domain.Case;
 
 public interface CaseService {
 	
 	public Case selectByPrimaryKey(Integer id);	
 	
-	public List<Case> selectAll();
+	public Page<Case> selectCaseList(Page<Case> page, Integer state);
 	
 	public int updateByPrimaryKey(Case record);
 	

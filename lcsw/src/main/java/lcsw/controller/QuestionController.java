@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.baomidou.mybatisplus.plugins.Page;
+
 import lcsw.domain.Answer;
 import lcsw.domain.Case;
 import lcsw.domain.Question;
@@ -157,9 +159,18 @@ public class QuestionController {
 	
 	@RequestMapping(value="/list")
 	@ResponseBody
-	public List<Question> listQuestion(HttpServletRequest request,HttpServletResponse response){
-		List<Question> questions = questionService.selectByCaseId(Integer.valueOf(request.getParameter("caseId")));
-		return questions;
+	public Map listQuestion(HttpServletRequest request,HttpServletResponse response){
+/*		List<Question> questions = questionService.selectByCaseId();*/
+		String rows = request.getParameter("rows");
+		String page = request.getParameter("page");
+		Map<String, Object> map = new HashMap<String, Object>();
+		Integer i = 1;
+		Integer caseId = Integer.valueOf(request.getParameter("caseId"));
+		Page<Question> questions = new Page<Question>(Integer.valueOf(page), Integer.valueOf(rows));
+		questions = questionService.selectByCaseId(questions, i, caseId);
+		map.put("total", questions.getTotal());
+		map.put("rows", questions.getRecords());
+		return map;
 	}
 	
 }

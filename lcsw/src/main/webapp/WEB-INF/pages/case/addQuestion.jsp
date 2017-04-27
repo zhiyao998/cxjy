@@ -39,7 +39,6 @@
 		var flag1 = $("#inputForm").form('enableValidation').form('validate'); 
 		if(flag1){
 			var json1 = $("#inputForm").serializeArray();
-			alert(JSON.stringify(json1));
 			var json = "{";
 			var id = $("#questionId").val();
 			var ftheme = $("#ftheme").combobox("getText");

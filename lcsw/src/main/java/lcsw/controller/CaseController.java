@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.baomidou.mybatisplus.plugins.Page;
+
 import lcsw.domain.Case;
 import lcsw.domain.Question;
 import lcsw.service.CaseService;
@@ -34,9 +36,31 @@ public class CaseController {
 	
 	@RequestMapping("/list")
 	@ResponseBody
-	public List<Case> listCase(HttpServletRequest request,HttpServletResponse response){
-		List<Case> cases = caseService.selectAll();
-		return cases;
+	public Map listCase(HttpServletRequest request,HttpServletResponse response){
+		String rows = request.getParameter("rows");
+		String page = request.getParameter("page");
+		String colnum = request.getParameter("sort");
+		String order = request.getParameter("order");
+		Map<String, Object> map = new HashMap<String, Object>();
+		Integer i = 1;
+		Page<Case> cases = new Page<Case>(Integer.valueOf(page), Integer.valueOf(rows));
+		if(colnum != null){
+			switch (colnum) {
+			case "createTime":
+				cases.setOrderByField("create_time");
+				break;
+			default:
+				cases.setOrderByField("case_type");
+				break;
+			}
+			if(order.equals("desc")){
+				cases.setAsc(false);
+			}
+		}
+		cases = caseService.selectCaseList(cases, i);
+		map.put("total", cases.getTotal());
+		map.put("rows", cases.getRecords());
+		return map;
 	}
 	
 	@RequestMapping("/management")
