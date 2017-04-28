@@ -1,11 +1,12 @@
 package lcsw.domain;
 
 public class QuestionType {
-	
+
 	private String ftheme;
 	private String stheme;
-	private String titleType;
-	private int count;
+	private Integer count2;
+	private Integer count3;
+	
 	public String getFtheme() {
 		return ftheme;
 	}
@@ -18,23 +19,19 @@ public class QuestionType {
 	public void setStheme(String stheme) {
 		this.stheme = stheme;
 	}
-	public String getTitleType() {
-		return titleType;
+	public Integer getCount2() {
+		return count2;
 	}
-	public void setTitleType(String titleType) {
-		this.titleType = titleType;
+	public void setCount2(Integer count2) {
+		this.count2 = count2;
 	}
-	public int getCount() {
-		return count;
+	public Integer getCount3() {
+		return count3;
 	}
-	public void setCount(int count) {
-		this.count = count;
+	public void setCount3(Integer count3) {
+		this.count3 = count3;
 	}
-	@Override
-	public String toString() {
-		return "QuestionType [ftheme=" + ftheme + ", stheme=" + stheme + ", titleType=" + titleType + ", count=" + count
-				+ "]";
-	}
+	
 	
 	
 }

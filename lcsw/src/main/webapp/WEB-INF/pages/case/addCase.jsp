@@ -169,7 +169,7 @@
 				</table>
 			</form>
 		</div>
-		<div id="center" data-options="region:'center',border:false" style="padding: 10px;hei: 100%">
+		<div id="center" data-options="region:'center',border:false" style="padding: 10px;height: 100%">
 			<table id="answerList" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,toolbar:toolbar,pagination:true,fit:true,remoteSort:true" style="width:100%;">
 				<thead>
 					<tr> 

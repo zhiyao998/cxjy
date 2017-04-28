@@ -6,7 +6,7 @@
     SELECT * FROM tbl_question WHERE 1=#{state} and case_id=#{caseId}
 </select>
 
-<select id="selectCountByThemeAndType">
+<select id="selectCountByThemeAndType" resultType="Integer">
 	select count(*) from tbl_question q,tbl_case c where c.case_id = q.case_id and c.title_type=#{titleType} and q.ftheme=#{ftheme}
 </select>
 
