@@ -64,9 +64,6 @@
 	function sumbitData() {
 		var map = new Array();
 		var list = new Array();
-		var total2 = $("#all2").val();
-		var total3 = $("#all3").val();
-		var total = $("#all").val();
 		$("tbody td input").each(function() {
 			var number = $(this).val();
 			if(parseInt(number) > 0){
@@ -84,17 +81,16 @@
 			}
 		});
 		$.ajax({
+		    headers: { 
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json' 
+		    },
 		    'type': 'POST',
 		    'url': "/lcsw/TestPaperGen/genTestPaer.action",
-		    'data':{
-		    	'total':total,
-		    	'total2':total2,
-		    	'total3':total3,
-		    	'list':JSON.stringify(list)
-		    },
+		    'data':JSON.stringify(list),
 		    'dataType': 'json',
 		    'success': function(data) {
-				
+				alert(data);
 		    }
 		});	
 	}
@@ -117,19 +113,19 @@
 				<tr>
 					<td>${i.ftheme }</td>
 					<c:choose>
-						<c:when test="${i.count2 ==0 }">
-							<td><input id="count2" disabled="disabled"><span>${i.count2 }</span></td>
+						<c:when test="${i.count2 ==0 }"> 
+							<td><input id="count2" disabled="disabled" value="0"><span>${i.count2 }</span></td>
 						</c:when>
 						<c:otherwise>
-							<td><input id="count2"><span>${i.count2 }</span></td>
+							<td><input id="count2" value="0"><span>${i.count2 }</span></td>
 						</c:otherwise>
 					</c:choose>
 					<c:choose>
 						<c:when test="${i.count3 ==0 }">
-							<td><input id="count3" disabled="disabled"><span>${i.count3 }</span></td>
+							<td><input id="count3" disabled="disabled" value="0"><span>${i.count3 }</span></td>
 						</c:when>
 						<c:otherwise>
-							<td><input id="count3"><span>${i.count3 }</span></td>
+							<td><input id="count3" value="0"><span>${i.count3 }</span></td>
 						</c:otherwise>
 					</c:choose>
 					<td></td>

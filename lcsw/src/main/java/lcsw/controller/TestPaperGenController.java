@@ -10,15 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import lcsw.domain.QuestionCount;
 import lcsw.domain.QuestionType;
 import lcsw.service.QuestionService;
 
 
 @Controller
-@RequestMapping(value="/TestPaperGen")
+@RequestMapping(value="/TestPaperGen")  
 public class TestPaperGenController {
 	
 	@Resource
@@ -42,10 +44,9 @@ public class TestPaperGenController {
 	
 	@RequestMapping(value="/genTestPaer")
 	@ResponseBody
-	public Map genTestPaer(HttpServletRequest request,HttpServletResponse response){
+	public Map genTestPaer(HttpServletRequest request,HttpServletResponse response,@RequestBody List<QuestionCount> list){
 		Map<String,Object> map = new HashMap<String,Object>();
-		String total = request.getParameter("total");
-		System.out.println(total);
+		System.out.println(list);
 		return map;
 	}
 	

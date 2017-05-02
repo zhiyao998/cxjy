@@ -18,6 +18,9 @@ public class Case implements Serializable{
 	@TableId(value="case_id")
 	private Integer caseId;
 	
+	@TableField(value="case_title")
+	private String caseTitle;
+	
 	@TableField(value="chief_complain")
 	private String chiefComplain;
 	
@@ -32,6 +35,27 @@ public class Case implements Serializable{
 	
 	@TableField(value="title_type")
 	private String titleType;
+	
+	@TableField(value="phy_exam_count")
+	private Integer phyEaxmCount;
+	
+	@TableField(value="fst_visit_count")
+	private Integer fstVisitCount;
+	
+	@TableField(value="ary_exam_count")
+	private Integer aryEaxmCount;
+	
+	@TableField(value="diagnose_count")
+	private Integer diagnoseCount;
+	
+	@TableField(value="treatment_count")
+	private Integer treatmentCount;
+	
+	@TableField(value="pat_man_count")
+	private Integer patManCount;
+	
+	@TableField(value="inquiry_count")
+	private Integer inquiryCount;
 
 	public Integer getCaseId() {
 		return caseId;
@@ -80,11 +104,77 @@ public class Case implements Serializable{
 	public void setTitleType(String titleType) {
 		this.titleType = titleType;
 	}
+	
+	public String getCaseTitle() {
+		return caseTitle;
+	}
+
+	public void setCaseTitle(String caseTitle) {
+		this.caseTitle = caseTitle;
+	}
+
+	public Integer getPhyEaxmCount() {
+		return phyEaxmCount;
+	}
+
+	public void setPhyEaxmCount(Integer phyEaxmCount) {
+		this.phyEaxmCount = phyEaxmCount;
+	}
+
+	public Integer getFstVisitCount() {
+		return fstVisitCount;
+	}
+
+	public void setFstVisitCount(Integer fstVisitCount) {
+		this.fstVisitCount = fstVisitCount;
+	}
+
+	public Integer getAryEaxmCount() {
+		return aryEaxmCount;
+	}
+
+	public void setAryEaxmCount(Integer aryEaxmCount) {
+		this.aryEaxmCount = aryEaxmCount;
+	}
+
+	public Integer getDiagnoseCount() {
+		return diagnoseCount;
+	}
+
+	public void setDiagnoseCount(Integer diagnoseCount) {
+		this.diagnoseCount = diagnoseCount;
+	}
+
+	public Integer getTreatmentCount() {
+		return treatmentCount;
+	}
+
+	public void setTreatmentCount(Integer treatmentCount) {
+		this.treatmentCount = treatmentCount;
+	}
+
+	public Integer getPatManCount() {
+		return patManCount;
+	}
+
+	public void setPatManCount(Integer patManCount) {
+		this.patManCount = patManCount;
+	}
+
+	public Integer getInquiryCount() {
+		return inquiryCount;
+	}
+
+	public void setInquiryCount(Integer inquiryCount) {
+		this.inquiryCount = inquiryCount;
+	}
 
 	@Override
 	public String toString() {
-		return "Case [caseId=" + caseId + ", chiefComplain=" + chiefComplain + ", createTime=" + createTime
-				+ ", creater=" + creater + ", caseType=" + caseType + ", titleType=" + titleType + "]";
-	}
-	
+		return "Case [caseId=" + caseId + ", caseTitle=" + caseTitle + ", chiefComplain=" + chiefComplain
+				+ ", createTime=" + createTime + ", creater=" + creater + ", caseType=" + caseType + ", titleType="
+				+ titleType + ", phyEaxmCount=" + phyEaxmCount + ", fstVisitCount=" + fstVisitCount + ", aryEaxmCount="
+				+ aryEaxmCount + ", diagnoseCount=" + diagnoseCount + ", treatmentCount=" + treatmentCount
+				+ ", patManCount=" + patManCount + ", inquiryCount=" + inquiryCount + "]";
+	}	
 }

@@ -43,7 +43,7 @@
 			var id = $("#questionId").val();
 			var ftheme = $("#ftheme").combobox("getText");
 			var stheme = $("#stheme").combobox("getValue");
-			var title = $("#title").textbox("getValue");
+			var title = escape($("#title").val());
 			var caseid = $("#caseId").val();
 			json += "\"question\":{\"questionId\":\""+ id +"\",\"ftheme\":\""+ ftheme +"\",\"stheme\":\""+ stheme +"\",\"title\":\""+ title + "\",\"caseId\":\""+ caseid  +"\"}";
 	 		var trs = $("#answers tr");
@@ -95,6 +95,7 @@
 
 	}
 	$(function() {
+		$('#title').ckeditor();
 		if($("#questionId").val() != null && $("#questionId").val() != ""){
 			$.ajax({
 			    'type': 'POST',
@@ -105,7 +106,7 @@
 						var answers = data.answers;
 						var question = data.question;
 						$("#ftheme").combobox("select",question.ftheme);
-						$("#title").textbox("setValue",question.title);
+						$("#title").val(unescape(question.title));
 						$("#caseId").val(question.caseId);
 						if(answers.length > 3){
 							for(var i = 3; i < answers.length; i++){
@@ -190,7 +191,7 @@
 					<label for="title">题目：</label>
 				</td>
 				<td>
-					<textarea rows="5" cols="30" class="easyui-textbox" id="title" name="title" data-options="required:true,multiline:true" style="height: 80px;width: 240px"></textarea>
+					<textarea rows="5" cols="30" class="easyui-validatebox" id="title" name="title" style="height: 80px;width: 240px"></textarea>
 				</td>
 			</tr>
 		</table>

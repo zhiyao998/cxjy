@@ -10,10 +10,11 @@
 		<table id="grid" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,url:'/lcsw/case/list.action',toolbar:toolbar,pagination:true,fit:true,remoteSort:true" style="width:100%;">
     		<thead>
     			<th data-options="field:'caseId',checkbox:true"">病例id</th>   
-    			<th data-options="field:'chiefComplain',sortable:true" style="width:22%;">病例名称</th>   
-            	<th data-options="field:'createTime',sortable:true"  style="width:22%;">创建时间</th>   
-            	<th data-options="field:'creater'"  style="width:22%;">创建人</th> 
-            	<th data-options="field:'titleType',sortable:true" style="width:22%;">题目类型</th>
+    			<th data-options="field:'caseTitle',sortable:true" style="width:20%;">病例名称</th>   
+            	<th data-options="field:'createTime',sortable:true"  style="width:20%;">创建时间</th>   
+            	<th data-options="field:'creater'"  style="width:20%;">创建人</th> 
+            	<th data-options="field:'titleType',sortable:true" style="width:20%;">题目类型</th>
+            	<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:20%;">操作</th> 
     		</thead>
     	</table>
     <script type="text/javascript">
@@ -73,6 +74,26 @@
 				}
 			}
 		}];
+		function formatOpt(val,row,index) {
+			return "<button onclick='editCase(" + row.caseId + ")'>编辑</button> <button onclick='deleteCase(" + row.caseId + ")'>删除</button>";
+		}
+		function editCase(id) {
+			parent.addtab('编辑病例',"/lcsw/case/editCase.action?id="+id);
+		}
+		function deleteCase(id) {
+			var ids = new Array();
+			ids.push(id);
+				$.post("/lcsw/case/deleteCase.action", {
+					'ids':JSON.stringify(ids)
+				}, function(data) {
+						if (data.status) {
+						$.messager.alert('系统消息', "删除成功", 'info',
+								function() {
+									$('#grid').datagrid('reload');
+								});
+					} 
+				}, "json"); 
+		}
 	</script>
     	
 </body>

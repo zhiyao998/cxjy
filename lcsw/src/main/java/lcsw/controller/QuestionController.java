@@ -74,7 +74,6 @@ public class QuestionController {
 		return map;
 	}
 	
-	@Transactional
 	@RequestMapping(value="/addQuestion")
 	@ResponseBody
 	public Map addQuestion(HttpServletRequest request,HttpServletResponse response,@RequestBody QuestionItem questionItem){

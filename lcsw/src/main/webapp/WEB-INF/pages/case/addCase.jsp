@@ -5,12 +5,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>添加病例</title>
 <%@ include file="../../common.jsp"%>
+<style type="text/css">
+	#showText p{
+		
+	}
+</style>
 <script type="text/javascript">
 	$(function() {
-		$('#chiefComplain').ckeditor();
 		var caseId = $("#caseId").val();
 		if(caseId == null || caseId == ""){
 			$("#center").hide();
+			$('#chiefComplain').ckeditor();
 		}else{
 			$.ajax({
 			    'type': 'POST',
@@ -22,13 +27,16 @@
 						$("#caseType").combobox("select",newCase.caseType);
 						$("#titleType").combobox("select",newCase.titleType);
 						$("#chiefComplain").val(newCase.chiefComplain);
+						$("#caseTitle").textbox("setValue",newCase.caseTitle);
+						$("#chiefComplain").hide();
+						$("#showText").append(newCase.chiefComplain);
 						$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + caseId});
 						$("#answerList").datagrid("load");
 						$("#caseType").combobox("disable");
-						$("#chiefComplain").attr("disabled",true);
 						$("#titleType").combobox("disable");
 						$("#editInfo").linkbutton("enable");
 						$("#addInfo").linkbutton("disable");
+						$("#caseTitle").textbox("disable");
 					}
 				}
 			});
@@ -81,6 +89,7 @@
 					$.post(url, json, function(data) {
 						if (data.status) {
 								//ok后的回调方法，去关闭父页面的窗口元素
+								var newCase = data.Newcase;
 								if($("#center").is(":hidden")){
 									$("#center").show();
 								}
@@ -90,10 +99,17 @@
 										$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + $("#caseId").val()});
 									}
 									$("#caseType").combobox("disable");
-									$("#chiefComplain").attr("disabled",true);
+									var editor = CKEDITOR.instances.chiefComplain;//chiefComplain是我ckeditor的id
+									editor.setReadOnly(true);
+									editor.destroy();
+									$("#chiefComplain").hide();
+									$("#showText").empty();
+									$("#showText").append(newCase.chiefComplain);
+									$("#showText").show();
 									$("#titleType").combobox("disable");
 									$("#editInfo").linkbutton("enable");
 									$("#addInfo").linkbutton("disable");
+									$("#caseTitle").textbox("disable");
 								}
 						}
 					}, "json");
@@ -105,14 +121,20 @@
 	function editCaseInfo() {
 		if($("#addInfo").linkbutton("options").disabled == true){
 			$("#addInfo").linkbutton("enable");
-			$("#chiefComplain").attr("disabled",false);
+			$("#showText").hide();
+			$("#chiefComplain").attr('disabled',false);
+			$('#chiefComplain').ckeditor();
 			$("#editInfo").linkbutton("disable");
 			$("#caseType").combobox("enable");
 			$("#titleType").combobox("enable");
+			$("#caseTitle").textbox("enable");
 		}
 	}
 	function formatOpt(val,row,index) {
 		return "<button onclick='editQuestion(" + row.questionId + ")'>编辑</button> <button onclick='deleteQuestion(" + row.questionId + ")'>删除</button>";
+	}
+	function showTitle(val,row,index) {
+		return unescape(row.title);
 	}
 
 </script>
@@ -128,12 +150,20 @@
 			<form action="/lcsw/question/addCaseInfo.action" method="post" id="inputForm">
 				<input type="hidden" id="caseId" name="caseId" value="${requestScope.caseId }">
 				<input id="creater" type="hidden" name="creater" value="rongyu">
-				<table id="caseInfo" style="text-align: center;">
+				<table id="caseInfo" style="text-align: center;width: 100%;margin: 10px;">
 					<tr>
-						<td colspan="2">
-							<h3>主诉</h3>
-							<textarea class="easyui-validatebox" name="chiefComplain" id="chiefComplain" rows="5" cols="80" style="height: 200px;">
-            				</textarea>
+						<td>
+							<label for="caseTitle">病例名称：</label>
+						</td>
+						<td>
+							<input class="easyui-textbox" data-options="required:true" name="caseTitle" id="caseTitle" style="width:150px;">
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" style="padding: 10px;">
+							<h2>主诉</h2>
+							<textarea class="easyui-validatebox" name="chiefComplain" id="chiefComplain" style="height: 200px;"></textarea>
+							<div id="showText" style="height: 200px; padding: 20px"></div>
 						</td>
 					</tr>
 					<tr>
@@ -166,6 +196,9 @@
 						<td><a id="editInfo" href="#" onclick="editCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-pencil',disabled:true">编辑</a> </td>
 						<td><a id="addInfo" href="#" onclick="addCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a> </td>
 					</tr>
+					<tr>
+						
+					</tr>
 				</table>
 			</form>
 		</div>
@@ -173,7 +206,7 @@
 			<table id="answerList" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,toolbar:toolbar,pagination:true,fit:true,remoteSort:true" style="width:100%;">
 				<thead>
 					<tr> 
-    					<th data-options="field:'title'" style="width:22%;">题目简介</th>   
+    					<th data-options="field:'title',formatter:showTitle" style="width:22%;">题目简介</th>   
             			<th data-options="field:'ftheme',sortable:true"  style="width:22%;">一级主题词</th>
             			<th data-options="field:'stheme',sortable:true" style="width: 22%;">二级主题词</th>   
             			<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:22%;">操作</th> 
