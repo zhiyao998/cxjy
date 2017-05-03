@@ -10,4 +10,8 @@
 	select count(*) from tbl_question q,tbl_case c where c.case_id = q.case_id and c.title_type=#{titleType} and q.ftheme=#{ftheme}
 </select>
 
+<select id="selectFtheme" resultType="String">
+    SELECT ftheme FROM tbl_question WHERE question_id=#{id}
+</select>
+
 </mapper>

@@ -4,10 +4,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@ include file="../../common.jsp"%>
+<link rel="stylesheet" type="text/css" href="/lcsw/public/bootstrap/css/bootstrap.min.css">
+<script src="/lcsw/public/bootstrap/js/bootstrap-submenu.min.js" defer></script>
+<script type="text/javascript" src="${ctx }/public/plugins/jquery.aCollapTable.min.js"></script>
 <title>组卷列表</title>
 <style type="text/css">
 	table tr{
-		text-align: center;
 		height: auto;
 	}
 	
@@ -31,34 +33,20 @@
 	padding: 10px;
 	line-height: 1.5;
 	border: 1px solid #ddd;
+	text-align: left;
 }
 </style>
 
 <script type="text/javascript">
 	$(function() {
-		$("#count2,#count3").change(function() {
-			var number = parseInt($(this).val());
-			if(!isNaN(number)){
-				var span = $(this).next("span");
-				var count = parseInt($(span).text());
-				if(number <= count){
-					if($(this).attr("id") == "count2"){
-						var sum = number + parseInt($("#all2").val());
-						$("#all2").val(sum);
-					}else{
-						var sum = number + parseInt($("#all3").val());
-						$("#all3").val(sum);
-					}
-					$("#all").val(number + parseInt($("#all").val()));
-				}else{
-					$(this).val("")
-					alert("题目数量不能超过现有题目！");
-				}
-			}else{
-				$(this).val("")
-				alert("请输入整数!");
-			}
+		
+		$('#types').aCollapTable({
+		    startCollapsed: true,
+		    addColumn: false,
+		    plusButton: '<i class="glyphicon glyphicon-plus"></i> ', 
+		    minusButton: '<i class="glyphicon glyphicon-minus"></i> ' 
 		});
+
 	});
 	
 	function sumbitData() {
@@ -99,47 +87,124 @@
 
 </head>
 <body>
-	<table width="100%" border="1" cellspacing="0" cellpadding="0">
-		<thead>
-			<tr>
-				<th>主题词</th>
-				<th>A2</th>
-				<th>A3</th>	
-				<th>合计</th>		
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${requestScope.list }" var="i">
-				<tr>
-					<td>${i.ftheme }</td>
-					<c:choose>
-						<c:when test="${i.count2 ==0 }"> 
-							<td><input id="count2" disabled="disabled" value="0"><span>${i.count2 }</span></td>
-						</c:when>
-						<c:otherwise>
-							<td><input id="count2" value="0"><span>${i.count2 }</span></td>
-						</c:otherwise>
-					</c:choose>
-					<c:choose>
-						<c:when test="${i.count3 ==0 }">
-							<td><input id="count3" disabled="disabled" value="0"><span>${i.count3 }</span></td>
-						</c:when>
-						<c:otherwise>
-							<td><input id="count3" value="0"><span>${i.count3 }</span></td>
-						</c:otherwise>
-					</c:choose>
-					<td></td>
-				</tr>
-			</c:forEach>
-		</tbody>
-		<tfoot>
+	<table id="types" class="table table-hover" width="100%" border="1" cellspacing="0" cellpadding="0">
+	<thead>
+		<tr>
+			<th>病例类型</th>
+			<th colspan="7">分支详情</th>
+		</tr>
+	</thead>
+	<tbody>
+        	<tr data-id="普通科" data-parent="">         
+            	<td>普通科</td>
+        	</tr>
+        	<c:forEach items="${requestScope.cases }" var="c" varStatus="i">
+        		<c:if test="${c.caseType == '普通科' }">
+        			<tr data-id="${c.caseId }" data-parent="普通科">
+        				<td>${c.caseTitle }</td>
+        				<td><span>问诊:${c.inquiryCount }</span></td>
+        				<td><span>体格检查:${c.phyEaxmCount }</span></td>
+        				<td><span>初诊:${c.fstVisitCount }</span></td>
+        				<td><span>辅助检查:${c.aryEaxmCount }</span></td>
+        				<td><span>确诊:${c.diagnoseCount }</span></td>
+        				<td><span>治疗方案:${c.treatmentCount }</span></td>
+        				<td><span>病人管理:${c.patManCount }</span></td>
+        			</tr>
+        		</c:if>
+        	</c:forEach>
+        	<tr data-id="口腔科" data-parent=""> 
+            	<td>口腔科</td>
+        	</tr>
+        	<c:forEach items="${requestScope.cases }" var="c" varStatus="i">
+        		<c:if test="${c.caseType == '口腔科' }">
+        			<tr data-id="${c.caseId }" data-parent="口腔科">
+        				<td>${c.caseTitle }</td>
+        				<td><span>问诊:${c.inquiryCount }</span></td>
+        				<td><span>体格检查:${c.phyEaxmCount }</span></td>
+        				<td><span>初诊:${c.fstVisitCount }</span></td>
+        				<td><span>辅助检查:${c.aryEaxmCount }</span></td>
+        				<td><span>确诊:${c.diagnoseCount }</span></td>
+        				<td><span>治疗方案:${c.treatmentCount }</span></td>
+        				<td><span>病人管理:${c.patManCount }</span></td>        			
+        			</tr>
+        		</c:if>
+        	</c:forEach>
+        	<tr data-id="内科" data-parent=""> 
+            	<td>内科</td>
+        	</tr>
+        	<c:forEach items="${requestScope.cases }" var="c" varStatus="i">
+        		<c:if test="${c.caseType == '内科' }">
+        			<tr data-id="${c.caseId }" data-parent="内科">
+        				<td>${c.caseTitle }</td>
+        				<td><span>问诊:${c.inquiryCount }</span></td>
+        				<td><span>体格检查:${c.phyEaxmCount }</span></td>
+        				<td><span>初诊:${c.fstVisitCount }</span></td>
+        				<td><span>辅助检查:${c.aryEaxmCount }</span></td>
+        				<td><span>确诊:${c.diagnoseCount }</span></td>
+        				<td><span>治疗方案:${c.treatmentCount }</span></td>
+        				<td><span>病人管理:${c.patManCount }</span></td>        			
+        			</tr>
+        		</c:if>
+        	</c:forEach>
+        	<tr data-id="外科" data-parent=""> 
+            	<td>外科</td>
+        	</tr>
+        	<c:forEach items="${requestScope.cases }" var="c" varStatus="i">
+        		<c:if test="${c.caseType == '外科' }">
+        			<tr data-id="${c.caseId }" data-parent="外科">
+        				<td><span>问诊:${c.inquiryCount }</span></td>
+        				<td><span>体格检查:${c.phyEaxmCount }</span></td>
+        				<td><span>初诊:${c.fstVisitCount }</span></td>
+        				<td><span>辅助检查:${c.aryEaxmCount }</span></td>
+        				<td><span>确诊:${c.diagnoseCount }</span></td>
+        				<td><span>治疗方案:${c.treatmentCount }</span></td>
+        				<td><span>病人管理:${c.patManCount }</span></td>      			
+        			</tr>
+        		</c:if>
+        	</c:forEach>
+        	<tr data-id="胸外科" data-parent=""> 
+            	<td>胸外科</td>
+        	</tr>
+        	<c:forEach items="${requestScope.cases }" var="c" varStatus="i">
+        		<c:if test="${c.caseType == '胸外科' }">
+        			<tr data-id="${c.caseId }" data-parent="胸外科">
+        				<td>${c.caseTitle }</td>
+        				<td><span>问诊:${c.inquiryCount }</span></td>
+        				<td><span>体格检查:${c.phyEaxmCount }</span></td>
+        				<td><span>初诊:${c.fstVisitCount }</span></td>
+        				<td><span>辅助检查:${c.aryEaxmCount }</span></td>
+        				<td><span>确诊:${c.diagnoseCount }</span></td>
+        				<td><span>治疗方案:${c.treatmentCount }</span></td>
+        				<td><span>病人管理:${c.patManCount }</span></td>         			
+        			</tr>
+        		</c:if>
+        	</c:forEach>
+       		<tr data-id="皮肤科" data-parent=""> 
+            	<td>皮肤科</td>
+        	</tr>
+        	<c:forEach items="${requestScope.cases }" var="c" varStatus="i">
+        		<c:if test="${c.caseType == '皮肤科' }">
+        			<tr data-id="${c.caseId }" data-parent="皮肤科">
+        				<td>${c.caseTitle }</td>
+        				<td><span>问诊:${c.inquiryCount }</span></td>
+        				<td><span>体格检查:${c.phyEaxmCount }</span></td>
+        				<td><span>初诊:${c.fstVisitCount }</span></td>
+        				<td><span>辅助检查:${c.aryEaxmCount }</span></td>
+        				<td><span>确诊:${c.diagnoseCount }</span></td>
+        				<td><span>治疗方案:${c.treatmentCount }</span></td>
+        				<td><span>病人管理:${c.patManCount }</span></td>         			
+        			</tr>
+        		</c:if>
+        	</c:forEach>
+    </tbody>
+<!-- 		<tfoot>
 			<tr>
 				<td>合计</td>
 				<td><input id="all2" type="text" disabled="disabled" value="0">题</td>
 				<td><input id="all3" type="text" disabled="disabled" value="0">题</td>
 				<td><input id="all" type="text" disabled="disabled" value="0">题</td>
 			</tr>
-		</tfoot>
+		</tfoot> -->
 	</table>
 	<div style="text-align: center;padding: 20px;">
 			<a id="close" style="" href="#" onclick="sumbitData()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a>  

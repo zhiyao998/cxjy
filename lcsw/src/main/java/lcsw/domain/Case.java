@@ -31,7 +31,7 @@ public class Case implements Serializable{
 	private String creater;
 	
 	@TableField(value="case_type")
-	private Integer caseType;
+	private String caseType;
 	
 	@TableField(value="title_type")
 	private String titleType;
@@ -89,11 +89,11 @@ public class Case implements Serializable{
 		this.creater = creater;
 	}
 
-	public Integer getCaseType() {
+	public String getCaseType() {
 		return caseType;
 	}
 
-	public void setCaseType(Integer caseType) {
+	public void setCaseType(String caseType) {
 		this.caseType = caseType;
 	}
 

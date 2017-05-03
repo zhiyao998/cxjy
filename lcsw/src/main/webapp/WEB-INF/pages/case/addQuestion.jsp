@@ -86,6 +86,14 @@
 			    'dataType': 'json',
 			    'success': function(data) {
 			    	if(data.status){
+			    		var c = data.newCase;
+			    		parent.$("#inquiryCount").text(c.inquiryCount);
+			    		parent.$("#phyEaxmCount").text(c.phyEaxmCount);
+			    		parent.$("#fstVisitCount").text(c.fstVisitCount);
+			    		parent.$("#aryEaxmCount").text(c.aryEaxmCount);
+			    		parent.$("#diagnoseCount").text(c.diagnoseCount);
+			    		parent.$("#treatmentCount").text(c.treatmentCount);
+			    		parent.$("#patManCount").text(c.patManCount);
 			    		parent.$("#answerList").datagrid('reload');
 				    	parent.$('#${windowid}').window('close');
 			    	}

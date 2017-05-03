@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import lcsw.domain.Case;
+import lcsw.domain.Question;
 import lcsw.domain.QuestionCount;
 import lcsw.domain.QuestionType;
+import lcsw.service.CaseService;
 import lcsw.service.QuestionService;
 
 
@@ -25,11 +28,18 @@ public class TestPaperGenController {
 	
 	@Resource
 	private QuestionService qService;
+	@Resource
+	private CaseService caseService;
 	
 	@RequestMapping(value="/findAllCase")
 	public String findAllCase(HttpServletRequest request,HttpServletResponse response){
-		List<QuestionType> list = qService.selectCountByThemeAndType();	
-		request.setAttribute("list", list);
+		List<Case> cases = caseService.selectAll();
+		String type[] = {"普通科","口腔科","内科","外科","胸外科","皮肤科"};
+		String ftheme[] = {"问诊","体格检查","初步诊断","辅助检查","确诊","治疗方案","病人管理"};
+		for(Case c:cases){
+			
+		}
+		request.setAttribute("cases", cases);
 		return "/TestPaperGen/countList";
 	}
 	

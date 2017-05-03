@@ -46,4 +46,9 @@ public class CaseServiceImpl implements CaseService {
 		return caseMapper.deleteBatchIds(ids);
 	}
 
+	@Override
+	public List<Case> selectAll() {
+		return caseMapper.selectList(new EntityWrapper<Case>());
+	}
+
 }

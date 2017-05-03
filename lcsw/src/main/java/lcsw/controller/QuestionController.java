@@ -78,13 +78,18 @@ public class QuestionController {
 	@ResponseBody
 	public Map addQuestion(HttpServletRequest request,HttpServletResponse response,@RequestBody QuestionItem questionItem){
 		Map map = new HashMap<String,Object>();
+		Case c = new Case();
 		Question question = questionItem.getQuestion();
 		String a = question.getAnswers();
 		List<Answer> answers = questionItem.getAnswers();
 		if(question.getQuestionId() == null || question.getQuestionId().equals("")){
 			questionService.insert(question);
+			c = updateCaseCount(question,null);
+			
 		}else{
+			String oldFtheme = questionService.selectFtheme(question.getQuestionId());
 			questionService.updateByPrimaryKey(question);
+			c = updateCaseCount(question,oldFtheme);
 		}
 		for(int i = 0; i < answers.size(); i++){
 			if(i == 0){
@@ -110,7 +115,9 @@ public class QuestionController {
 		
 		System.out.println(answers);
 		System.out.println(question);
+		
 		map.put("status", true);
+		map.put("newCase", c);
 		return map;
 	}
 	
@@ -170,6 +177,39 @@ public class QuestionController {
 		map.put("total", questions.getTotal());
 		map.put("rows", questions.getRecords());
 		return map;
+	}
+	
+	private Case updateCaseCount(Question question,String oldFtheme){
+		Case c = caseService.selectByPrimaryKey(question.getCaseId());
+		Map<String,Integer> map = new HashMap<String, Integer>();
+		map.put("问诊", c.getInquiryCount());
+		map.put("体格检查", c.getPhyEaxmCount());
+		map.put("初诊", c.getFstVisitCount());
+		map.put("辅助检查", c.getAryEaxmCount());
+		map.put("确诊", c.getDiagnoseCount());
+		map.put("治疗方案", c.getTreatmentCount());
+		map.put("病人管理", c.getPatManCount());
+		Integer count = 0;
+		if(oldFtheme == null){
+			count = map.get(question.getFtheme());
+			map.put(question.getFtheme(), count + 1);
+		}else{
+			if(!question.getFtheme().equals(oldFtheme)){
+				count = map.get(oldFtheme);
+				map.put(oldFtheme, count - 1);
+				count = map.get(question.getFtheme());
+				map.put(question.getFtheme(), count + 1);
+			}
+		}
+		c.setInquiryCount(map.get("问诊"));
+		c.setAryEaxmCount(map.get("辅助检查"));
+		c.setFstVisitCount(map.get("初诊"));
+		c.setTreatmentCount(map.get("治疗方案"));
+		c.setDiagnoseCount(map.get("确诊"));
+		c.setPatManCount(map.get("病人管理"));
+		c.setPhyEaxmCount(map.get("体格检查"));
+		caseService.updateByPrimaryKey(c);
+		return c;
 	}
 	
 }

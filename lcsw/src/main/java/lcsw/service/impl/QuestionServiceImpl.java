@@ -1,7 +1,9 @@
 package lcsw.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -91,6 +93,29 @@ public class QuestionServiceImpl implements QuestionService {
 			questionTypes.add(questionType);
 		}
 		return questionTypes;
+	}
+
+	@Override
+	public String selectFtheme(Integer id) {
+		String oldFtheme = qusetionMapper.selectFtheme(id);
+		return oldFtheme;
+	}
+
+	@Override
+	public List<Question> selectByCase(Integer id) {
+		return qusetionMapper.selectList(new EntityWrapper<Question>().eq("case_id", id));
+	}
+
+	@Override
+	public Map<String,Integer> selectQuestionCountByCase(Integer id) {
+		Integer count = 0;
+		Map<String,Integer> map = new HashMap<String,Integer>();
+		String ftheme[] = {"问诊","体格检查","初步诊断","辅助检查","确诊","治疗方案","病人管理"};
+		for(int i = 0; i < ftheme.length; i++){
+			count = qusetionMapper.selectCount(new EntityWrapper<Question>().eq("case_id", id).eq("ftheme", ftheme[i]));
+			map.put(ftheme[i], count);
+		}		
+		return map;
 	}
 
 }

@@ -6,9 +6,8 @@
 <title>添加病例</title>
 <%@ include file="../../common.jsp"%>
 <style type="text/css">
-	#showText p{
+	
 		
-	}
 </style>
 <script type="text/javascript">
 	$(function() {
@@ -37,6 +36,13 @@
 						$("#editInfo").linkbutton("enable");
 						$("#addInfo").linkbutton("disable");
 						$("#caseTitle").textbox("disable");
+			    		$("#inquiryCount").text(newCase.inquiryCount);
+			    		$("#phyEaxmCount").text(newCase.phyEaxmCount);
+			    		$("#fstVisitCount").text(newCase.fstVisitCount);
+			    		$("#aryEaxmCount").text(newCase.aryEaxmCount);
+			    		$("#diagnoseCount").text(newCase.diagnoseCount);
+			    		$("#treatmentCount").text(newCase.treatmentCount);
+			    		$("#patManCount").text(newCase.patManCount);
 					}
 				}
 			});
@@ -111,6 +117,13 @@
 									$("#addInfo").linkbutton("disable");
 									$("#caseTitle").textbox("disable");
 								}
+					    		$("#inquiryCount").text(newCase.inquiryCount);
+					    		$("#phyEaxmCount").text(newCase.phyEaxmCount);
+					    		$("#fstVisitCount").text(newCase.fstVisitCount);
+					    		$("#aryEaxmCount").text(newCase.aryEaxmCount);
+					    		$("#diagnoseCount").text(newCase.diagnoseCount);
+					    		$("#treatmentCount").text(newCase.treatmentCount);
+					    		$("#patManCount").text(newCase.patManCount);
 						}
 					}, "json");
 				}
@@ -172,12 +185,12 @@
 						</td>
 						<td>
 							<select id="caseType" name="caseType" class="easyui-combobox" data-options="required:true" style="width:150px;">
-								<option value="1">普通科</option>   
-    							<option value="2">口腔科</option>   
-    							<option value="3">内科</option>   
-    							<option value="4">外科</option>   
-    							<option value="5">胸外科</option>   
-    							<option value="6">皮肤科</option>   
+								<option value="普通科">普通科</option>   
+    							<option value="口腔科">口腔科</option>   
+    							<option value="内科">内科</option>   
+    							<option value="外科">外科</option>   
+    							<option value="胸外科">胸外科</option>   
+    							<option value="皮肤科">皮肤科</option>   
 							</select>  
 						</td>
 					</tr>
@@ -196,8 +209,26 @@
 						<td><a id="editInfo" href="#" onclick="editCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-pencil',disabled:true">编辑</a> </td>
 						<td><a id="addInfo" href="#" onclick="addCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a> </td>
 					</tr>
-					<tr>
-						
+					<tr style="margin: 30px;">
+						<td>
+							<label for="count">各分支数目：</label>
+						</td>
+					</tr>
+					<tr style="margin: 30px;">
+						<td><span>问诊</span><p id="inquiryCount" name="inquiryCount"></p></td>
+						<td><span>体格检查</span><p id="phyEaxmCount" name="phyEaxmCount"></p></td>
+					</tr>
+					<tr style="margin: 30px;">
+						<td><span>初诊</span><p id="fstVisitCount" name="fstVisitCount"></p></td>
+						<td><span>辅助检查</span><p id="aryEaxmCount" name="aryEaxmCount"></p></td>
+					</tr>
+					<tr style="margin: 30px;">
+						<td><span>确诊</span><p id="diagnoseCount" name="diagnoseCount"></p></td>
+						<td><span>治疗方案</span><p id="treatmentCount" name="treatmentCount"></p></td>
+					</tr>
+					<tr style="margin: 30px;">
+						<td><span>病人管理</span><p id="patManCount" name="patManCount"></p></td>
+						<td></td>
 					</tr>
 				</table>
 			</form>
