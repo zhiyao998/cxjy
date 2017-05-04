@@ -87,7 +87,7 @@ function open(url) {
 	$("body").append(html);
 	$('#'+windowid).window({
 		width : "900",
-		height : "500",
+		height : "700",
 		modal : true,
 		//当window关闭时把这个窗口的代码清除。
 		onClose : function() {

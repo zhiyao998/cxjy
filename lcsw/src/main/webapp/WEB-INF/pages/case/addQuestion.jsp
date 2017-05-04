@@ -7,13 +7,8 @@
 <%@ include file="../../common.jsp"%>
 <script type="text/javascript">
 	function addNewAnswer() {
-		var html = "";
-		var type = $('#accessoryexamType').combobox("getValue");
-		if(type != "2"){
-			html = "<tr><td><input class='easyui-textbox' data-options='required:true'></td><td><input class='easyui-textbox' data-options='required:true'></td><td><input class='easyui-numberbox' style='width:50px;' required='required' data-options='min:-10,max:10,editable:true'></td><td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td><td><input type='hidden'></td></tr>";
-		}else{
-			html = "<tr><td><input class='easyui-textbox' data-options='required:true'></td><td><input class='easyui-filebox' data-options='required:true'></td><td><input class='easyui-numberbox' style='width:50px;' required='required' data-options='min:-10,max:10,editable:true'></td><td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td></tr>";
-		}
+		var html = ""; 
+		html = "<tr><td width='30%'><input class='easyui-textbox' data-options='required:true' style='width: 100%'></td><td width='30%'><input class='easyui-textbox' data-options='required:true' style='width: 100%'></td><td><input class='easyui-numberbox' style='width:40px;' required='required' data-options='min:-10,max:10,editable:true'></td><td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td><td><input type='hidden'></td></tr>";
 		$("#answers").append(html);
 		$.parser.parse("#answers");
 	};
@@ -42,26 +37,21 @@
 			var json = "{";
 			var id = $("#questionId").val();
 			var ftheme = $("#ftheme").combobox("getText");
-			var stheme = $("#stheme").combobox("getValue");
 			var title = escape($("#title").val());
 			var caseid = $("#caseId").val();
-			json += "\"question\":{\"questionId\":\""+ id +"\",\"ftheme\":\""+ ftheme +"\",\"stheme\":\""+ stheme +"\",\"title\":\""+ title + "\",\"caseId\":\""+ caseid  +"\"}";
+			json += "\"question\":{\"questionId\":\""+ id +"\",\"ftheme\":\""+ ftheme +"\",\"title\":\""+ title + "\",\"caseId\":\""+ caseid  +"\"}";
 	 		var trs = $("#answers tr");
 			json += ",\"answers\":[";
 			var flag = true;
 			var length = 0;
 			$(trs).each(function() {
 				var tds = $(this).children();
-				var type = $('#accessoryexamType').combobox("getValue");
-				if(type == "2"){
-					var id = $(tds[4]).children()[0].value;
+				if(length < 3){
+					var id = $(tds[3]).children()[0].value;
 				}else{
-					if(length < 3){
-						var id = $(tds[3]).children()[0].value;
-					}else{
-						var id = $(tds[4]).children()[0].value;
-					}
+					var id = $(tds[4]).children()[0].value;
 				}
+
 				var info = $(tds[0]).children()[0].value;
 				var analysis = $(tds[1]).children()[0].value;
 				var score = $(tds[2]).children()[0].value;
@@ -138,14 +128,6 @@
 				}
 			});	
 		}	
-		$('#accessoryexamType').combobox({
-			onSelect: function(){
-				var type = $('#accessoryexamType').combobox("getValue");
-				if(type == "2"){
-					$("#answers").empty();
-				}			
-			}
-		});
 	});
 </script>
 
@@ -174,16 +156,16 @@
     					<option value="病人管理">病人管理</option>   
 					</select> 
 				</td>
-				<td>
+<!-- 				<td>
 					<label for="stheme">二级主题词：</label>
 				</td>
 				<td>
 					<select id="stheme" name="stheme" class="easyui-combobox" style="width:100px;">
 							<option value="0"></option>
 					</select>
-				</td>
+				</td> -->
 			</tr>
-			<tr id="type">
+<!-- 			<tr id="type">
 				<td>
 					<label for="accessoryexamType">答案类型：</label>
 				</td>
@@ -193,7 +175,7 @@
     					<option value="2">图像</option> 
 					</select>
 				</td>
-			</tr>
+			</tr> -->
 			<tr style="height: 30%;width: 50%">
 				<td>
 					<label for="title">题目：</label>
@@ -203,7 +185,7 @@
 				</td>
 			</tr>
 		</table>
-		<table>
+		<table style="width: 100%;">
 			<thead>
 				<tr>
 					<th>答案选项</th>
@@ -214,22 +196,22 @@
 			</thead>
 			<tbody id="answers">
 				<tr>
-					<td><input id="info0" class='easyui-textbox' data-options='required:true'></td>
-					<td><input id="analysis0" class='easyui-textbox' data-options='required:true'></td>
-					<td><input id="score0" class="easyui-numberbox" style="width:50px;" required="required" data-options="min:-10,max:10,editable:true"></td>
-					<td><input id="id0" type="hidden"></td>
+					<td width="30%"><input id="info0" class='easyui-textbox' data-options='required:true' style="width: 100%"></td>
+					<td width="30%"><input id="analysis0" class='easyui-textbox' data-options='required:true' style="width: 100%"></td>
+					<td width="20%"><input id="score0" class="easyui-numberbox" style="width:40px;" required="required" data-options="min:-10,max:10,editable:true"></td>
+					<td width="20%"><input id="id0" type="hidden"></td>
 				</tr>
 				<tr>
-					<td><input id="info1" class='easyui-textbox' data-options='required:true'></td>
-					<td><input id="analysis1" class='easyui-textbox' data-options='required:true'></td>
-					<td><input id="score1" class="easyui-numberbox" style="width:50px;" required="required" data-options="min:-10,max:10,editable:true"></td>
-					<td><input id="id1" type="hidden"></td>
+					<td width="30%"><input id="info1" class='easyui-textbox' data-options='required:true' style="width: 100%"></td>
+					<td width="30%"><input id="analysis1" class='easyui-textbox' data-options='required:true' style="width: 100%"></td>
+					<td width="20%"><input id="score1" class="easyui-numberbox" style="width:40px;" required="required" data-options="min:-10,max:10,editable:true"></td>
+					<td width="20%"><input id="id1" type="hidden"></td>
 				</tr>
 				<tr>
-					<td><input id="info2" class='easyui-textbox' data-options='required:true'></td>
-					<td><input id="analysis2" class='easyui-textbox' data-options='required:true'></td>
-					<td><input id="score2" class="easyui-numberbox" style="width:50px;" required="required" data-options="min:-10,max:10,editable:true"></td>
-					<td><input id="id2" type="hidden"></td>
+					<td width="30%"><input id="info2" class='easyui-textbox' data-options='required:true' style="width: 100%"></td>
+					<td width="30%"><input id="analysis2" class='easyui-textbox' data-options='required:true' style="width: 100%"></td>
+					<td width="20%"><input id="score2" class="easyui-numberbox" style="width:40px;" required="required" data-options="min:-10,max:10,editable:true"></td>
+					<td width="20%"><input id="id2" type="hidden"></td>
 				</tr>
 			</tbody>
 		</table>

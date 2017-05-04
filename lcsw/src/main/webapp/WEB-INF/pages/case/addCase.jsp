@@ -176,7 +176,7 @@
 						<td colspan="2" style="padding: 10px;">
 							<h2>主诉</h2>
 							<textarea class="easyui-validatebox" name="chiefComplain" id="chiefComplain" style="height: 200px;"></textarea>
-							<div id="showText" style="height: 200px; padding: 20px"></div>
+							<div id="showText" style="height: 200px;"></div>
 						</td>
 					</tr>
 					<tr>
@@ -239,7 +239,6 @@
 					<tr> 
     					<th data-options="field:'title',formatter:showTitle" style="width:22%;">题目简介</th>   
             			<th data-options="field:'ftheme',sortable:true"  style="width:22%;">一级主题词</th>
-            			<th data-options="field:'stheme',sortable:true" style="width: 22%;">二级主题词</th>   
             			<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:22%;">操作</th> 
 					</tr>
 				</thead>

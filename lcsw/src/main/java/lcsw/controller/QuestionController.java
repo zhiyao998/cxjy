@@ -130,9 +130,11 @@ public class QuestionController {
 		if(newCase.getCaseId() == null){
 			caseService.insert(newCase);
 			Integer caseId = newCase.getCaseId();
+			newCase = caseService.selectByPrimaryKey(caseId);
 		}else{
 			caseService.updateByPrimaryKey(newCase);
 			Integer caseId = newCase.getCaseId();
+			newCase = caseService.selectByPrimaryKey(caseId);
 		}
 		map.put("Newcase", newCase);
 		map.put("status", true);
@@ -184,7 +186,7 @@ public class QuestionController {
 		Map<String,Integer> map = new HashMap<String, Integer>();
 		map.put("问诊", c.getInquiryCount());
 		map.put("体格检查", c.getPhyEaxmCount());
-		map.put("初诊", c.getFstVisitCount());
+		map.put("初步诊断", c.getFstVisitCount());
 		map.put("辅助检查", c.getAryEaxmCount());
 		map.put("确诊", c.getDiagnoseCount());
 		map.put("治疗方案", c.getTreatmentCount());
@@ -203,7 +205,7 @@ public class QuestionController {
 		}
 		c.setInquiryCount(map.get("问诊"));
 		c.setAryEaxmCount(map.get("辅助检查"));
-		c.setFstVisitCount(map.get("初诊"));
+		c.setFstVisitCount(map.get("初步诊断"));
 		c.setTreatmentCount(map.get("治疗方案"));
 		c.setDiagnoseCount(map.get("确诊"));
 		c.setPatManCount(map.get("病人管理"));
