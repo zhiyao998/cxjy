@@ -8,7 +8,7 @@
 <script type="text/javascript">
 	function addNewAnswer() {
 		var html = ""; 
-		html = "<tr><td width='30%'><input class='easyui-textbox' data-options='required:true' style='width: 100%'></td><td width='30%'><input class='easyui-textbox' data-options='required:true' style='width: 100%'></td><td><input class='easyui-numberbox' style='width:40px;' required='required' data-options='min:-10,max:10,editable:true'></td><td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td><td><input type='hidden'></td></tr>";
+		html = "<tr><td width='30%'><input class='easyui-textbox' data-options='required:true' style='width: 100%'></td><td width='30%'><input class='easyui-textbox' data-options='required:true' style='width: 100%'></td><td width='20%'><input class='easyui-numberbox' style='width:40px;' required='required' data-options='min:-10,max:10,editable:true'></td><td width='20%'><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td><td><input type='hidden'></td></tr>";
 		$("#answers").append(html);
 		$.parser.parse("#answers");
 	};
@@ -84,6 +84,10 @@
 			    		parent.$("#diagnoseCount").text(c.diagnoseCount);
 			    		parent.$("#treatmentCount").text(c.treatmentCount);
 			    		parent.$("#patManCount").text(c.patManCount);
+			    		parent.$("#panswerTotal").text(c.panswerTotal);
+			    		parent.$("#nanswerTotal").text(c.nanswerTotal);
+			    		parent.$("#zanswerTotal").text(c.zanswerTotal);
+			    		parent.$("#answerTotal").text(c.answerTotal);
 			    		parent.$("#answerList").datagrid('reload');
 				    	parent.$('#${windowid}').window('close');
 			    	}
@@ -108,10 +112,10 @@
 						$("#caseId").val(question.caseId);
 						if(answers.length > 3){
 							for(var i = 3; i < answers.length; i++){
-								html = "<tr><td><input id='info"+ i +"' class='easyui-textbox' data-options='required:true'></td>" + 
-										"<td><input id='analysis" + i + "' class='easyui-textbox' data-options='required:true'></td>" + 
-										"<td><input id='score" + i +"' class='easyui-numberbox' style='width:50px;' required='required' data-options='min:-10,max:10,editable:true'></td>" + 
-										"<td><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td>" + 
+								html = "<tr><td width='30%'><input id='info"+ i +"' class='easyui-textbox' data-options='required:true' style='width: 100%'></td>" + 
+										"<td width='30%'><input id='analysis" + i + "' class='easyui-textbox' data-options='required:true' style='width: 100%'></td>" + 
+										"<td width='20%'><input id='score" + i +"' class='easyui-numberbox' style='width:40px;' required='required' data-options='min:-10,max:10,editable:true'></td>" + 
+										"<td width='20%'><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td>" + 
 										"<td><input id='id" + i + "' type='hidden'></td></tr>";
 								$("#answers").append(html);
 							}

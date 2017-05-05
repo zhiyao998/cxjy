@@ -57,6 +57,18 @@ public class Case implements Serializable{
 	@TableField(value="inquiry_count")
 	private Integer inquiryCount;
 
+	@TableField(value="panswer_total")
+	private Integer panswerTotal;
+	
+	@TableField(value="nanswer_total")
+	private Integer nanswerTotal;
+	
+	@TableField(value="zanswer_total")
+	private Integer zanswerTotal;
+	
+	@TableField(value="answer_total")
+	private Integer answerTotal;
+	
 	public Integer getCaseId() {
 		return caseId;
 	}
@@ -168,6 +180,38 @@ public class Case implements Serializable{
 	public void setInquiryCount(Integer inquiryCount) {
 		this.inquiryCount = inquiryCount;
 	}
+	
+	public Integer getPanswerTotal() {
+		return panswerTotal;
+	}
+
+	public void setPanswerTotal(Integer panswerTotal) {
+		this.panswerTotal = panswerTotal;
+	}
+
+	public Integer getNanswerTotal() {
+		return nanswerTotal;
+	}
+
+	public void setNanswerTotal(Integer nanswerTotal) {
+		this.nanswerTotal = nanswerTotal;
+	}
+
+	public Integer getZanswerTotal() {
+		return zanswerTotal;
+	}
+
+	public void setZanswerTotal(Integer zanswerTotal) {
+		this.zanswerTotal = zanswerTotal;
+	}
+
+	public Integer getAnswerTotal() {
+		return answerTotal;
+	}
+
+	public void setAnswerTotal(Integer answerTotal) {
+		this.answerTotal = answerTotal;
+	}
 
 	@Override
 	public String toString() {
@@ -175,6 +219,10 @@ public class Case implements Serializable{
 				+ ", createTime=" + createTime + ", creater=" + creater + ", caseType=" + caseType + ", titleType="
 				+ titleType + ", phyEaxmCount=" + phyEaxmCount + ", fstVisitCount=" + fstVisitCount + ", aryEaxmCount="
 				+ aryEaxmCount + ", diagnoseCount=" + diagnoseCount + ", treatmentCount=" + treatmentCount
-				+ ", patManCount=" + patManCount + ", inquiryCount=" + inquiryCount + "]";
-	}	
+				+ ", patManCount=" + patManCount + ", inquiryCount=" + inquiryCount + ", panswerTotal=" + panswerTotal
+				+ ", nanswerTotal=" + nanswerTotal + ", zanswerTotal=" + zanswerTotal + ", answerTotal=" + answerTotal
+				+ "]";
+	}
+
+	
 }

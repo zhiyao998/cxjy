@@ -6,7 +6,28 @@
 <title>添加病例</title>
 <%@ include file="../../common.jsp"%>
 <style type="text/css">
+	#questionInfo{
+		font-size: 14px;
+		color: 	black;
+		line-height: 2;
+	}
 	
+	h2{
+		color: red;
+	}
+	
+	#caseInfo{
+		color: black;
+	}
+	
+	#caseInfo td{
+		margin: 20px;
+	}
+	
+	#showText{
+		text-align: center;
+		line-height: 2;
+	}
 		
 </style>
 <script type="text/javascript">
@@ -14,6 +35,7 @@
 		var caseId = $("#caseId").val();
 		if(caseId == null || caseId == ""){
 			$("#center").hide();
+			$("#showText").hide();
 			$('#chiefComplain').ckeditor();
 		}else{
 			$.ajax({
@@ -43,6 +65,10 @@
 			    		$("#diagnoseCount").text(newCase.diagnoseCount);
 			    		$("#treatmentCount").text(newCase.treatmentCount);
 			    		$("#patManCount").text(newCase.patManCount);
+			    		$("#panswerTotal").text(newCase.panswerTotal);
+			    		$("#nanswerTotal").text(newCase.nanswerTotal);
+			    		$("#zanswerTotal").text(newCase.zanswerTotal);
+			    		$("#answerTotal").text(newCase.answerTotal);
 					}
 				}
 			});
@@ -76,6 +102,18 @@
 					'id':id,
 					}, function(data) {
 	 					if (data.status) {
+	 						var newCase = data.newCase;
+				    		$("#inquiryCount").text(newCase.inquiryCount);
+				    		$("#phyEaxmCount").text(newCase.phyEaxmCount);
+				    		$("#fstVisitCount").text(newCase.fstVisitCount);
+				    		$("#aryEaxmCount").text(newCase.aryEaxmCount);
+				    		$("#diagnoseCount").text(newCase.diagnoseCount);
+				    		$("#treatmentCount").text(newCase.treatmentCount);
+				    		$("#patManCount").text(newCase.patManCount);
+				    		$("#panswerTotal").text(newCase.panswerTotal);
+				    		$("#nanswerTotal").text(newCase.nanswerTotal);
+				    		$("#zanswerTotal").text(newCase.zanswerTotal);
+				    		$("#answerTotal").text(newCase.answerTotal);
 							$.messager.alert('系统消息', "删除成功", 'info',
 								function() {
 									$('#answerList').datagrid('reload');
@@ -106,7 +144,6 @@
 									}
 									$("#caseType").combobox("disable");
 									var editor = CKEDITOR.instances.chiefComplain;//chiefComplain是我ckeditor的id
-									editor.setReadOnly(true);
 									editor.destroy();
 									$("#chiefComplain").hide();
 									$("#showText").empty();
@@ -135,7 +172,6 @@
 		if($("#addInfo").linkbutton("options").disabled == true){
 			$("#addInfo").linkbutton("enable");
 			$("#showText").hide();
-			$("#chiefComplain").attr('disabled',false);
 			$('#chiefComplain').ckeditor();
 			$("#editInfo").linkbutton("disable");
 			$("#caseType").combobox("enable");
@@ -159,31 +195,36 @@
 </head>
 <body>
 	<div class="easyui-layout" data-options="fit:true">
-		<div data-options="region:'west',border:true" style="width:35%;height: 100%">
-			<form action="/lcsw/question/addCaseInfo.action" method="post" id="inputForm">
+		<div data-options="region:'west',border:true" style="width:40%;height: 100%;background-color: #C4D8ED;padding: 10px">
+			<form action="/lcsw/question/addCaseInfo.action" method="post" id="inputForm" style="background-color: white;">
 				<input type="hidden" id="caseId" name="caseId" value="${requestScope.caseId }">
 				<input id="creater" type="hidden" name="creater" value="rongyu">
-				<table id="caseInfo" style="text-align: center;width: 100%;margin: 10px;">
+				<div  id="caseInfo">
+				<table style="text-align: center;width: 100%;margin: 10px;">
+					<tr style="padding: 20px">
+						<td>
+							<h2>串题编辑</h2>
+						</td>
+						 <td>
+							<a id="editInfo" href="#" onclick="editCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-pencil',disabled:true">编辑</a> 
+							<a id="addInfo" href="#" onclick="addCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a> 
+						</td>
+					</tr>
 					<tr>
 						<td>
 							<label for="caseTitle">病例名称：</label>
-						</td>
-						<td>
 							<input class="easyui-textbox" data-options="required:true" name="caseTitle" id="caseTitle" style="width:150px;">
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2" style="padding: 10px;">
-							<h2>主诉</h2>
-							<textarea class="easyui-validatebox" name="chiefComplain" id="chiefComplain" style="height: 200px;"></textarea>
-							<div id="showText" style="height: 200px;"></div>
+							<textarea class="easyui-validatebox" name="chiefComplain" id="chiefComplain" style="height: 150px;"></textarea>
+							<div id="showText" style="height: 150px;border: 2px solid red;"></div>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<label for="caseType">病例类型：</label>
-						</td>
-						<td>
 							<select id="caseType" name="caseType" class="easyui-combobox" data-options="required:true" style="width:150px;">
 								<option value="普通科">普通科</option>   
     							<option value="口腔科">口腔科</option>   
@@ -193,59 +234,85 @@
     							<option value="皮肤科">皮肤科</option>   
 							</select>  
 						</td>
-					</tr>
-					<tr>
 						<td>
 							<label for="titleType">题目类型：</label>
-						</td>
-						<td>
 							<select id="titleType" name="titleType" class="easyui-combobox" data-options="required:true" style="width:150px;">
 								<option value="A2">A2</option>   
     							<option value="A3">A3</option>    
 							</select>  
 						</td>
 					</tr>
-					<tr>
-						<td><a id="editInfo" href="#" onclick="editCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-pencil',disabled:true">编辑</a> </td>
-						<td><a id="addInfo" href="#" onclick="addCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a> </td>
-					</tr>
-					<tr style="margin: 30px;">
-						<td>
-							<label for="count">各分支数目：</label>
-						</td>
-					</tr>
-					<tr style="margin: 30px;">
-						<td><span>问诊</span><p id="inquiryCount" name="inquiryCount"></p></td>
-						<td><span>体格检查</span><p id="phyEaxmCount" name="phyEaxmCount"></p></td>
-					</tr>
-					<tr style="margin: 30px;">
-						<td><span>初诊</span><p id="fstVisitCount" name="fstVisitCount"></p></td>
-						<td><span>辅助检查</span><p id="aryEaxmCount" name="aryEaxmCount"></p></td>
-					</tr>
-					<tr style="margin: 30px;">
-						<td><span>确诊</span><p id="diagnoseCount" name="diagnoseCount"></p></td>
-						<td><span>治疗方案</span><p id="treatmentCount" name="treatmentCount"></p></td>
-					</tr>
-					<tr style="margin: 30px;">
-						<td><span>病人管理</span><p id="patManCount" name="patManCount"></p></td>
-						<td></td>
-					</tr>
 				</table>
+				</div>
+				<div id="questionInfo">
+					<h2>串题信息</h2>
+					<table style="border: 2px solid red;width: 100%">
+						<tr>
+							<td colspan="4">
+								<h3>各分支数目：</h3>
+							</td>
+						</tr>
+						<tr>
+							<td width="25%">
+								问诊:<p id="inquiryCount" name="inquiryCount" style="display: inline;"></p>题
+							</td>
+							<td  width="25%">
+								体格检查:<p id="phyEaxmCount" name="phyEaxmCount" style="display: inline;"></p>题
+							</td>
+							<td width="25%">
+								初步诊断:<p id="fstVisitCount" name="fstVisitCount" style="display: inline;"></p>题
+							</td>
+							<td width="25%">
+								辅助检查:<p id="aryEaxmCount" name="aryEaxmCount" style="display: inline;"></p>题
+							</td>
+						</tr>
+						<tr>
+							<td>
+								确诊:<p id="diagnoseCount" name="diagnoseCount" style="display: inline;"></p>题
+							</td>
+							<td>
+								治疗方案:<p id="treatmentCount" name="treatmentCount" style="display: inline;"></p>题
+							</td>
+							<td>
+								病人管理:<p id="patManCount" name="patManCount" style="display: inline;"></p>题
+							</td>
+						</tr>
+						<tr>
+							<td><h3>分支选项信息</h3></td>
+						</tr>
+						<tr>
+							<td>正确选项总数:<p id="panswerTotal" name="panswerTotal" style="display: inline;"></p>个</td>
+							<td>错误选项总数:<p id="nanswerTotal" name="nanswerTotal" style="display: inline;"></p>个</td>
+							<td>无关选项总数:<p id="zanswerTotal" name="zanswerTotal" style="display: inline;"></p>个</td>
+							<td>选项总数:<p id="answerTotal" name="answerTotal" style="display: inline;"></p>个</td>
+						</tr>
+					</table>
+				</div>
 			</form>
+
 		</div>
-		<div id="center" data-options="region:'center',border:false" style="padding: 10px;height: 100%">
+		<div id="center" data-options="region:'center',border:false">
+		<div class="easyui-layout" data-options="fit:true">
+			<div id="center" data-options="region:'center',border:false">
 			<table id="answerList" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,toolbar:toolbar,pagination:true,fit:true,remoteSort:true" style="width:100%;">
 				<thead>
 					<tr> 
-    					<th data-options="field:'title',formatter:showTitle" style="width:22%;">题目简介</th>   
-            			<th data-options="field:'ftheme',sortable:true"  style="width:22%;">一级主题词</th>
-            			<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:22%;">操作</th> 
+    					<th data-options="field:'title',formatter:showTitle" style="width:13%;">题目简介</th>   
+            			<th data-options="field:'ftheme',sortable:true"  style="width:13%;">一级主题词</th>
+            			<th data-options="field:'pscoreCount'"  style="width:10%;">正确选项数目</th>
+            			<th data-options="field:'pscoreTotal'"  style="width:10%;">正确选项总分</th>
+            			<th data-options="field:'nscoreCount'" style="width:10%;">错误选项数目</th>
+            			<th data-options="field:'nscoreTotal'"  style="width:10%;">错误选项总分</th>
+            			<th data-options="field:'zscoreCount'"  style="width:10%;">无关选项数目</th>
+            			<th data-options="field:'answersTotal'"  style="width:10%;">选项总数目</th>
+            			<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:13%;">操作</th> 
 					</tr>
 				</thead>
 				<tbody  id="questions">
 						
 				</tbody>
 			</table>
+		</div>
 	<script type="text/javascript">
 		var toolbar = [{
 			text:'新增分支',
@@ -255,10 +322,11 @@
 			}
 		}];
 	</script>
-		</div>
-		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; padding: 5px; background-color: #e0e8f5">
+		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; background-color: #e0e8f5">
 			<a id="close" href="#" onclick="back();" class="easyui-linkbutton " data-options="iconCls:'fa-arrow-left'">返回</a>  
 		</div>
+	</div>
+	</div>
 	</div>
 </body>
 </html>

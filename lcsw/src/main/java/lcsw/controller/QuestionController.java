@@ -81,6 +81,12 @@ public class QuestionController {
 		Case c = new Case();
 		Question question = questionItem.getQuestion();
 		String a = question.getAnswers();
+		Integer pscoreCount = 0;
+		Integer pscoreTotal = 0;
+		Integer nscoreCount = 0;
+		Integer nscoreTotal = 0;
+		Integer zscoreCount = 0;
+		boolean newQuestion = true;
 		List<Answer> answers = questionItem.getAnswers();
 		if(question.getQuestionId() == null || question.getQuestionId().equals("")){
 			questionService.insert(question);
@@ -90,29 +96,66 @@ public class QuestionController {
 			String oldFtheme = questionService.selectFtheme(question.getQuestionId());
 			questionService.updateByPrimaryKey(question);
 			c = updateCaseCount(question,oldFtheme);
+			newQuestion = false;
 		}
+		question = questionService.selectByPrimaryKey(question.getQuestionId());
+		Integer pscoreCountSum = c.getPanswerTotal();
+		Integer nscoreCountSum = c.getNanswerTotal();
+		Integer zscoreCountSum = c.getZanswerTotal();
+		Integer answerTotal = c.getAnswerTotal();
 		for(int i = 0; i < answers.size(); i++){
+			Answer answer = answers.get(i);
 			if(i == 0){
-				if(answers.get(i).getAnswerId() == null || answers.get(i).getAnswerId().equals("")){
-					answerService.insert(answers.get(i));
+				if(answer.getAnswerId() == null || answer.getAnswerId().equals("")){
+					answerService.insert(answer);
 				}else{
-					answerService.updateByPrimaryKey(answers.get(i));
+					answerService.updateByPrimaryKey(answer);
 				}
-				a = "" + answers.get(i).getAnswerId();
+				a = "" + answer.getAnswerId();
 			}else{
-				if(answers.get(i).getAnswerId() == null || answers.get(i).getAnswerId().equals("")){
-					answerService.insert(answers.get(i));
+				if(answer.getAnswerId() == null || answer.getAnswerId().equals("")){
+					answerService.insert(answer);
 				}else{
-					answerService.updateByPrimaryKey(answers.get(i));
+					answerService.updateByPrimaryKey(answer);
 				}
-				a += "," + answers.get(i).getAnswerId();
+				a += "," + answer.getAnswerId();
 			}
+			if(answer.getScore() > 0){
+				pscoreCount++;
+				pscoreTotal += answer.getScore();
+			}else if(answer.getScore() == 0){
+				zscoreCount++;
+			}else{
+				nscoreCount++;
+				nscoreTotal += answer.getScore();
+			}
+		}
+		if(newQuestion){
+			c.setAnswerTotal(answerTotal + answers.size());
+			c.setPanswerTotal(pscoreCountSum + pscoreCount);
+			c.setNanswerTotal(nscoreCountSum + nscoreCount);
+			c.setZanswerTotal(zscoreCountSum + zscoreCount); 
+		}else{
+			answerTotal = answerTotal + answers.size() - question.getAnswersTotal();
+			c.setAnswerTotal(answerTotal);
+			pscoreCountSum = pscoreCountSum + pscoreCount - question.getPscoreCount();
+			c.setPanswerTotal(pscoreCountSum);
+			nscoreCountSum = nscoreCountSum + nscoreCount - question.getNscoreCount();
+			c.setNanswerTotal(nscoreCountSum);
+			zscoreCountSum = zscoreCountSum + zscoreCount - question.getZscoreCount();
+			c.setZanswerTotal(zscoreCountSum);
 		}
 		if(a != null){
 			question.setAnswers(a);
+			question.setNscoreCount(nscoreCount);
+			question.setNscoreTotal(nscoreTotal);
+			question.setPscoreCount(pscoreCount);
+			question.setPscoreTotal(pscoreTotal);
+			question.setZscoreCount(zscoreCount);
+			question.setAnswersTotal(answers.size());
 			questionService.updateByPrimaryKey(question);
 		}
-		
+		caseService.updateByPrimaryKey(c);
 		System.out.println(answers);
 		System.out.println(question);
 		
@@ -147,8 +190,48 @@ public class QuestionController {
 		Map map = new HashMap<String,Object>();
 		List<Integer> list = new ArrayList<Integer>();
 		String questionId = request.getParameter("id");
-		list.add(Integer.parseInt(questionId));
+		Integer count = 0;
+		Integer id = Integer.parseInt(questionId);
+		list.add(id);
+		Question question = questionService.selectByPrimaryKey(id);
+		Case case1 = caseService.selectByPrimaryKey(question.getCaseId());
 		questionService.deleteByPrimaryKey(list);
+		switch (question.getFtheme()) {
+		case "问诊":
+			count = case1.getInquiryCount();
+		    case1.setInquiryCount(count-1);
+			break;
+		case "体格检查":
+			count = case1.getPhyEaxmCount();
+			case1.setPhyEaxmCount(count-1);
+			break;
+		case "初步诊断":
+			count = case1.getFstVisitCount();
+			case1.setFstVisitCount(count-1);
+			break;
+		case "辅助检查":
+			count = case1.getAryEaxmCount();
+			case1.setAryEaxmCount(count-1);
+			break;
+		case "确诊":
+			count = case1.getDiagnoseCount();
+			case1.setDiagnoseCount(count-1);
+			break;
+		case "治疗方案":
+			count = case1.getTreatmentCount();
+			case1.setTreatmentCount(count-1);   
+			break;
+		default:
+			count = case1.getPatManCount();
+			case1.setPatManCount(count-1);
+			break;
+		}
+		case1.setPanswerTotal(case1.getPanswerTotal() - question.getPscoreCount());
+		case1.setNanswerTotal(case1.getNanswerTotal() - question.getNscoreCount());
+		case1.setZanswerTotal(case1.getZanswerTotal() - question.getZscoreCount());
+		case1.setAnswerTotal(case1.getAnswerTotal() - question.getAnswersTotal());
+		caseService.updateByPrimaryKey(case1);
+		map.put("newCase", case1);
 		map.put("status", true);
 		return map;
 	}
@@ -210,7 +293,6 @@ public class QuestionController {
 		c.setDiagnoseCount(map.get("确诊"));
 		c.setPatManCount(map.get("病人管理"));
 		c.setPhyEaxmCount(map.get("体格检查"));
-		caseService.updateByPrimaryKey(c);
 		return c;
 	}
 	

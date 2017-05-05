@@ -3,7 +3,6 @@ package lcsw.domain;
 public class QuestionType {
 
 	private String ftheme;
-	private String stheme;
 	private Integer count2;
 	private Integer count3;
 	
@@ -12,12 +11,6 @@ public class QuestionType {
 	}
 	public void setFtheme(String ftheme) {
 		this.ftheme = ftheme;
-	}
-	public String getStheme() {
-		return stheme;
-	}
-	public void setStheme(String stheme) {
-		this.stheme = stheme;
 	}
 	public Integer getCount2() {
 		return count2;
