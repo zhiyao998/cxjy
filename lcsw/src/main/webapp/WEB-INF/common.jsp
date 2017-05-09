@@ -43,6 +43,28 @@ function addtab(title,url) {
 	if(chiose){
 		$('#tabs').tabs("select",title);
 	}else{
+		$('#tabs').tabs({
+            onSelect: function(title,index) {
+				if(title == "病例列表"){
+					var tab = $('#tabs').tabs('getSelected');
+					$('#tabs').tabs('update', {
+						tab: tab,
+						options: {
+							content: createFrame("/lcsw/case/management.action") // 新内容的URL
+						}
+					});
+				}
+				if(title == "结构化组卷"){
+					var tab = $('#tabs').tabs('getSelected');
+					$('#tabs').tabs('update', {
+						tab: tab,
+						options: {
+							content: createFrame("/lcsw/TestPaperGen/findAllCase.action") // 新内容的URL
+						}
+					});
+				}
+			}
+		});
 		// 在用户点击的时候提示
 	       $('#tabs').tabs('add', {
 	            title: title,
@@ -86,7 +108,7 @@ function open(url) {
 			+ url + '" ></iframe></div>';
 	$("body").append(html);
 	$('#'+windowid).window({
-		width : "900",
+		width : "1200",
 		height : "700",
 		modal : true,
 		//当window关闭时把这个窗口的代码清除。

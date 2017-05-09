@@ -14,7 +14,6 @@ import com.baomidou.mybatisplus.plugins.Page;
 
 import lcsw.domain.Case;
 import lcsw.domain.Question;
-import lcsw.domain.QuestionType;
 import lcsw.mapper.AnswerMapper;
 import lcsw.mapper.QuestionMapper;
 import lcsw.service.QuestionService;
@@ -78,21 +77,6 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public int updateByPrimaryKey(Question record) {
 		return qusetionMapper.updateById(record);
-	}
-
-	@Override
-	public List<QuestionType> selectCountByThemeAndType() {
-		List<QuestionType> questionTypes = new ArrayList<QuestionType>();
-		String ftheme[] = {"问诊","体格检查","初步诊断","辅助检查","确诊","治疗方案","病人管理"};
-		
-		for(int i = 0 ; i < ftheme.length; i++){
-			QuestionType questionType = new QuestionType();
-			questionType.setFtheme(ftheme[i]);
-			questionType.setCount2(qusetionMapper.selectCountByThemeAndType("A2", ftheme[i]));
-			questionType.setCount3(qusetionMapper.selectCountByThemeAndType("A3", ftheme[i]));
-			questionTypes.add(questionType);
-		}
-		return questionTypes;
 	}
 
 	@Override

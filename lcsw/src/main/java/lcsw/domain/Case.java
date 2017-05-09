@@ -37,13 +37,13 @@ public class Case implements Serializable{
 	private String titleType;
 	
 	@TableField(value="phy_exam_count")
-	private Integer phyEaxmCount;
+	private Integer phyExamCount;
 	
 	@TableField(value="fst_visit_count")
 	private Integer fstVisitCount;
 	
 	@TableField(value="ary_exam_count")
-	private Integer aryEaxmCount;
+	private Integer aryExamCount;
 	
 	@TableField(value="diagnose_count")
 	private Integer diagnoseCount;
@@ -68,6 +68,9 @@ public class Case implements Serializable{
 	
 	@TableField(value="answer_total")
 	private Integer answerTotal;
+	
+	@TableField(value="total_count")
+	private Integer totalCount;
 	
 	public Integer getCaseId() {
 		return caseId;
@@ -125,13 +128,6 @@ public class Case implements Serializable{
 		this.caseTitle = caseTitle;
 	}
 
-	public Integer getPhyEaxmCount() {
-		return phyEaxmCount;
-	}
-
-	public void setPhyEaxmCount(Integer phyEaxmCount) {
-		this.phyEaxmCount = phyEaxmCount;
-	}
 
 	public Integer getFstVisitCount() {
 		return fstVisitCount;
@@ -139,14 +135,6 @@ public class Case implements Serializable{
 
 	public void setFstVisitCount(Integer fstVisitCount) {
 		this.fstVisitCount = fstVisitCount;
-	}
-
-	public Integer getAryEaxmCount() {
-		return aryEaxmCount;
-	}
-
-	public void setAryEaxmCount(Integer aryEaxmCount) {
-		this.aryEaxmCount = aryEaxmCount;
 	}
 
 	public Integer getDiagnoseCount() {
@@ -181,6 +169,14 @@ public class Case implements Serializable{
 		this.inquiryCount = inquiryCount;
 	}
 	
+	public Integer getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
+	}
+
 	public Integer getPanswerTotal() {
 		return panswerTotal;
 	}
@@ -213,16 +209,31 @@ public class Case implements Serializable{
 		this.answerTotal = answerTotal;
 	}
 
+	public Integer getPhyExamCount() {
+		return phyExamCount;
+	}
+
+	public void setPhyExamCount(Integer phyExamCount) {
+		this.phyExamCount = phyExamCount;
+	}
+
+	public Integer getAryExamCount() {
+		return aryExamCount;
+	}
+
+	public void setAryExamCount(Integer aryExamCount) {
+		this.aryExamCount = aryExamCount;
+	}
+
 	@Override
 	public String toString() {
 		return "Case [caseId=" + caseId + ", caseTitle=" + caseTitle + ", chiefComplain=" + chiefComplain
 				+ ", createTime=" + createTime + ", creater=" + creater + ", caseType=" + caseType + ", titleType="
-				+ titleType + ", phyEaxmCount=" + phyEaxmCount + ", fstVisitCount=" + fstVisitCount + ", aryEaxmCount="
-				+ aryEaxmCount + ", diagnoseCount=" + diagnoseCount + ", treatmentCount=" + treatmentCount
+				+ titleType + ", phyExamCount=" + phyExamCount + ", fstVisitCount=" + fstVisitCount + ", aryExamCount="
+				+ aryExamCount + ", diagnoseCount=" + diagnoseCount + ", treatmentCount=" + treatmentCount
 				+ ", patManCount=" + patManCount + ", inquiryCount=" + inquiryCount + ", panswerTotal=" + panswerTotal
 				+ ", nanswerTotal=" + nanswerTotal + ", zanswerTotal=" + zanswerTotal + ", answerTotal=" + answerTotal
-				+ "]";
+				+ ", totalCount=" + totalCount + "]";
 	}
-
 	
 }

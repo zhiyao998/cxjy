@@ -59,12 +59,13 @@
 						$("#addInfo").linkbutton("disable");
 						$("#caseTitle").textbox("disable");
 			    		$("#inquiryCount").text(newCase.inquiryCount);
-			    		$("#phyEaxmCount").text(newCase.phyEaxmCount);
+			    		$("#phyExamCount").text(newCase.phyExamCount);
 			    		$("#fstVisitCount").text(newCase.fstVisitCount);
-			    		$("#aryEaxmCount").text(newCase.aryEaxmCount);
+			    		$("#aryExamCount").text(newCase.aryExamCount);
 			    		$("#diagnoseCount").text(newCase.diagnoseCount);
 			    		$("#treatmentCount").text(newCase.treatmentCount);
 			    		$("#patManCount").text(newCase.patManCount);
+			    		$("#totalCount").text(newCase.totalCount);
 			    		$("#panswerTotal").text(newCase.panswerTotal);
 			    		$("#nanswerTotal").text(newCase.nanswerTotal);
 			    		$("#zanswerTotal").text(newCase.zanswerTotal);
@@ -104,12 +105,13 @@
 	 					if (data.status) {
 	 						var newCase = data.newCase;
 				    		$("#inquiryCount").text(newCase.inquiryCount);
-				    		$("#phyEaxmCount").text(newCase.phyEaxmCount);
+				    		$("#phyExamCount").text(newCase.phyExamCount);
 				    		$("#fstVisitCount").text(newCase.fstVisitCount);
-				    		$("#aryEaxmCount").text(newCase.aryEaxmCount);
+				    		$("#aryExamCount").text(newCase.aryExamCount);
 				    		$("#diagnoseCount").text(newCase.diagnoseCount);
 				    		$("#treatmentCount").text(newCase.treatmentCount);
 				    		$("#patManCount").text(newCase.patManCount);
+				    		$("#totalCount").text(newCase.totalCount);
 				    		$("#panswerTotal").text(newCase.panswerTotal);
 				    		$("#nanswerTotal").text(newCase.nanswerTotal);
 				    		$("#zanswerTotal").text(newCase.zanswerTotal);
@@ -155,12 +157,13 @@
 									$("#caseTitle").textbox("disable");
 								}
 					    		$("#inquiryCount").text(newCase.inquiryCount);
-					    		$("#phyEaxmCount").text(newCase.phyEaxmCount);
+					    		$("#phyExamCount").text(newCase.phyExamCount);
 					    		$("#fstVisitCount").text(newCase.fstVisitCount);
-					    		$("#aryEaxmCount").text(newCase.aryEaxmCount);
+					    		$("#aryExamCount").text(newCase.aryExamCount);
 					    		$("#diagnoseCount").text(newCase.diagnoseCount);
 					    		$("#treatmentCount").text(newCase.treatmentCount);
 					    		$("#patManCount").text(newCase.patManCount);
+					    		$("#totalCount").text(newCase.totalCount);
 						}
 					}, "json");
 				}
@@ -175,7 +178,6 @@
 			$('#chiefComplain').ckeditor();
 			$("#editInfo").linkbutton("disable");
 			$("#caseType").combobox("enable");
-			$("#titleType").combobox("enable");
 			$("#caseTitle").textbox("enable");
 		}
 	}
@@ -200,10 +202,10 @@
 				<input type="hidden" id="caseId" name="caseId" value="${requestScope.caseId }">
 				<input id="creater" type="hidden" name="creater" value="rongyu">
 				<div  id="caseInfo">
-				<table style="text-align: center;width: 100%;margin: 10px;">
+				<table style="text-align: center;width: 100%;margin: 10px;padding: 10px;">
 					<tr style="padding: 20px">
 						<td>
-							<h2>串题编辑</h2>
+							<h2>串题主干编辑</h2>
 						</td>
 						 <td>
 							<a id="editInfo" href="#" onclick="editCaseInfo()" class="easyui-linkbutton" data-options="iconCls:'fa-pencil',disabled:true">编辑</a> 
@@ -257,13 +259,13 @@
 								问诊:<p id="inquiryCount" name="inquiryCount" style="display: inline;"></p>题
 							</td>
 							<td  width="25%">
-								体格检查:<p id="phyEaxmCount" name="phyEaxmCount" style="display: inline;"></p>题
+								体格检查:<p id="phyExamCount" name="phyExamCount" style="display: inline;"></p>题
 							</td>
 							<td width="25%">
 								初步诊断:<p id="fstVisitCount" name="fstVisitCount" style="display: inline;"></p>题
 							</td>
 							<td width="25%">
-								辅助检查:<p id="aryEaxmCount" name="aryEaxmCount" style="display: inline;"></p>题
+								辅助检查:<p id="aryExamCount" name="aryExamCount" style="display: inline;"></p>题
 							</td>
 						</tr>
 						<tr>
@@ -275,6 +277,9 @@
 							</td>
 							<td>
 								病人管理:<p id="patManCount" name="patManCount" style="display: inline;"></p>题
+							</td>
+							<td>
+								总计:<p id="totalCount" name="totalCount" style="display: inline;"></p>题
 							</td>
 						</tr>
 						<tr>

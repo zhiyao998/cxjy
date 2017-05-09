@@ -9,13 +9,16 @@
 <body>
 		<table id="grid" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,url:'/lcsw/case/list.action',toolbar:toolbar,pagination:true,fit:true,remoteSort:true" style="width:100%;">
     		<thead>
-    			<th data-options="field:'caseId',checkbox:true"">病例id</th>   
-    			<th data-options="field:'caseTitle',sortable:true" style="width:16%;">病例名称</th>
-    			<th data-options="field:'caseType'" style="width:16%;">病例类型</th>     
-            	<th data-options="field:'createTime',sortable:true"  style="width:16%;">创建时间</th>   
-            	<th data-options="field:'creater'"  style="width:16%;">创建人</th> 
-            	<th data-options="field:'titleType',sortable:true" style="width:16%;">题目类型</th>
-            	<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:16%;">操作</th> 
+    			<tr>
+    				<th data-options="field:'caseId',checkbox:true"">病例id</th>   
+    				<th data-options="field:'caseTitle',sortable:true" style="width:14%;">病例名称</th>
+    				<th data-options="field:'caseType'" style="width:14%;">病例类型</th>     
+            		<th data-options="field:'createTime',sortable:true"  style="width:14%;">创建时间</th>   
+            		<th data-options="field:'creater'"  style="width:14%;">创建人</th> 
+            		<th data-options="field:'titleType',sortable:true" style="width:14%;">题目类型</th>
+            		<th data-options="field:'totalCount',sortable:true" style="width:14%;">分支数目</th>
+            		<th data-options="field:'opt',formatter:formatOpt,align:'center'"  style="width:14%;">操作</th> 
+    			</tr>
     		</thead>
     	</table>
     <script type="text/javascript">

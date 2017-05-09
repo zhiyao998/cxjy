@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import lcsw.domain.Case;
 import lcsw.domain.Question;
 import lcsw.domain.QuestionCount;
-import lcsw.domain.QuestionType;
 import lcsw.service.CaseService;
 import lcsw.service.QuestionService;
 
@@ -48,11 +47,11 @@ public class TestPaperGenController {
 			Map<String,Integer> fthemeMap = (Map<String, Integer>) typeMap.get(c.getCaseType());
 			int count = fthemeMap.get("问诊") + c.getInquiryCount();
 			fthemeMap.put("问诊", count);
-			count = fthemeMap.get("体格检查") + c.getPhyEaxmCount();
+			count = fthemeMap.get("体格检查") + c.getPhyExamCount();
 			fthemeMap.put("体格检查", count);
 			count = fthemeMap.get("初步诊断") + c.getFstVisitCount();
 			fthemeMap.put("初步诊断", count);
-			count = fthemeMap.get("辅助检查") + c.getAryEaxmCount();
+			count = fthemeMap.get("辅助检查") + c.getAryExamCount();
 			fthemeMap.put("辅助检查", count);
 			count = fthemeMap.get("确诊") + c.getDiagnoseCount();
 			fthemeMap.put("确诊", count);
@@ -67,22 +66,15 @@ public class TestPaperGenController {
 		return "/TestPaperGen/countList";
 	}
 	
-	@RequestMapping(value="/getCount")
-	@ResponseBody
-	public Map getCount(HttpServletRequest request,HttpServletResponse response){
-		Map<String,Object> map = new HashMap<String,Object>();
-		List<QuestionType> list = qService.selectCountByThemeAndType();	
-		map.put("rows", list);
-		return map;
-	}
-	
 	@RequestMapping(value="/genTestPaper")
-	public String genTestPaer(HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public Map genTestPaer(HttpServletRequest request,HttpServletResponse response,@RequestBody List<QuestionCount> questionCounts){
 		Map<String,Object> map = new HashMap<String,Object>();
-		String ids = request.getParameter("ids");
-		System.out.println(ids);
-		map.put("ids", ids);
-		return "/TestPaperGen/showTestPaperInfo";
+		System.out.println(questionCounts);
+		
+		map.put("status", true);
+		map.put("url", "/TestPaperGen/showTestPaperInfo.action");
+		return map;
 	}
 	
 }

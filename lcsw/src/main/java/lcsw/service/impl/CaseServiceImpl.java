@@ -37,7 +37,8 @@ public class CaseServiceImpl implements CaseService {
 
 	@Override
 	public Page<Case> selectCaseList(Page<Case> page, Integer state) {
-	    page.setRecords(caseMapper.selectCaseList(page, state));
+		List<Case> cases = caseMapper.selectCaseList(page, state);
+	    page.setRecords(cases);
 	    return page;
 	}
 	
@@ -48,7 +49,7 @@ public class CaseServiceImpl implements CaseService {
 
 	@Override
 	public List<Case> selectAll() {
-		return caseMapper.selectList(new EntityWrapper<Case>());
+		return caseMapper.selectList(new EntityWrapper<Case>().eq("title_type", "A3"));
 	}
 
 }

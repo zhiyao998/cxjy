@@ -6,7 +6,6 @@ import java.util.Map;
 import com.baomidou.mybatisplus.plugins.Page;
 
 import lcsw.domain.Question;
-import lcsw.domain.QuestionType;
 
 public interface QuestionService {
 	
@@ -23,8 +22,6 @@ public interface QuestionService {
     List<Question> selectByCase(Integer id);
     
     Map<String,Integer> selectQuestionCountByCase(Integer id);
-    
-    List<QuestionType> selectCountByThemeAndType();
 
     int updateByPrimaryKey(Question record);
 	

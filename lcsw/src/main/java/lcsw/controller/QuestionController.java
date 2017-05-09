@@ -1,5 +1,7 @@
 package lcsw.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.plugins.Page;
 
@@ -26,6 +30,7 @@ import lcsw.domain.QuestionItem;
 import lcsw.service.AnswerService;
 import lcsw.service.CaseService;
 import lcsw.service.QuestionService;
+import lcsw.util.upload.FileUpload;
 
 @Controller
 @RequestMapping(value="/question")
@@ -202,16 +207,16 @@ public class QuestionController {
 		    case1.setInquiryCount(count-1);
 			break;
 		case "体格检查":
-			count = case1.getPhyEaxmCount();
-			case1.setPhyEaxmCount(count-1);
+			count = case1.getPhyExamCount();
+			case1.setPhyExamCount(count-1);
 			break;
 		case "初步诊断":
 			count = case1.getFstVisitCount();
 			case1.setFstVisitCount(count-1);
 			break;
 		case "辅助检查":
-			count = case1.getAryEaxmCount();
-			case1.setAryEaxmCount(count-1);
+			count = case1.getAryExamCount();
+			case1.setAryExamCount(count-1);
 			break;
 		case "确诊":
 			count = case1.getDiagnoseCount();
@@ -264,13 +269,23 @@ public class QuestionController {
 		return map;
 	}
 	
+	@RequestMapping(value="/addImage")
+	public void addImage(HttpServletRequest request,HttpServletResponse response,@RequestParam("upload") MultipartFile file){
+		String path = FileUpload.uploadFile(file, request);
+		try {
+			ckeditor(request, response, path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private Case updateCaseCount(Question question,String oldFtheme){
 		Case c = caseService.selectByPrimaryKey(question.getCaseId());
 		Map<String,Integer> map = new HashMap<String, Integer>();
 		map.put("问诊", c.getInquiryCount());
-		map.put("体格检查", c.getPhyEaxmCount());
+		map.put("体格检查", c.getPhyExamCount());
 		map.put("初步诊断", c.getFstVisitCount());
-		map.put("辅助检查", c.getAryEaxmCount());
+		map.put("辅助检查", c.getAryExamCount());
 		map.put("确诊", c.getDiagnoseCount());
 		map.put("治疗方案", c.getTreatmentCount());
 		map.put("病人管理", c.getPatManCount());
@@ -287,13 +302,37 @@ public class QuestionController {
 			}
 		}
 		c.setInquiryCount(map.get("问诊"));
-		c.setAryEaxmCount(map.get("辅助检查"));
+		c.setAryExamCount(map.get("辅助检查"));
 		c.setFstVisitCount(map.get("初步诊断"));
 		c.setTreatmentCount(map.get("治疗方案"));
 		c.setDiagnoseCount(map.get("确诊"));
 		c.setPatManCount(map.get("病人管理"));
-		c.setPhyEaxmCount(map.get("体格检查"));
+		c.setPhyExamCount(map.get("体格检查"));
+		c.setTotalCount(map.get("问诊") + map.get("辅助检查") + map.get("初步诊断") + map.get("治疗方案") + map.get("确诊") + map.get("病人管理") + map.get("体格检查"));
 		return c;
 	}
+	
+	   /**
+     * ckeditor文件上传功能，回调，传回图片路径，实现预览效果。
+     * 
+     * @Title ckeditor
+     * @param request
+     * @param response
+     * @param DirectoryName
+     *            文件上传目录：比如upload(无需带前面的/) upload/..
+     * @throws IOException
+     */
+    public static void ckeditor(HttpServletRequest request, HttpServletResponse response, String imageContextPath)
+            throws IOException {
+        // 结合ckeditor功能
+        response.setContentType("text/html;charset=UTF-8");
+        String callback = request.getParameter("CKEditorFuncNum");
+        PrintWriter out = response.getWriter();
+        out.println("<script type=\"text/javascript\">");
+        out.println("window.parent.CKEDITOR.tools.callFunction(" + callback + ",'" + imageContextPath + "',''" + ")");
+        out.println("</script>");
+        out.flush();
+        out.close();
+    }
 	
 }
