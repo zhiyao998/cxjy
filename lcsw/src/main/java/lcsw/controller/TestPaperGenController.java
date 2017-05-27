@@ -1,6 +1,7 @@
 package lcsw.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,15 +10,22 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import lcsw.domain.Answer;
+import lcsw.domain.AverageCount;
 import lcsw.domain.Case;
+import lcsw.domain.Paper;
 import lcsw.domain.Question;
 import lcsw.domain.QuestionCount;
+import lcsw.service.AnswerService;
 import lcsw.service.CaseService;
+import lcsw.service.PaperService;
 import lcsw.service.QuestionService;
 
 
@@ -29,6 +37,10 @@ public class TestPaperGenController {
 	private QuestionService qService;
 	@Resource
 	private CaseService caseService;
+	@Resource
+	private PaperService paperService;
+	@Autowired
+	private AnswerService answerService;
 	
 	@RequestMapping(value="/findAllCase")
 	public String findAllCase(HttpServletRequest request,HttpServletResponse response){
@@ -67,14 +79,49 @@ public class TestPaperGenController {
 	}
 	
 	@RequestMapping(value="/genTestPaper")
-	@ResponseBody
-	public Map genTestPaer(HttpServletRequest request,HttpServletResponse response,@RequestBody List<QuestionCount> questionCounts){
+	public String genTestPaer(HttpServletRequest request,HttpServletResponse response,@RequestParam(value="ids") String ids){
 		Map<String,Object> map = new HashMap<String,Object>();
-		System.out.println(questionCounts);
+		System.out.println(ids);
+		request.getSession().setAttribute("ids", ids);
+		return "/TestPaperGen/showTestPaperInfo";
+	}
+	
+	@RequestMapping(value="/showTestPaperInfo")
+	@ResponseBody
+	public String showTestPaperInfo(HttpServletRequest request,HttpServletResponse response){
 		
-		map.put("status", true);
-		map.put("url", "/TestPaperGen/showTestPaperInfo.action");
+		return "/TestPaperGen/showTestPaperInfo";
+	}
+	
+	@RequestMapping(value="getCaseList")
+	@ResponseBody
+	public Map getCaseList(HttpServletRequest request,HttpServletResponse response){
+		Map<String,Object> map = new HashMap<String,Object>();
+		String ids = (String) request.getSession().getAttribute("ids");
+		String id[] = ids.split(",");
+		List<Integer> idsList = new ArrayList<Integer>();
+		List<Case> caseList = new ArrayList<Case>();
+ 		for(String s: id){
+			idsList.add(Integer.parseInt(s));
+		}
+ 		caseList = caseService.selectCaseByIds(idsList);
+		map.put("total", caseList.size());
+		map.put("rows", caseList);
 		return map;
 	}
 	
+	@RequestMapping(value="findQuestionById")
+	@ResponseBody
+	public Map findQuestionById(HttpServletRequest request,HttpServletResponse response){
+		Map<String,Object> map = new HashMap<String,Object>();
+		String s[] = request.getParameter("answers").split(",");
+		List<Answer> answers = new ArrayList<Answer>();
+		for(int i = 0; i < s.length; i++){
+			Answer a = answerService.selectByPrimaryKey(Integer.valueOf(s[i]));
+			answers.add(a);
+		}
+		map.put("answers", answers);
+		map.put("status", true);
+		return map;
+	}
 }

@@ -12,6 +12,8 @@ public interface CaseService {
 	
 	public Page<Case> selectCaseList(Page<Case> page, Integer state);
 	
+	public List<Case> selectCaseByIds(List<Integer> ids);
+	
 	public List<Case> selectAll();
 	
 	public int updateByPrimaryKey(Case record);
@@ -19,5 +21,9 @@ public interface CaseService {
 	public int insert(Case record);
 	
 	public int deleteByPrimaryKey(List<Integer> ids);
+	
+	public Integer selectAverageCount(String caseType);
+	
+	public List<Case> selectCaseByRandom(String caseType, Integer num);
 	
 }

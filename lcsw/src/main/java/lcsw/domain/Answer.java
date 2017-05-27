@@ -26,6 +26,9 @@ public class Answer implements Serializable{
 	@TableField(value="score")
 	private Integer score;
 	
+	@TableField(value="answer_result")
+	private String result;
+	
 	
 	public Integer getAnswerId() {
 		return answerId;
@@ -51,12 +54,17 @@ public class Answer implements Serializable{
 	public void setScore(Integer score) {
 		this.score = score;
 	}
+	
+	public String getResult() {
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
+	}
 	@Override
 	public String toString() {
-		return "Answer [answerId=" + answerId +", info=" + info + ", analysis="
-				+ analysis + ", score=" + score + "]";
+		return "Answer [answerId=" + answerId + ", info=" + info + ", analysis=" + analysis + ", score=" + score
+				+ ", result=" + result + "]";
 	}
-	
-	
 	
 }

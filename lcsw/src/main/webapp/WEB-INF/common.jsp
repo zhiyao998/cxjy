@@ -9,6 +9,7 @@
 	request.setAttribute("ctx", ctx);
 %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
 <link rel="stylesheet" type="text/css" href="${ctx }/public/easyui/themes/bootstrap/easyui.css">
 <link rel="stylesheet" type="text/css" href="${ctx }/public/easyui/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="${ctx }/public/Font-Awesome/css/font-awesome.min.css">
@@ -63,6 +64,24 @@ function addtab(title,url) {
 						}
 					});
 				}
+				if(title == "用户列表"){
+					var tab = $('#tabs').tabs('getSelected');
+					$('#tabs').tabs('update', {
+						tab: tab,
+						options: {
+							content: createFrame("/lcsw/user/userMagt.action") // 新内容的URL
+						}
+					});
+				}
+				if(title == "角色设置"){
+					var tab = $('#tabs').tabs('getSelected');
+					$('#tabs').tabs('update', {
+						tab: tab,
+						options: {
+							content: createFrame("/lcsw/role/roleSet.action") // 新内容的URL
+						}
+					});
+				}
 			}
 		});
 		// 在用户点击的时候提示
@@ -82,6 +101,17 @@ function back(){
 	var index = window.parent.$('#tabs').tabs('getTabIndex',tab);
 	var casetab = window.parent.$('#tabs');
 	window.parent.$('#tabs').tabs('close',index);
+}
+
+function backToPaperGen() {
+	var tab = window.parent.$('#tabs').tabs('getSelected');
+	window.parent.$('#tabs').tabs('update', {
+		tab: tab,
+		options: {
+			title: "结构化组卷",
+			content: createFrame("/lcsw/TestPaperGen/findAllCase.action") // 新内容的URL
+		}
+	});
 }
 
 function createFrame(url) {
@@ -107,9 +137,11 @@ function open(url) {
 	var html = '<div id="'+windowid+'"><iframe frameborder="0" marginwidth="100%" width="100%" height="100%" src="'
 			+ url + '" ></iframe></div>';
 	$("body").append(html);
+	var h = $(window).height();
+	var w = $(window).width();
 	$('#'+windowid).window({
-		width : "1200",
-		height : "700",
+		width : w * 0.90,
+		height : h * 0.90,
 		modal : true,
 		//当window关闭时把这个窗口的代码清除。
 		onClose : function() {

@@ -52,4 +52,19 @@ public class CaseServiceImpl implements CaseService {
 		return caseMapper.selectList(new EntityWrapper<Case>().eq("title_type", "A3"));
 	}
 
+	@Override
+	public Integer selectAverageCount(String caseType) {
+		return caseMapper.selectAverageCount(caseType);
+	}
+
+	@Override
+	public List<Case> selectCaseByRandom(String caseType, Integer num) {
+		return caseMapper.selectCaseByRandom(caseType, num);
+	}
+
+	@Override
+	public List<Case> selectCaseByIds(List<Integer> ids) {
+		return caseMapper.selectBatchIds(ids);
+	}
+
 }

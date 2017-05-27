@@ -324,15 +324,21 @@ public class QuestionController {
      */
     public static void ckeditor(HttpServletRequest request, HttpServletResponse response, String imageContextPath)
             throws IOException {
-        // 结合ckeditor功能
         response.setContentType("text/html;charset=UTF-8");
         String callback = request.getParameter("CKEditorFuncNum");
         PrintWriter out = response.getWriter();
-        out.println("<script type=\"text/javascript\">");
-        out.println("window.parent.CKEDITOR.tools.callFunction(" + callback + ",'" + imageContextPath + "',''" + ")");
-        out.println("</script>");
-        out.flush();
-        out.close();
+        // 结合ckeditor功能
+    	if(!imageContextPath.equals("")){
+            out.println("<script type=\"text/javascript\">");
+            out.println("window.parent.CKEDITOR.tools.callFunction(" + callback + ",'" + imageContextPath + "',''" + ")");
+            out.println("</script>");
+            out.flush();
+            out.close();
+    	}else{
+    	    out.println("<script type=\"text/javascript\">");    
+    	    out.println("window.parent.CKEDITOR.tools.callFunction(" + callback + ",''," + "'文件格式不正确（必须为.jpg/.gif/.bmp/.png文件）');");   
+    	    out.println("</script>");  
+    	}
     }
 	
 }

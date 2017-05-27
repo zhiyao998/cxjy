@@ -36,7 +36,7 @@
 			}
 		},{
 			text:'编辑病例',
-			iconCls:'fa-plus-square',
+			iconCls:'fa-pencil',
 			handler:function(){
 				var row = $('#grid').datagrid('getSelections');
 				if(row.length > 0){

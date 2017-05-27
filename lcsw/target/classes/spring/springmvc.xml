@@ -19,6 +19,7 @@
         
    	<!-- 资源映射 -->
 	<mvc:resources location="/WEB-INF/public/" mapping="/public/**"/>
+	<mvc:resources location="/WEB-INF/images/" mapping="/upload/**"/>
 	
 		<!-- 配置json转换器-->
     <bean id="mappingJacksonHttpMessageConverter"

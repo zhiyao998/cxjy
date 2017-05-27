@@ -10,21 +10,29 @@
 		border: 1px solid #196AC5;
 		border-collapse: collapse;
 	}
+	.divStyle div{
+		margin: 10px;
+		padding: 5px;
+	}
 </style>
 <script type="text/javascript">
 	var newAnswer = 3;
 	function addNewAnswer() {
 		var html = ""; 
-		html = "<tr><td width='20%'><textarea class='easyui-textbox' data-options='required:true' style='width: 100%;height: 60%'></textarea></td><td width='40%'><textarea  id='analysis" + newAnswer +"' class='easyui-validatebox' data-options='required:true' style='width: 100%'></textarea></td><td width='20%'><input class='easyui-numberbox' style='width:40px;' required='required' data-options='min:-10,max:10,editable:true'></td><td width='20%'><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td><td><input type='hidden'></td></tr>";
+		html = "<tr><td width='20%'><div class='divStyle'><input id='id" + newAnswer +"' type='hidden'><div style='display: inline-block;'><label>" + (newAnswer+1) + "、</label><textarea id='info" + newAnswer + "' class='easyui-textbox' data-options='required:true,multiline:true' style='width: 100%;min-height: 60px;max-height:80px;'></textarea></div>";
+		html += "<div><label>分值:</label><input id='score" + newAnswer + "' class='easyui-numberbox' style='width:40px;' required='required' data-options='min:-10,max:10,editable:true'></div> </div><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\">删除选项</a></td>" + 
+				"<td width='40%'><textarea id='result"+ newAnswer +"' class='easyui-validatebox' data-options='required:true' style='width: 100%'></textarea></td>" + 
+				"<td width='40%'><textarea id='analysis"+ newAnswer +"' class='easyui-validatebox' data-options='required:true' style='width: 100%'></textarea></td>";
 		$("#answers").append(html);
 		$('#analysis' + newAnswer).ckeditor();
+		$('#result' + newAnswer).ckeditor();
 		$.parser.parse("#answers");
 		newAnswer++;
 	};
 	function removeAnswer(r) {
 		var tr = $(r).parent().parent();
-		var td = $(r).parent().next();
-		var id = $(td).children()[0].value;
+		var input = $(tr).find(":hidden");
+		var id = $(input).val();
 		if(id != "" && id != null){
 			$.post("/lcsw/question/deleteAnswer.action", {
 				'id':id,
@@ -54,21 +62,16 @@
 			var flag = true;
 			var length = 0;
 			$(trs).each(function() {
-				var tds = $(this).children();
-				if(length < 3){
-					var id = $(tds[3]).children()[0].value;
-				}else{
-					var id = $(tds[4]).children()[0].value;
-				}
-
-				var info = $(tds[0]).children()[0].value;
+				var id = $("#id" + length).val();
+				var info = $("#info" + length).val();
+				var result = escape($("#result" + length).val());
 				var analysis = escape($("#analysis" + length).val());
-				var score = $(tds[2]).children()[0].value;
+				var score = $("#score" + length).val();
 				if(flag){
-					json += "{\"answerId\":\""+ id +"\",\"info\":\""+ info +"\",\"analysis\":\""+ analysis +"\",\"score\":\""+ score + "\"}";
+					json += "{\"answerId\":\""+ id +"\",\"info\":\""+ info + "\",\"result\":\""+ result +"\",\"analysis\":\""+ analysis +"\",\"score\":\""+ score + "\"}";
 					flag = false;
 				}else{
-					json += ",{\"answerId\":\""+ id +"\",\"info\":\""+ info +"\",\"analysis\":\""+ analysis +"\",\"score\":\""+ score + "\"}";					
+					json += ",{\"answerId\":\""+ id +"\",\"info\":\""+ info + "\",\"result\":\""+ result +"\",\"analysis\":\""+ analysis +"\",\"score\":\""+ score + "\"}";					
 				}
 				length++;
 			});
@@ -92,6 +95,7 @@
 			    		parent.$("#diagnoseCount").text(c.diagnoseCount);
 			    		parent.$("#treatmentCount").text(c.treatmentCount);
 			    		parent.$("#patManCount").text(c.patManCount);
+			    		parent.$("#totalCount").text(c.totalCount);
 			    		parent.$("#panswerTotal").text(c.panswerTotal);
 			    		parent.$("#nanswerTotal").text(c.nanswerTotal);
 			    		parent.$("#zanswerTotal").text(c.zanswerTotal);
@@ -120,11 +124,10 @@
 						$("#caseId").val(question.caseId);
 						if(answers.length > 3){
 							for(var i = 3; i < answers.length; i++){
-								html = "<tr><td width='20%'><textarea id='info"+ i +"' class='easyui-textbox' data-options='required:true' style='width: 100%'></textarea></td>" + 
-										"<td width='40%'><textarea id='analysis"+ i +"' class='easyui-validatebox' data-options='required:true' style='width: 100%'></textarea></td>" + 
-										"<td width='20%'><input id='score" + i +"' class='easyui-numberbox' style='width:40px;' required='required' data-options='min:-10,max:10,editable:true'></td>" + 
-										"<td width='20%'><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\"></a> </td>" + 
-										"<td><input id='id" + i + "' type='hidden'></td></tr>";
+								html = "<tr><td width='15%'><div class='divStyle'><input id='id" + i +"' type='hidden'><div style='display: inline-block;'><label>" + (i+1) + "、</label><textarea id='info" + i + "' class='easyui-textbox' data-options='required:true,multiline:true' style='width: 100%;min-height: 60px;max-height:80px;'></textarea></div>";
+								html += "<div><label>分值:</label><input id='score" + i + "' class='easyui-numberbox' style='width:40px;' required='required' data-options='min:-10,max:10,editable:true'></div></div><a href='#' onclick='removeAnswer(this)' class='easyui-linkbutton' data-options=\"iconCls:'fa-window-close'\">删除选项</a> </td>" + 
+										"<td width='40%'><textarea id='result"+ i +"' class='easyui-validatebox' data-options='required:true' style='width: 100%'></textarea></td>" + 
+										"<td width='40%'><textarea id='analysis"+ i +"' class='easyui-validatebox' data-options='required:true' style='width: 100%'></textarea></td>";
 								$("#answers").append(html);
 							}
 							$.parser.parse("#answers");
@@ -133,8 +136,10 @@
 						newAnswer = 0;
 						for(var i = 0; i < trs.length; i++) {
 							$('#analysis' + i).ckeditor();
+							$('#result' + i).ckeditor();
 							$("#info" + i).textbox("setValue",answers[i].info);
 							$("#analysis" + i).val(unescape(answers[i].analysis));
+							$("#result" + i).val(unescape(answers[i].result));
 							$("#score" + i).numberbox("setValue",answers[i].score);
 							$("#id" + i).val(answers[i].answerId);
 							newAnswer++;
@@ -146,6 +151,9 @@
 			$('#analysis0').ckeditor();
 			$('#analysis1').ckeditor();
 			$('#analysis2').ckeditor();
+			$('#result0').ckeditor();
+			$('#result1').ckeditor();
+			$('#result2').ckeditor();
 		}	
 	});
 </script>
@@ -158,12 +166,10 @@
 	<form id="inputForm" method="post">  
 		<input type="hidden" id="questionId" name="questionId" value="${requestScope.questionId }">
 		<input type="hidden" id="caseId" name="caseId" value="${requestScope.caseId }">
-		<table>
-			<tr>
+		<table style="text-align: center;">
+			<tr style="height: 30%;width: 50%">
 				<td>
 					<label for="ftheme">一级主题词：</label>
-				</td>
-				<td>
 					<select id="ftheme" name="ftheme" class="easyui-combobox" data-options="required:true" style="width: 100px;">
 						<option value="0"></option>
 						<option value="问诊">问诊</option>   
@@ -175,11 +181,8 @@
     					<option value="病人管理">病人管理</option>   
 					</select> 
 				</td>
-			<tr style="height: 30%;width: 50%">
 				<td>
-					<label for="title">题目：</label>
-				</td>
-				<td>
+					<h3>分支题干</h3>
 					<textarea rows="5" cols="30" class="easyui-validatebox" id="title" name="title" style="height: 80px;width: 240px"></textarea>
 				</td>
 			</tr>
@@ -187,30 +190,59 @@
 		<table style="width: 100%;" border="1" cellspacing="0" cellpadding="0">
 			<thead>
 				<tr>
-					<th>答案选项</th>
-					<th>答案分析</th>
-					<th>分值</th>
-					<th>操作</th>
+					<th>选项详情</th>
+					<th>结果</th>
+					<th>分析</th>
 				</tr>
 			</thead>
 			<tbody id="answers">
 				<tr>
-					<td width="20%"><textarea id="info0" class='easyui-textbox' data-options='required:true' style="width: 100%;height: 60%"></textarea></td>
+					<td width="15%">
+						<div class="divStyle">
+							<input id="id0" type="hidden">
+							<div style="display: inline-block;">
+								<label>1、</label><textarea id="info0" class='easyui-textbox' data-options='required:true,multiline:true' style='width: 100%;min-height: 60px;max-height:80px;'></textarea>
+							</div>
+							<div>
+								<label>分值:</label>
+								<input id="score0" class="easyui-numberbox" style="width:40px;" required="required" data-options="min:-10,max:10,editable:true">
+							</div>
+						</div>
+					</td>
+					<td width="40%"><textarea id="result0" class='easyui-validatebox' data-options='required:true' style="width: 100%"></textarea></td>
 					<td width="40%"><textarea id="analysis0" class='easyui-validatebox' data-options='required:true' style="width: 100%"></textarea></td>
-					<td width="20%"><input id="score0" class="easyui-numberbox" style="width:40px;" required="required" data-options="min:-10,max:10,editable:true"></td>
-					<td width="20%"><input id="id0" type="hidden"></td>
 				</tr>
 				<tr>
-					<td width="20%"><textarea id="info1" class='easyui-textbox' data-options='required:true' style="width: 100%;height: 60%"></textarea></td>
+					<td width="15%">
+						<div class="divStyle">
+							<input id="id1" type="hidden">
+							<div>
+								<label>2、</label><textarea id="info1" class='easyui-textbox' data-options='required:true,multiline:true' style='width: 100%;min-height: 60px;max-height:80px;'></textarea>
+							</div>
+							<div>
+								<label>分值:</label>
+								<input id="score1" class="easyui-numberbox" style="width:40px;" required="required" data-options="min:-10,max:10,editable:true">
+							</div>
+						</div>
+					</td>
+					<td width="40%"><textarea id="result1" class='easyui-validatebox' data-options='required:true' style="width: 100%"></textarea></td>
 					<td width="40%"><textarea id="analysis1" class='easyui-validatebox' data-options='required:true' style="width: 100%"></textarea></td>
-					<td width="20%"><input id="score1" class="easyui-numberbox" style="width:40px;" required="required" data-options="min:-10,max:10,editable:true"></td>
-					<td width="20%"><input id="id1" type="hidden"></td>
 				</tr>
 				<tr>
-					<td width="20%"><textarea id="info2" class='easyui-textbox' data-options='required:true' style="width: 100%;height: 60%"></textarea></td>
+					<td width="15%">
+						<div class="divStyle">
+							<input id="id2" type="hidden">
+							<div style="display: inline-block;">
+								<label>3、</label><textarea id="info2" class='easyui-textbox' data-options='required:true,multiline:true' style='width: 100%;min-height: 60px;max-height:80px;'></textarea>
+							</div>
+							<div>
+								<label>分值:</label>
+								<input id="score2" class="easyui-numberbox" style="width:40px;" required="required" data-options="min:-10,max:10,editable:true">
+							</div>
+						</div>
+					</td>
+					<td width="40%"><textarea id="result2" class='easyui-validatebox' data-options='required:true' style="width: 100%"></textarea></td>
 					<td width="40%"><textarea id="analysis2" class='easyui-validatebox' data-options='required:true' style="width: 100%"></textarea></td>
-					<td width="20%"><input id="score2" class="easyui-numberbox" style="width:40px;" required="required" data-options="min:-10,max:10,editable:true"></td>
-					<td width="20%"><input id="id2" type="hidden"></td>
 				</tr>
 			</tbody>
 		</table>

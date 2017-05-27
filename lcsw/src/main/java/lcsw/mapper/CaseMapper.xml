@@ -6,5 +6,12 @@
     SELECT * FROM tbl_case WHERE 1=#{state}
 </select>
 
+<select id="selectAverageCount" resultType="Integer">
+	select sum(total_count)/count(*) from tbl_case where case_type = #{caseType} and title_type = "A3";
+</select>
+
+<select id="selectCaseByRandom" resultType="Case">
+	select * from tbl_case where case_type = #{caseType} and title_type = "A3" order by rand() limit #{num}
+</select>
 
 </mapper>

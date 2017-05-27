@@ -1,7 +1,6 @@
  package lcsw.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baomidou.mybatisplus.plugins.Page;
 
 import lcsw.domain.Case;
-import lcsw.domain.Question;
 import lcsw.service.CaseService;
 import lcsw.service.QuestionService;
 import lcsw.service.SessionProvider;

@@ -30,169 +30,6 @@
 	}
 		
 </style>
-<script type="text/javascript">
-	$(function() {
-		var caseId = $("#caseId").val();
-		if(caseId == null || caseId == ""){
-			$("#center").hide();
-			$("#showText").hide();
-			$('#chiefComplain').ckeditor();
-		}else{
-			$.ajax({
-			    'type': 'POST',
-			    'url': "/lcsw/case/getCase.action?caseId=" + caseId,
-			    'dataType': 'json',
-			    'success': function(data) {
-					if (data.status) {
-						var newCase = data.newCase;
-						$("#caseType").combobox("select",newCase.caseType);
-						$("#titleType").combobox("select",newCase.titleType);
-						$("#chiefComplain").val(newCase.chiefComplain);
-						$("#caseTitle").textbox("setValue",newCase.caseTitle);
-						$("#chiefComplain").hide();
-						$("#showText").append(newCase.chiefComplain);
-						$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + caseId});
-						$("#answerList").datagrid("load");
-						$("#caseType").combobox("disable");
-						$("#titleType").combobox("disable");
-						$("#editInfo").linkbutton("enable");
-						$("#addInfo").linkbutton("disable");
-						$("#caseTitle").textbox("disable");
-			    		$("#inquiryCount").text(newCase.inquiryCount);
-			    		$("#phyExamCount").text(newCase.phyExamCount);
-			    		$("#fstVisitCount").text(newCase.fstVisitCount);
-			    		$("#aryExamCount").text(newCase.aryExamCount);
-			    		$("#diagnoseCount").text(newCase.diagnoseCount);
-			    		$("#treatmentCount").text(newCase.treatmentCount);
-			    		$("#patManCount").text(newCase.patManCount);
-			    		$("#totalCount").text(newCase.totalCount);
-			    		$("#panswerTotal").text(newCase.panswerTotal);
-			    		$("#nanswerTotal").text(newCase.nanswerTotal);
-			    		$("#zanswerTotal").text(newCase.zanswerTotal);
-			    		$("#answerTotal").text(newCase.answerTotal);
-					}
-				}
-			});
-		}
-	});
-	function addQuestion() {
-		var rows = $('#answerList').datagrid('getRows');
-		var caseId = $("#caseId").val();
-		$.ajax({
-		    'type': 'POST',
-		    'url': "/lcsw/case/getCase.action?caseId=" + caseId,
-		    'dataType': 'json',
-		    'success': function(data) {
-				if (data.status) {
-					if(data.newCase.titleType == "A2" && rows.length > 0){
-						alert("A2题型只允许一个分支！");
-					}else{
-						open("/lcsw/question/toAddQuestion.action?caseId=" + $("#caseId").val());
-					}
-				}
-			}
-		});
-	};
-	function editQuestion(id) {
-		open("/lcsw/question/toEditQuestion.action?questionId=" + id);
-	};
-	function deleteQuestion(id) {
-		$.messager.confirm('确认对话框', '确认你是否要删除数据？', function(r) {
-			if (r) {
-	 			$.post("/lcsw/question/deleteQuestion.action", {
-					'id':id,
-					}, function(data) {
-	 					if (data.status) {
-	 						var newCase = data.newCase;
-				    		$("#inquiryCount").text(newCase.inquiryCount);
-				    		$("#phyExamCount").text(newCase.phyExamCount);
-				    		$("#fstVisitCount").text(newCase.fstVisitCount);
-				    		$("#aryExamCount").text(newCase.aryExamCount);
-				    		$("#diagnoseCount").text(newCase.diagnoseCount);
-				    		$("#treatmentCount").text(newCase.treatmentCount);
-				    		$("#patManCount").text(newCase.patManCount);
-				    		$("#totalCount").text(newCase.totalCount);
-				    		$("#panswerTotal").text(newCase.panswerTotal);
-				    		$("#nanswerTotal").text(newCase.nanswerTotal);
-				    		$("#zanswerTotal").text(newCase.zanswerTotal);
-				    		$("#answerTotal").text(newCase.answerTotal);
-							$.messager.alert('系统消息', "删除成功", 'info',
-								function() {
-									$('#answerList').datagrid('reload');
-							});
-						} 
-					}, "json"); 
-			}
-		});
-	};
-	function addCaseInfo() {
-		$("#inputForm").form("submit",{
-			onSubmit: function() {
-				var flag = $(this).form('enableValidation').form('validate'); 
-				if(flag){
-					var json = $("#inputForm").serializeArray();
-				  	var url = $(this).attr("action");
-					$.post(url, json, function(data) {
-						if (data.status) {
-								//ok后的回调方法，去关闭父页面的窗口元素
-								var newCase = data.Newcase;
-								if($("#center").is(":hidden")){
-									$("#center").show();
-								}
-								if($("#editInfo").linkbutton("options").disabled == true){
-									if(data.Newcase.caseId != null){
-										$("#caseId").val(data.Newcase.caseId);
-										$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + $("#caseId").val()});
-									}
-									$("#caseType").combobox("disable");
-									var editor = CKEDITOR.instances.chiefComplain;//chiefComplain是我ckeditor的id
-									editor.destroy();
-									$("#chiefComplain").hide();
-									$("#showText").empty();
-									$("#showText").append(newCase.chiefComplain);
-									$("#showText").show();
-									$("#titleType").combobox("disable");
-									$("#editInfo").linkbutton("enable");
-									$("#addInfo").linkbutton("disable");
-									$("#caseTitle").textbox("disable");
-								}
-					    		$("#inquiryCount").text(newCase.inquiryCount);
-					    		$("#phyExamCount").text(newCase.phyExamCount);
-					    		$("#fstVisitCount").text(newCase.fstVisitCount);
-					    		$("#aryExamCount").text(newCase.aryExamCount);
-					    		$("#diagnoseCount").text(newCase.diagnoseCount);
-					    		$("#treatmentCount").text(newCase.treatmentCount);
-					    		$("#patManCount").text(newCase.patManCount);
-					    		$("#totalCount").text(newCase.totalCount);
-						}
-					}, "json");
-				}
-				return false;
-			}
-		});
-	}
-	function editCaseInfo() {
-		if($("#addInfo").linkbutton("options").disabled == true){
-			$("#addInfo").linkbutton("enable");
-			$("#showText").hide();
-			$('#chiefComplain').ckeditor();
-			$("#editInfo").linkbutton("disable");
-			$("#caseType").combobox("enable");
-			$("#caseTitle").textbox("enable");
-		}
-	}
-	function formatOpt(val,row,index) {
-		return "<button onclick='editQuestion(" + row.questionId + ")'>编辑</button> <button onclick='deleteQuestion(" + row.questionId + ")'>删除</button>";
-	}
-	function showTitle(val,row,index) {
-		return unescape(row.title);
-	}
-
-</script>
-
-<style type="text/css">
-	
-</style>
 
 </head>
 <body>
@@ -221,7 +58,7 @@
 					<tr>
 						<td colspan="2" style="padding: 10px;">
 							<textarea class="easyui-validatebox" name="chiefComplain" id="chiefComplain" style="height: 150px;"></textarea>
-							<div id="showText" style="height: 150px;border: 2px solid red;"></div>
+							<div id="showText" style="min-height: 150px;max-height:300px;border: 2px solid red;"></div>
 						</td>
 					</tr>
 					<tr>
@@ -328,10 +165,185 @@
 		}];
 	</script>
 		<div data-options="region:'south',border:false" style="text-align: right; margin-bottom:0px; background-color: #e0e8f5">
-			<a id="close" href="#" onclick="back();" class="easyui-linkbutton " data-options="iconCls:'fa-arrow-left'">返回</a>  
+			<a id="close" href="#" onclick="back();" class="easyui-linkbutton" data-options="iconCls:'fa-arrow-left'">返回</a>  
 		</div>
 	</div>
 	</div>
 	</div>
 </body>
+<script type="text/javascript">
+	$(function() {
+		$("#answerList").datagrid({
+			onLoadSuccess : function(data) {
+				var rows = data.rows;
+				var panswerTotal = 0;
+				var nanswerTotal = 0;
+				var zanswerTotal = 0;
+				var answerTotal = 0;
+				$(rows).each(function() {
+					var row = this;
+					panswerTotal = parseInt(panswerTotal) + parseInt(row.pscoreCount);
+					nanswerTotal = parseInt(nanswerTotal) + parseInt(row.nscoreCount);
+					zanswerTotal = parseInt(zanswerTotal) + parseInt(row.zscoreCount);
+					answerTotal = parseInt(answerTotal) + parseInt(row.answersTotal);
+				})
+	    		$("#panswerTotal").text(panswerTotal);
+	    		$("#nanswerTotal").text(nanswerTotal);
+	    		$("#zanswerTotal").text(zanswerTotal);
+	    		$("#answerTotal").text(answerTotal);
+			}
+		});
+		var caseId = $("#caseId").val();
+		if(caseId == null || caseId == ""){
+			$("#center").hide();
+			$("#showText").hide();
+			$('#chiefComplain').ckeditor();
+		}else{
+			$.ajax({
+			    'type': 'POST',
+			    'url': "/lcsw/case/getCase.action?caseId=" + caseId,
+			    'dataType': 'json',
+			    'success': function(data) {
+					if (data.status) {
+						var newCase = data.newCase;
+						$("#caseType").combobox("select",newCase.caseType);
+						$("#titleType").combobox("select",newCase.titleType);
+						$("#chiefComplain").val(newCase.chiefComplain);
+						$("#caseTitle").textbox("setValue",newCase.caseTitle);
+						$("#chiefComplain").hide();
+						$("#showText").append(newCase.chiefComplain);
+						$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + caseId});
+						$("#answerList").datagrid("load");
+						$("#caseType").combobox("disable");
+						$("#titleType").combobox("disable");
+						$("#editInfo").linkbutton("enable");
+						$("#addInfo").linkbutton("disable");
+						$("#caseTitle").textbox("disable");
+			    		$("#inquiryCount").text(newCase.inquiryCount);
+			    		$("#phyExamCount").text(newCase.phyExamCount);
+			    		$("#fstVisitCount").text(newCase.fstVisitCount);
+			    		$("#aryExamCount").text(newCase.aryExamCount);
+			    		$("#diagnoseCount").text(newCase.diagnoseCount);
+			    		$("#treatmentCount").text(newCase.treatmentCount);
+			    		$("#patManCount").text(newCase.patManCount);
+			    		$("#totalCount").text(newCase.totalCount);
+			    		$("#panswerTotal").text(newCase.panswerTotal);
+			    		$("#nanswerTotal").text(newCase.nanswerTotal);
+			    		$("#zanswerTotal").text(newCase.zanswerTotal);
+			    		$("#answerTotal").text(newCase.answerTotal);
+					}
+				}
+			});
+		}
+	});
+	function addQuestion() {
+		var rows = $('#answerList').datagrid('getRows');
+		var caseId = $("#caseId").val();
+		$.ajax({
+		    'type': 'POST',
+		    'url': "/lcsw/case/getCase.action?caseId=" + caseId,
+		    'dataType': 'json',
+		    'success': function(data) {
+				if (data.status) {
+					if(data.newCase.titleType == "A2" && rows.length > 0){
+						alert("A2题型只允许一个分支！");
+					}else{
+						open("/lcsw/question/toAddQuestion.action?caseId=" + $("#caseId").val());
+					}
+				}
+			}
+		});
+	};
+	function editQuestion(id) {
+		open("/lcsw/question/toEditQuestion.action?questionId=" + id);
+	};
+	function deleteQuestion(id) {
+		$.messager.confirm('确认对话框', '确认你是否要删除数据？', function(r) {
+			if (r) {
+	 			$.post("/lcsw/question/deleteQuestion.action", {
+					'id':id,
+					}, function(data) {
+	 					if (data.status) {
+	 						var newCase = data.newCase;
+				    		$("#inquiryCount").text(newCase.inquiryCount);
+				    		$("#phyExamCount").text(newCase.phyExamCount);
+				    		$("#fstVisitCount").text(newCase.fstVisitCount);
+				    		$("#aryExamCount").text(newCase.aryExamCount);
+				    		$("#diagnoseCount").text(newCase.diagnoseCount);
+				    		$("#treatmentCount").text(newCase.treatmentCount);
+				    		$("#patManCount").text(newCase.patManCount);
+				    		$("#totalCount").text(newCase.totalCount);
+							$.messager.alert('系统消息', "删除成功", 'info',
+								function() {
+									$('#answerList').datagrid('reload');
+							});
+						} 
+					}, "json"); 
+			}
+		});
+	};
+	function addCaseInfo() {
+		$("#inputForm").form("submit",{
+			onSubmit: function() {
+				var flag = $(this).form('enableValidation').form('validate'); 
+				if(flag){
+					var json = $("#inputForm").serializeArray();
+				  	var url = $(this).attr("action");
+					$.post(url, json, function(data) {
+						if (data.status) {
+								//ok后的回调方法，去关闭父页面的窗口元素
+								var newCase = data.Newcase;
+								if($("#center").is(":hidden")){
+									$("#center").show();
+								}
+								if($("#editInfo").linkbutton("options").disabled == true){
+									if(data.Newcase.caseId != null){
+										$("#caseId").val(data.Newcase.caseId);
+										$("#answerList").datagrid({url:"/lcsw/question/list.action?caseId=" + $("#caseId").val()});
+									}
+									$("#caseType").combobox("disable");
+									var editor = CKEDITOR.instances.chiefComplain;//chiefComplain是我ckeditor的id
+									editor.destroy();
+									$("#chiefComplain").hide();
+									$("#showText").empty();
+									$("#showText").append(newCase.chiefComplain);
+									$("#showText").show();
+									$("#titleType").combobox("disable");
+									$("#editInfo").linkbutton("enable");
+									$("#addInfo").linkbutton("disable");
+									$("#caseTitle").textbox("disable");
+								}
+					    		$("#inquiryCount").text(newCase.inquiryCount);
+					    		$("#phyExamCount").text(newCase.phyExamCount);
+					    		$("#fstVisitCount").text(newCase.fstVisitCount);
+					    		$("#aryExamCount").text(newCase.aryExamCount);
+					    		$("#diagnoseCount").text(newCase.diagnoseCount);
+					    		$("#treatmentCount").text(newCase.treatmentCount);
+					    		$("#patManCount").text(newCase.patManCount);
+					    		$("#totalCount").text(newCase.totalCount);
+						}
+					}, "json");
+				}
+				return false;
+			}
+		});
+	}
+	function editCaseInfo() {
+		if($("#addInfo").linkbutton("options").disabled == true){
+			$("#addInfo").linkbutton("enable");
+			$("#showText").hide();
+			$('#chiefComplain').ckeditor();
+			$("#editInfo").linkbutton("disable");
+			$("#caseType").combobox("enable");
+			$("#caseTitle").textbox("enable");
+		}
+	}
+	function formatOpt(val,row,index) {
+		return "<button onclick='editQuestion(" + row.questionId + ")'>编辑</button> <button onclick='deleteQuestion(" + row.questionId + ")'>删除</button>";
+	}
+	function showTitle(val,row,index) {
+		return unescape(row.title);
+	}
+
+</script>
 </html>
