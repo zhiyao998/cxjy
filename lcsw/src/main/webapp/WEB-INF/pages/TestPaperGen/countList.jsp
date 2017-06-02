@@ -265,7 +265,9 @@
 		</tfoot>
 	</table>
 	<div style="text-align: center;padding: 20px;">
-			<a id="close" style="" href="#" onclick="sumbitData()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a>  
+			<shiro:hasPermission name="paperGen:show">
+				<a id="close" style="" href="#" onclick="sumbitData()" class="easyui-linkbutton" data-options="iconCls:'fa-check-circle'">提交</a>  
+			</shiro:hasPermission>
 			<a id="close" href="#" onclick="back()" class="easyui-linkbutton" data-options="iconCls:'fa-window-close'">关闭</a>  
 	</div>
 	

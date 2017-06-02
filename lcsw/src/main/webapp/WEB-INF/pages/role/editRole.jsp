@@ -95,6 +95,7 @@
 				  	var url = $(this).attr("action");
 					$.post(url, user, function(data) {
 						if (data.status) {
+							$('#roleList').datagrid('reload');
 							back();
 						}
 					}, "json");

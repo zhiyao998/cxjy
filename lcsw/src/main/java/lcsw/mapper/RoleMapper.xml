@@ -3,12 +3,12 @@
 <mapper namespace="lcsw.mapper.RoleMapper">
 
 <select id="selectRoleList" resultType="Role">
-    SELECT * FROM tbl_role
+    SELECT * FROM tbl_role 
 </select>
 
 <select id="selectByUserId" resultType="Role">
     SELECT r.* FROM tbl_role r, user_role ur
-    where 	ur.uesr_id = #{id} and
+    where 	ur.user_id = #{id} and
     		r.role_id = ur.role_id    							
 </select>
 

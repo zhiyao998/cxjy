@@ -9,7 +9,7 @@ import lcsw.domain.User;
 
 public interface UserMapper extends BaseMapper<User>{
 	
-	List<User> selectUserList(Pagination page);
+	List<User> selectUserList(Pagination page,Integer id);
 	
 	List<String> selectPermsByUserId(Integer id);
 	

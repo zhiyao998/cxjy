@@ -103,6 +103,7 @@
 				  	var url = $(this).attr("action");
 					$.post(url, user, function(data) {
 						if (data.status) {
+							$('#userList').datagrid('reload');
 							back();
 						}
 					}, "json");

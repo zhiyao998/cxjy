@@ -9,7 +9,7 @@
 <body>
 	<div class="easyui-layout" data-options="fit:true">
 		<div data-options="region:'center',border:true" style="width:100%%;height: 100%">
-			<table id="roleList" class="easyui-datagrid" data-options="fitColumns:true,singleSelect:true,rownumbers:true,toolbar:toolbar,pagination:true,fit:true,remoteSort:true,url:'/lcsw/role/roleList.action'" style="width:100%;">
+			<table id="roleList" class="easyui-datagrid" data-options="fitColumns:true,singleSelect:true,rownumbers:true,toolbar:'#tb',pagination:true,fit:true,remoteSort:true,url:'/lcsw/role/roleList.action'" style="width:100%;">
 				<thead>
 					<tr>  
             			<th data-options="field:'roleName'"  style="width:30%;">角色名称</th>
@@ -22,18 +22,18 @@
 						
 				</tbody>
 			</table>
+			<div id="tb">
+				<shiro:hasPermission name="sys:role:add">
+    				<a href="#" class="easyui-linkbutton" onclick="addRole()" data-options="iconCls:'fa-plus-square',plain:true">添加角色</a>
+    			</shiro:hasPermission>
+    		</div>
 	<script type="text/javascript">
 	function formatOpt(val,row,index) {
-		return "<button onclick='editPerms(" + row.roleId + ")'>权限</button>&nbsp;<button onclick='editRole(" + row.roleId + ")'>编辑</button>&nbsp;<button onclick='deleteRole(" + row.roleId + ")'>删除</button>";
+		var html = "<shiro:hasPermission name='sys:role:perms'><button onclick='editPerms(" + row.roleId + ")'>权限</button>&nbsp;</shiro:hasPermission>" 
+				 + "<shiro:hasPermission name='sys:role:edit'><button onclick='editRole(" + row.roleId + ")'>编辑</button>&nbsp;</shiro:hasPermission>"
+				 + "<shiro:hasPermission name='sys:role:delete'><button onclick='deleteRole(" + row.roleId + ")'>删除</button></shiro:hasPermission>";
+		return html;
 	}
-	
-		var toolbar = [{
-			text:'新增角色',
-			iconCls:'fa-plus-square',
-			handler:function(){
-				parent.addtab('新增角色',"/lcsw/role/toAddRole.action");
-			}
-		}];
 	</script>
 		</div>
 	</div>
@@ -53,6 +53,14 @@ function deleteRole(id) {
 				}, "json"); 
 		}
 	});
+}
+
+function addRole() {
+	parent.addtab('新增角色',"/lcsw/role/toAddRole.action");
+}
+
+function editPerms(id) {
+	open1("/lcsw/menu/toEditRolePerms.action?id=" + id,650,550);
 }
 
 function editRole(id) {

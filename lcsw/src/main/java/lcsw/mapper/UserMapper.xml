@@ -3,15 +3,14 @@
 <mapper namespace="lcsw.mapper.UserMapper">
 
 <select id="selectUserList" resultType="User">
-    SELECT * FROM tbl_user 
+    SELECT * FROM tbl_user where creator_id = #{id}
 </select>
 
 <select id="selectPermsByUserId" resultType="String">
 			select m.perms from user_role ur 
 			LEFT JOIN role_menu rm on ur.role_id = rm.role_id 
-			LEFT JOIN menu m on rm.menu_id = m.menu_id 
+			LEFT JOIN tbl_menu m on rm.menu_id = m.menu_id 
 			where ur.user_id = #{id}		
 </select>
-
 
 </mapper>

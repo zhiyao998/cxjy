@@ -81,5 +81,13 @@ public class Role {
 		return "Role [roleId=" + roleId + ", roleName=" + roleName + ", creatorId=" + creatorId + ", createTime="
 				+ createTime + ", roleCount=" + roleCount + ", remark=" + remark + "]";
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		Role r = (Role) obj;
+		if(getRoleId().equals(r.getRoleId())){
+			return true;
+		}
+		return false;
+	}
 }

@@ -1,5 +1,6 @@
 package lcsw.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,7 +11,10 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 
 import lcsw.domain.User;
+import lcsw.domain.User_Role;
+import lcsw.mapper.RoleMapper;
 import lcsw.mapper.UserMapper;
+import lcsw.mapper.User_RoleMapper;
 import lcsw.service.UserService;
 
 @Service
@@ -18,7 +22,11 @@ public class UserServiceImpl implements UserService {
 	
 	@Resource
 	private UserMapper userMapper;
-
+	@Resource
+	private User_RoleMapper user_RoleMapper;
+	@Resource
+	private RoleMapper roleMapper;
+	
 	@Override
 	public int insert(User user) {
 		return userMapper.insert(user);
@@ -40,8 +48,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Page<User> selectUserList(Page<User> page) {
-		List<User> users = userMapper.selectUserList(page);
+	public Page<User> selectUserList(Page<User> page, Integer id) {
+		List<User> users = userMapper.selectUserList(page,id);
 		page.setRecords(users);
 		return page;
 	}
@@ -65,6 +73,19 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<String> selectPermsByUserId(Integer id) {
 		return userMapper.selectPermsByUserId(id);
+	}
+
+	@Override
+	public int editUserRole(Integer userId, List<Integer> roleIds) {
+		user_RoleMapper.delete(new EntityWrapper<User_Role>().eq("user_id", userId));
+		List<User_Role> list = new ArrayList<User_Role>();
+		for (Integer id : roleIds) {
+			User_Role ur = new User_Role();
+			ur.setRoleId(id);
+			ur.setUserId(userId);
+			list.add(ur);
+		}
+		return user_RoleMapper.insertByBatch(list);
 	}
 
 }

@@ -45,42 +45,42 @@
 	<div data-options="region:'west',split:true,title:'菜单导航'" style="width:10%;">
     	<div id="basicMgnt">
              <ul id="accordion" class="accordion">
+             	<shiro:hasPermission name="sys:mgmt">
                 <li>
-                	<shiro:hasPermission name="sys:mgmt">
              		<div class="link"><i class="fa  fa-user-circle"></i>系统管理<i class="fa fa-chevron-down"></i></div>
              		<ul class="submenu">
-             			<shiro:hasPermission name="sys:user">
+             			<shiro:hasPermission name="sys:user:mgmt">
 							<li><a href="/lcsw/user/userMagt.action" onclick=" return false; ">用户管理</a></li>
 						</shiro:hasPermission>
-						<shiro:hasPermission name="sys:role">
+						<shiro:hasPermission name="sys:role:mgmt">
 							<li><a href="/lcsw/role/roleSet.action" onclick=" return false; ">角色设置</a></li>
 						</shiro:hasPermission>
 						<shiro:hasPermission name="sys:menu">
 							<li><a href="/lcsw/user/userMagt.action" onclick=" return false; ">菜单设置</a></li>
 						</shiro:hasPermission>
 					</ul>
-					</shiro:hasPermission>
              	</li>
+             	</shiro:hasPermission>
+             	<shiro:hasPermission name="case:mgmt">
              	<li>
-             		<shiro:hasPermission name="case:mgmt">
              		<div class="link"><i class="fa  fa-pencil-square-o"></i>病例管理<i class="fa fa-chevron-down"></i></div>
              		<ul class="submenu">
              			<shiro:hasPermission name="case:list">
 						<li><a href="/lcsw/case/management.action" onclick=" return false; ">病例列表</a></li>
 						</shiro:hasPermission>
 					</ul>
-					</shiro:hasPermission>
              	</li>
+             	</shiro:hasPermission>
+             	<shiro:hasPermission name="paperGen:mgmt">
              	<li>
-             		<shiro:hasPermission name="paperGen:mgmt">
              		<div class="link"><i class="fa  fa-list"></i>组卷管理<i class="fa fa-chevron-down"></i></div>
              		<ul class="submenu">
              			<shiro:hasPermission name="paperGen:gen">
 						<li><a href="/lcsw/TestPaperGen/findAllCase.action" onclick=" return false; ">普通组卷</a></li>
 						</shiro:hasPermission>
 					</ul>
-					</shiro:hasPermission>
              	</li>
+             	</shiro:hasPermission>
              </ul>
     	</div>				
 	</div>

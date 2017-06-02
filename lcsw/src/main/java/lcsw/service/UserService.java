@@ -16,11 +16,14 @@ public interface UserService {
 	
 	List<User> findByName(String name);
 	
-	Page<User> selectUserList(Page<User> page);
+	Page<User> selectUserList(Page<User> page,Integer id);
 	
 	int updatePassword(int id, String oldPass, String newPass);
 	
 	User selectUserById(Integer id);
 
 	List<String> selectPermsByUserId(Integer id);
+	
+	int editUserRole(Integer userId,List<Integer> roleIds);
+
 }

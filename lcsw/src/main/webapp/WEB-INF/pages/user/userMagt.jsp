@@ -27,8 +27,16 @@ function editUser(id) {
 	parent.addtab('编辑病例',"/lcsw/user/toEditUser.action?id="+id);
 }
 
+function addUser() {
+	parent.addtab('添加用户',"/lcsw/user/toAddUser.action");
+}
+
 function formatOpt(val,row,index) {
-	return "<button onclick='editPerms(" + row.id + ")'>权限</button>&nbsp;<button onclick='editRole(" + row.id + ")'>角色</button>&nbsp;<button onclick='editUser(" + row.id + ")'>编辑</button>&nbsp;<button onclick='deleteUser(" + row.id + ")'>删除</button>";
+	var html = "<button onclick='editPerms(" + row.id + ")'>权限</button>&nbsp;"
+	  			+ "<shiro:hasPermission name='sys:user:role'><button onclick='editRole(" + row.id + ")'>角色</button>&nbsp;</shiro:hasPermission>"
+	  			+ "<shiro:hasPermission name='sys:user:edit'><button onclick='editUser(" + row.id + ")'>编辑</button>&nbsp;</shiro:hasPermission>"
+	  			+ "<shiro:hasPermission name='sys:user:delete'><button onclick='deleteUser(" + row.id + ")'>删除</button></shiro:hasPermission>";
+	return html;
 }
 function formatStatus(val,row,index) {
 	if(row.status == 1){
@@ -37,13 +45,16 @@ function formatStatus(val,row,index) {
 		return "禁用";
 	}
 }
+function editRole(id) {
+	open1("/lcsw/user/toEditUserRoles.action?id=" + id,650,550);
+}
 </script>
 
 </head>
 <body>
 	<div class="easyui-layout" data-options="fit:true">
 		<div data-options="region:'center',border:true" style="width:100%%;height: 100%">
-			<table id="userList" class="easyui-datagrid" data-options="fitColumns:true,singleSelect:true,rownumbers:true,toolbar:toolbar,pagination:true,fit:true,remoteSort:true,url:'/lcsw/user/userList.action'" style="width:100%;">
+			<table id="userList" class="easyui-datagrid" data-options="fitColumns:true,singleSelect:true,rownumbers:true,toolbar:'#tb',pagination:true,fit:true,remoteSort:true,url:'/lcsw/user/userList.action'" style="width:100%;">
 				<thead>
 					<tr>  
             			<th data-options="field:'name'"  style="width:40%;">用户姓名</th>
@@ -55,26 +66,11 @@ function formatStatus(val,row,index) {
 						
 				</tbody>
 			</table>
-	<script type="text/javascript">
-		var toolbar = [{
-			text:'新增用户',
-			iconCls:'fa-plus-square',
-			handler:function(){
-				parent.addtab('新增用户',"/lcsw/user/toAddUser.action");
-			}
-		},{
-			text:'编辑用户',
-			iconCls:'fa-pencil',
-			handler:function(){
-				var row = $('#userList').datagrid('getSelected');
-				if(row == null){
-					alert("请选择一行");
-				}else{
-					editUser(row.id);	
-				}
-			}
-		}];
-	</script>
+			<div id="tb">
+				<shiro:hasPermission name="sys:user:add">
+    				<a href="#" class="easyui-linkbutton" onclick="addUser()" data-options="iconCls:'fa-plus-square',plain:true">添加用户</a>
+    			</shiro:hasPermission>
+    		</div>
 		</div>
 	</div>
 </body>

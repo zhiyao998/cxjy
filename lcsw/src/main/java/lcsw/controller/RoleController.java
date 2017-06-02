@@ -74,8 +74,8 @@ public class RoleController {
 	@ResponseBody
 	public R deleteUser(String id){
 		List<Integer> list = new ArrayList<Integer>();
-		list.add(Integer.parseInt(id));
-		roleService.delectByIds(list);
+		list.add(Integer.valueOf(id));
+		roleService.deleteByIds(list);
 		return R.ok();
 	}
 	
@@ -87,6 +87,21 @@ public class RoleController {
 		role.setCreatorId(user.getId());
 		role.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		roleService.insertRole(role);
+		return R.ok();
+	}
+	
+	@RequestMapping("/editRolePerms")
+	@ResponseBody
+	public R editRolePerms(HttpServletRequest request){
+		String ids[] = request.getParameter("ids").split(",");
+		Integer roleId = Integer.valueOf(request.getParameter("roleId"));
+		List<Integer> list = new ArrayList<Integer>();
+		if(!ids[0].equals("")){
+			for (String id : ids) {
+				list.add(Integer.valueOf(id));
+			}
+		}
+		roleService.editRolePerms(roleId, list);
 		return R.ok();
 	}
 }

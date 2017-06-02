@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.plugins.Page;
 
+import lcsw.domain.Role;
 import lcsw.domain.User;
+import lcsw.service.RoleService;
 import lcsw.service.UserService;
 import lcsw.util.base.R;
 
@@ -28,15 +30,26 @@ public class UserController {
 	
 	@Resource
 	private UserService userService;
+	@Resource
+	private RoleService roleService;
+	
+	@RequestMapping("/toEditUserRoles")
+	public String toEditUserPerms(HttpServletRequest request,String id){
+		request.setAttribute("windowid", request.getParameter("windowid"));
+		request.setAttribute("userId", id);
+		return "/standard/editUserRoles";
+	}
 	
 	@RequestMapping(value="/userList")
 	@ResponseBody
 	public Map listUser(HttpServletRequest request,HttpServletResponse response){
 		String rows = request.getParameter("rows");
 		String page = request.getParameter("page");
+		Subject subject = SecurityUtils.getSubject();
+		User user = (User) subject.getPrincipal();
 		Map<String, Object> map = new HashMap<String, Object>();
 		Page<User> users = new Page<User>(Integer.valueOf(page), Integer.valueOf(rows));
-		users = userService.selectUserList(users);
+		users = userService.selectUserList(users,user.getId());
 		map.put("total", users.getTotal());
 		map.put("rows", users.getRecords());
 		return map;
@@ -67,6 +80,9 @@ public class UserController {
 	@RequestMapping("/addUser")
 	@ResponseBody
 	public R addUser(User user){
+		Subject subject = SecurityUtils.getSubject();
+		User creator = (User) subject.getPrincipal();
+		user.setCreatorId(creator.getId());
 		userService.insert(user);
 		return R.ok();
 	}
@@ -99,5 +115,33 @@ public class UserController {
 		}else{
 			return R.error("原密码错误");
 		}
+	}
+	
+	@RequestMapping("/getUserRoles")
+	@ResponseBody
+	public Map getUserRoles(HttpServletRequest request){
+		Map map = new HashMap<String,Object>();
+		Integer userId = Integer.valueOf(request.getParameter("userId"));
+		List<Role> all = roleService.selectAllRoles();
+		List<Role> user = roleService.selectByUserId(userId);
+		if(user != null){
+			all.removeAll(user);
+		}
+		map.put("all", all);
+		map.put("user", user);
+		return map;
+	}
+	
+	@RequestMapping("/editUserRoles")
+	@ResponseBody
+	public R editUserRoles(HttpServletRequest request){
+		String ids[] = request.getParameter("ids").split(",");
+		Integer userId = Integer.valueOf(request.getParameter("userId"));
+		List<Integer> list = new ArrayList<Integer>();
+		for (String id : ids) {
+			list.add(Integer.valueOf(id));
+		}
+		userService.editUserRole(userId, list);
+		return R.ok();
 	}
 }

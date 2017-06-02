@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lcsw.mapper.User_RoleMapper">
+	
+	<insert id="insertByBatch" parameterType="java.util.List">
+		insert into user_role (user_id,role_id)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			( #{item.userId,jdbcType=INTEGER}, #{item.roleId,jdbcType=INTEGER} )
+		</foreach>
+	</insert>
+	
+	<select id="getRoleCount" resultType="INTEGER">
+		select count(user_id) from user_role where role_id = #{id}
+	</select>
+
+</mapper>

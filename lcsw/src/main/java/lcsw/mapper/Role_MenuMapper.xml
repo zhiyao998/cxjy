@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lcsw.mapper.Role_MenuMapper">
+	
+	<insert id="insertByBatch" parameterType="java.util.List">
+		insert into role_menu (role_id,menu_id)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			( #{item.roleId,jdbcType=INTEGER}, #{item.menuId,jdbcType=INTEGER} )
+		</foreach>
+	</insert>
+	
+	<select id="selectByRoleId" resultType="Integer">
+		select rm.menu_id from role_menu rm, tbl_menu m
+		<where>
+			rm.role_id = #{id} and rm.menu_id = m.menu_id and m.type > 1
+		</where>
+	</select>
+
+</mapper>

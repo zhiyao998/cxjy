@@ -21,6 +21,9 @@ public class Menu {
 	
 	@TableField("type")
 	private Integer type;
+	
+	@TableField("group_name")
+	private String groupName;
 
 	public Integer getMenuId() {
 		return menuId;
@@ -62,10 +65,27 @@ public class Menu {
 		this.type = type;
 	}
 
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
 	@Override
 	public String toString() {
 		return "Menu [menuId=" + menuId + ", menuName=" + menuName + ", parentId=" + parentId + ", perms=" + perms
-				+ ", type=" + type + "]";
+				+ ", type=" + type + ", groupName=" + groupName + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Menu m = (Menu) obj;
+		if(getMenuId().equals(m.getMenuId())){
+			return true;
+		}
+		return false;
 	}
 	
 	

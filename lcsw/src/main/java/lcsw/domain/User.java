@@ -21,7 +21,10 @@ public class User implements Serializable{
 	
 	@TableField(value="status")
 	private Integer status; 
-
+	
+	@TableField(value="creator_id")
+	private Integer creatorId;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -53,9 +56,20 @@ public class User implements Serializable{
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
+	
+	public Integer getCreatorId() {
+		return creatorId;
+	}
+
+	public void setCreatorId(Integer creatorId) {
+		this.creatorId = creatorId;
+	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", password=" + password + ", status=" + status + "]";
+		return "User [id=" + id + ", name=" + name + ", password=" + password + ", status=" + status + ", creatorId="
+				+ creatorId + "]";
 	}
+
+	
 }

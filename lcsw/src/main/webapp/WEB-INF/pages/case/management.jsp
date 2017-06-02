@@ -7,7 +7,7 @@
 <title>病例管理</title>
 </head>
 <body>
-		<table id="grid" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,url:'/lcsw/case/list.action',toolbar:toolbar,pagination:true,fit:true,remoteSort:true" style="width:100%;">
+		<table id="grid" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,url:'/lcsw/case/list.action',pagination:true,fit:true,remoteSort:true" style="width:100%;">
     		<thead>
     			<tr>
     				<th data-options="field:'caseId',checkbox:true"">病例id</th>   
@@ -21,71 +21,34 @@
     			</tr>
     		</thead>
     	</table>
+    	<div id="tb">
+    		<a href="#" class="easyui-linkbutton" onclick="refreshList()" data-options="iconCls:'fa-refresh',plain:true">刷新列表</a>
+    		<shiro:hasPermission name="case:add">
+				<a href="#" class="easyui-linkbutton" onclick="addCase()" data-options="iconCls:'fa-plus-square',plain:true">增加病例</a>
+			</shiro:hasPermission>
+    	</div>
     <script type="text/javascript">
-		var toolbar = [{
-			text:'刷新列表',
-			iconCls:'fa-refresh',
-			handler:function(){
-				$('#grid').datagrid('reload');
-			}
-		},{
-			text:'增加病例',
-			iconCls:'fa-plus-square',
-			handler:function(){
-				parent.addtab('新增病例',"/lcsw/case/addCase.action");
-			}
-		},{
-			text:'编辑病例',
-			iconCls:'fa-pencil',
-			handler:function(){
-				var row = $('#grid').datagrid('getSelections');
-				if(row.length > 0){
-					var ids = [];
-					for(var i=0;i<row.length;i++){
-						ids[i] = row[i].caseId;
-					}
-					parent.addtab('编辑病例',"/lcsw/case/editCase.action?id="+ids[0]);
-				}else{
-					alert("请选择需要修改的病例");	
-				}
-			}
-		},{
-			text:'删除病例',
-			iconCls:'fa-remove',
-			handler:function(){
-				var row = $('#grid').datagrid('getSelections');
-				if(row.length > 0){
-					$.messager.confirm('确认对话框', '确认你是否要删除数据？', function(r) {
-						if (r) {
-							var ids = [];
-							for(var i=0;i<row.length;i++){
-								ids[i] = row[i].caseId;
-							}
-	 						$.post("/lcsw/case/deleteCase.action", {
-								'ids':JSON.stringify(ids)
-							}, function(data) {
-	 							if (data.status) {
-									$.messager.alert('系统消息', "删除成功", 'info',
-											function() {
-												$('#grid').datagrid('reload');
-											});
-								} 
-							}, "json"); 
-						}
-					});
-				}else{
-					alert("请至少选中一项");
-				}
-			}
-		}];
+		$(function() {
+			$('#grid').datagrid({
+				toolbar: '#tb'
+			});
+		})
 		function formatOpt(val,row,index) {
-			return "<button onclick='editCase(" + row.caseId + ")'>编辑</button> <button onclick='deleteCase(" + row.caseId + ")'>删除</button>";
+			var html = "<shiro:hasPermission name='case:edit'><button onclick='editCase(" + row.caseId + ")'>编辑</button>&nbsp;</shiro:hasPermission>"
+					 + "<shiro:hasPermission name='case:delete'><button onclick='deleteCase(" + row.caseId + ")'>删除</button></shiro:hasPermission>";
+			return html;
+		}
+		function addCase() {
+			parent.addtab('新增病例',"/lcsw/case/addCase.action");
+		}
+		function refreshList() {
+			$('#grid').datagrid('reload');
 		}
 		function editCase(id) {
 			parent.addtab('编辑病例',"/lcsw/case/editCase.action?id="+id);
 		}
 		function deleteCase(id) {
-			var ids = new Array();
+			var ids = new Array();  
 			ids.push(id);
 				$.post("/lcsw/case/deleteCase.action", {
 					'ids':JSON.stringify(ids)

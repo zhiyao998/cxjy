@@ -64,7 +64,7 @@ function addtab(title,url) {
 						}
 					});
 				}
-				if(title == "用户列表"){
+				if(title == "用户管理"){
 					var tab = $('#tabs').tabs('getSelected');
 					$('#tabs').tabs('update', {
 						tab: tab,
@@ -99,7 +99,6 @@ function addtab(title,url) {
 function back(){
 	var tab = window.parent.$('#tabs').tabs('getSelected');
 	var index = window.parent.$('#tabs').tabs('getTabIndex',tab);
-	var casetab = window.parent.$('#tabs');
 	window.parent.$('#tabs').tabs('close',index);
 }
 
@@ -142,6 +141,28 @@ function open(url) {
 	$('#'+windowid).window({
 		width : w * 0.90,
 		height : h * 0.90,
+		modal : true,
+		//当window关闭时把这个窗口的代码清除。
+		onClose : function() {
+			$('#'+windowid).window('destroy');
+		}
+	});
+}
+
+function open1(url,w,h) {
+	//生成随机数
+	var windowid = "windowid" +Math.floor(Math.random() *Math.pow(10, 12));
+	if (url.indexOf("?") != -1) {
+		url = url +"&windowid=" +windowid;
+	} else {
+		url = url +"?windowid=" +windowid;
+	}
+	var html = '<div id="'+windowid+'"><iframe frameborder="0" marginwidth="100%" width="100%" height="100%" src="'
+			+ url + '" ></iframe></div>';
+	$("body").append(html);
+	$('#'+windowid).window({
+		width : w,
+		height : h,
 		modal : true,
 		//当window关闭时把这个窗口的代码清除。
 		onClose : function() {
